@@ -1,6 +1,13 @@
 // All runtime config comes from env vars. Secrets never live in the repo.
 const path = require('path');
 
+// Local dev: backend/.env (git-ignored). On Render the dashboard env vars are used and this file is absent.
+try {
+  process.loadEnvFile(path.join(__dirname, '..', '.env'));
+} catch {
+  /* no .env */
+}
+
 const env = process.env;
 
 module.exports = {
@@ -8,9 +15,11 @@ module.exports = {
   version: require('../package.json').version,
 
   openrouterKey: env.OPENROUTER_API_KEY || '',
-  model: env.LLM_MODEL || 'anthropic/claude-haiku-5.5',
-  fallbackModel: env.LLM_FALLBACK_MODEL || 'google/gemini-3.1-flash-lite',
+  // Free-tier models only. Free keys get ~50 free requests/day across all models, hence llmDailyCap.
+  model: env.LLM_MODEL || 'nvidia/nemotron-3-ultra-550b-a55b:free',
+  fallbackModel: env.LLM_FALLBACK_MODEL || 'poolside/laguna-xs-2.1:free',
   llmTimeoutMs: Number(env.LLM_TIMEOUT_MS || 25000),
+  llmDailyCap: Number(env.LLM_DAILY_CAP || 45),
   forceStub: env.STUB === '1',
 
   // FalkorDB Cloud: either FALKORDB_URL (falkor://user:pass@host:port) or host/port/user/pass.

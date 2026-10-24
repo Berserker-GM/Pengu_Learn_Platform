@@ -16,13 +16,15 @@ services:
       - key: OPENROUTER_API_KEY
         sync: false
       - key: LLM_MODEL
-        value: anthropic/claude-haiku-5.5
+        value: nvidia/nemotron-3-ultra-550b-a55b:free
       - key: LLM_FALLBACK_MODEL
-        value: google/gemini-3.1-flash-lite
+        value: poolside/laguna-xs-2.1:free
+      - key: LLM_DAILY_CAP
+        value: "45"
       - key: FALKORDB_HOST
         sync: false
       - key: FALKORDB_PORT
-        sync: false
+        value: "56844"
       - key: FALKORDB_USERNAME
         sync: false
       - key: FALKORDB_PASSWORD

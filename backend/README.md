@@ -14,7 +14,8 @@ node scripts/smoke.js https://<render-url>
 | Var | Default | Notes |
 |---|---|---|
 | `OPENROUTER_API_KEY` | – | missing → stub questions |
-| `LLM_MODEL` / `LLM_FALLBACK_MODEL` | `anthropic/claude-haiku-5.5` / `google/gemini-3.1-flash-lite` | any OpenRouter id |
+| `LLM_MODEL` / `LLM_FALLBACK_MODEL` | `nvidia/nemotron-3-ultra-550b-a55b:free` / `poolside/laguna-xs-2.1:free` | free models only (team decision); tested 2026-10-24 |
+| `LLM_DAILY_CAP` | 45 | free OpenRouter keys get 50 free requests/day; past the cap reviews use seed questions (stub) |
 | `FALKORDB_HOST` `FALKORDB_PORT` `FALKORDB_USERNAME` `FALKORDB_PASSWORD` | – | or one `FALKORDB_URL=falkor://user:pass@host:port`; `FALKORDB_TLS=1` if the instance needs TLS |
 | `FALKORDB_GRAPH` | `pengu` | graph name |
 | `STUB=1` | – | force stub LLM even with a key |

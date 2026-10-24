@@ -3,11 +3,26 @@ const config = require('./config');
 
 const URL = 'https://openrouter.ai/api/v1/chat/completions';
 
+// Global daily request budget (every model attempt counts, fallbacks included). Resets at UTC midnight.
+const budget = { day: '', used: 0 };
+function spend() {
+  const day = new Date().toISOString().slice(0, 10);
+  if (budget.day !== day) Object.assign(budget, { day, used: 0 });
+  if (budget.used >= config.llmDailyCap) throw new Error('daily LLM budget exhausted');
+  budget.used += 1;
+}
+
 function enabled() {
   return Boolean(config.openrouterKey) && !config.forceStub;
 }
 
+function budgetStatus() {
+  const day = new Date().toISOString().slice(0, 10);
+  return { used: budget.day === day ? budget.used : 0, cap: config.llmDailyCap };
+}
+
 async function callModel(model, messages, { json, maxTokens }) {
+  spend();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), config.llmTimeoutMs);
   try {
@@ -24,8 +39,11 @@ async function callModel(model, messages, { json, maxTokens }) {
         model,
         messages,
         temperature: 0.3,
-        max_tokens: maxTokens,
-        ...(json ? { response_format: { type: 'json_object' } } : {}),
+        // Free reasoning models spend tokens thinking first; keep it short and out of the content.
+        max_tokens: Math.max(maxTokens, 1000),
+        reasoning: { effort: 'low', exclude: true },
+        // json_object mode makes some free models return empty content; the prompt asks for JSON and parseJson extracts it.
+        ...(json && process.env.LLM_JSON_MODE === '1' ? { response_format: { type: 'json_object' } } : {}),
       }),
     });
     if (!res.ok) throw new Error(`openrouter ${res.status}: ${(await res.text()).slice(0, 200)}`);
@@ -47,6 +65,7 @@ async function complete(messages, { json = false, maxTokens = 300 } = {}) {
     } catch (err) {
       lastErr = err;
       console.warn(`[llm] ${model} failed: ${err.message}`);
+      if (/budget exhausted/.test(err.message)) break;
     }
   }
   throw lastErr;
@@ -70,4 +89,4 @@ function parseJson(text) {
   return null;
 }
 
-module.exports = { enabled, complete, parseJson };
+module.exports = { enabled, complete, parseJson, budgetStatus };

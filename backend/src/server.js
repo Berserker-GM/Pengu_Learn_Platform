@@ -17,7 +17,7 @@ const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
 const validUser = (id) => typeof id === 'string' && /^[A-Za-z0-9-]{8,64}$/.test(id);
 
 app.get('/health', (_req, res) => {
-  res.json({ ok: true, version: config.version, llm: llm.enabled() ? 'openrouter' : 'stub', db: store.kind() });
+  res.json({ ok: true, version: config.version, llm: llm.enabled() ? 'openrouter' : 'stub', db: store.kind(), llmBudget: llm.budgetStatus() });
 });
 
 app.post('/snapshot', async (req, res, next) => {

@@ -22,7 +22,7 @@ Rules for the question:
 - Prefer questions that make the learner trace a tiny input, e.g. "What does mid become when the list has one element?"
 - If the same mistake type appears in the learner's recent history, you may gently note it: "Seen this one before:".
 
-Return ONLY a JSON object, no prose, no markdown:
+Do not explain your reasoning. Return ONLY a JSON object, nothing before or after it, no markdown:
 {
   "mistakes": [
     { "type": "snake_case_mistake_kind", "concept": "snake_case_concept", "evidence": "<=15 words pointing at the code, no fix" }

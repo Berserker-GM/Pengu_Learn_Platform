@@ -32,9 +32,12 @@ async function chat({ userId, message, courseId }) {
         { role: 'system', content: SYSTEM },
         { role: 'user', content: `${context}${courseId ? ` Current course: ${courseId}.` : ''}\nLearner says: ${message}` },
       ],
-      { maxTokens: 80 },
+      { json: true, maxTokens: 120 },
     );
-    return { reply: guard.clean(text.replace(/^["']|["']$/g, ''), MAX_WORDS) || STUB_REPLIES[0] };
+    // Only trust the JSON field: free reasoning models sometimes leak their thinking as plain text.
+    const reply = llm.parseJson(text)?.reply;
+    if (typeof reply !== 'string' || !reply.trim()) throw new Error(`no reply field: ${text.slice(0, 80)}`);
+    return { reply: guard.clean(reply, MAX_WORDS) };
   } catch (err) {
     console.warn('[chat] llm failed:', err.message);
     return { reply: STUB_REPLIES[0] };
