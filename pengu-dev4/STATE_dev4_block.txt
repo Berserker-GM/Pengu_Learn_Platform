@@ -1,0 +1,7 @@
+Dev4 (ext + content)
+- E1: DONE (smoke-tested with stub vscode + mock backend)
+- E2: DONE (smoke-tested: file_saved, review_start, review_result reach mock bridge)
+- E3: DONE, vscode-ext/pengu-watcher-0.1.0.vsix built. Dev2: bundle it as pengu-watcher.vsix (id pengu.pengu-watcher)
+- C1: PARTIAL, manifest/lessons never pasted to me; run node vscode-ext/scripts/validate-content.js and send me any PROBLEMS
+- C2: DONE, content/README.md
+- Blockers: none. Not yet tested against real Electron bridge or real VS Code (needs your F5 run).

@@ -1,0 +1,16 @@
+### 00:20 E1 watcher extension
+- Files: vscode-ext/package.json, vscode-ext/extension.js, vscode-ext/.vscode/launch.json
+- What: Per-doc timers (interval 10 s / idle 20 s / error on new diagnostics) POST /snapshot per CONTRACT §1; hash-skip, 20000 chars, 45 s timeout; node http fallback because VS Code 1.80 has no global fetch.
+- Test: create ~/.pengu/config.json, run backend, F5 in vscode-ext, edit a file in content/dsa, see POST /snapshot in backend log.
+### 00:50 E2 bridge events
+- Files: vscode-ext/extension.js
+- What: review_start before POST, review_result after (always sent, question null on failure so pet never sticks in thinking), file_saved on save; 2 s timeout, silent.
+- Test: curl-mock bridge on 47821 or run Electron; edit+save a course file, see events.
+### 01:00 E3 vsix
+- Files: vscode-ext/pengu-watcher-0.1.0.vsix, .vscodeignore, README.md
+- What: built with npx @vscode/vsce package --allow-missing-repository --skip-license (5.8 KB). Copy to app/ as pengu-watcher.vsix for A4.
+- Test: code --install-extension vscode-ext/pengu-watcher-0.1.0.vsix
+### 01:10 C1/C2 content
+- Files: content/README.md, vscode-ext/scripts/validate-content.js
+- What: user guide rewritten (C2). C1: manifest not pasted to me, so I added a validator instead of editing it; run it, paste any PROBLEMS back.
+- Test: node vscode-ext/scripts/validate-content.js
