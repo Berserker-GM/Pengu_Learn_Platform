@@ -316,7 +316,7 @@ function registerPetIpc() {
     const result = await backendFetch(
       '/chat',
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) },
-      45000
+      60000
     );
     if (result.error) return { error: result.error };
     return typeof result.reply === 'string' ? { reply: result.reply } : { error: 'No reply from Pengu.' };

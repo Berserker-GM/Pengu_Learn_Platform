@@ -6,7 +6,7 @@ const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
 
-const BACKEND_TIMEOUT_MS = 45000;
+const BACKEND_TIMEOUT_MS = 60000;
 const BRIDGE_TIMEOUT_MS = 2000;
 const INTERVAL_MS = 10000;
 const IDLE_MS = 20000;

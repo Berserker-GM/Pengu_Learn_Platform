@@ -7,7 +7,7 @@ All JSON is UTF-8. Timestamps are ISO-8601 strings. `userId` is a UUID v4 string
 ## 1. Backend HTTP API
 Base URL: `BACKEND_URL` (production value lives in `app/config.default.json`; local dev `http://localhost:8787`).
 CORS open. Body limit 256 KB. Every error is `{ "error": "<message>" }` with 4xx/5xx. Clients **ignore errors silently**.
-Cold start on Render can take ~40 s: timeouts **45 s** for /snapshot and /chat, 15 s for /progress.
+Cold start on Render can take ~40 s: timeouts **60 s** for /snapshot and /chat (free LLMs take 15-45 s), 15 s for /progress.
 
 ### GET /health
 ```json

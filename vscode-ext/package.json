@@ -2,7 +2,7 @@
   "name": "pengu-watcher",
   "displayName": "Pengu Watcher",
   "description": "Sends code snapshots from Pengu courses to the Pengu mentor.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "pengu",
   "engines": { "vscode": "^1.80.0" },
   "categories": ["Education", "Other"],
