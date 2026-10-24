@@ -9,7 +9,10 @@ Phase: **release** · Code freeze: **T+2:15**
   (hello, idle, hover_jump, talking, sleeping; transparent 256px @12fps). Real Electron launch: animations load, bridge bubble OK.
 - In progress: release. Prod smoke test passed (review, dedupe, error review, chat, progress); app/config.default.json -> prod;
   `npm run package` builds dist/Pengu-win.zip (165 MB, no warnings, vsix + content bundled); packaged exe starts and writes prod config.
-- Next: clean-machine test (docs/RELEASE.md), GitHub Release v0.1.0, share link
+- Fixed after clean-PC test ("pet not correcting me"): ext 0.1.2 reviews on save + retries after rate_limited; backend 1.0.2
+  lets idle through after 10 s, LLM timeout 45 s + fallback 10 s, max_tokens 3000 (reasoning truncated JSON); clients 60 s.
+  Verified: real ext code vs prod + packaged Pengu (save -> AI question; forced rate_limited -> retry 12 s -> AI question).
+- Next: user reloads VS Code window + visual bubble check, then upload the REBUILT dist/Pengu-win.zip to Release v0.1.0
 - Blockers: none
 - Known bugs / limits: free OpenRouter key = 50 req/day (backend caps 45, then seed questions), key expires 2026-10-31.
   walk/dragged/thinking/sending have no art yet (fall back to idle). backend/src/server.js now has authenticated download access endpoints
