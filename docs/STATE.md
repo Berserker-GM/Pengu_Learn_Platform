@@ -12,8 +12,8 @@ Phase: **release** · Code freeze: **T+2:15**
 - Next: clean-machine test (docs/RELEASE.md), GitHub Release v0.1.0, share link
 - Blockers: none
 - Known bugs / limits: free OpenRouter key = 50 req/day (backend caps 45, then seed questions), key expires 2026-10-31.
-  walk/dragged/thinking/sending have no art yet (fall back to idle). backend/src/server.js got Razorpay routes from the web team
-  without BRAIN review: self-contained, no new deps, not on the pet path.
+  walk/dragged/thinking/sending have no art yet (fall back to idle). backend/src/server.js now has authenticated download access endpoints
+  configured with Supabase auth and manual UPI approval for gated downloads.
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
 - Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch. A4 dashboard (course cards, % bar, Start copies course → opens VS Code, installs vsix when present). A5 Progress tab (audit lists, refresh, empty/error states). A6 `pet:chat` → POST /chat. A7 dry run: `cd app && npm run package` → `dist/Pengu-win.zip` (151 MB), packaged exe verified locally.

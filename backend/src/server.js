@@ -174,7 +174,9 @@ app.get('/progress/:userId', async (req, res, next) => {
 app.use((_req, res) => res.status(404).json({ error: 'not found' }));
 app.use((err, _req, res, _next) => {
   console.error('[error]', err);
-  res.status(err.status || 500).json({ error: err.type === 'entity.too.large' ? 'payload too large' : 'internal error' });
+  const status = err.status || 500;
+  const message = err.type === 'entity.too.large' ? 'payload too large' : (status < 500 && err.message ? err.message : 'internal error');
+  res.status(status).json({ error: message });
 });
 
 store.init().finally(() => {
