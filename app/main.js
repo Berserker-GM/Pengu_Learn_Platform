@@ -31,6 +31,7 @@ let petWindow = null;
 let dashWindow = null;
 let dragOffset = null;
 let settings = null; // { userId, backendUrl, bridgePort }
+let lastCourseId = null; // course of the latest bridge event, gives /chat context
 
 function readJson(filePath) {
   try {
@@ -206,7 +207,10 @@ function handleBridgeEvent(event) {
       sendToPet('pet:say', { text: event.question, kind: 'review' });
     }
   }
-  if (typeof event.courseId === 'string') pushProgress(event.courseId);
+  if (typeof event.courseId === 'string') {
+    lastCourseId = event.courseId;
+    pushProgress(event.courseId);
+  }
 }
 
 function listAnimations() {
@@ -303,6 +307,20 @@ function registerPetIpc() {
 
   // Voice is LATER (whisper.cpp); the channel exists so the renderer gets a clean error.
   ipcMain.handle('pet:transcribe', () => ({ error: 'Voice input is not available yet.' }));
+
+  ipcMain.handle('pet:chat', async (_event, payload) => {
+    const message = String((payload && payload.message) || '').trim().slice(0, 500);
+    if (!message) return { error: 'Type a message first.' };
+    const body = { userId: settings.userId, message };
+    if (lastCourseId) body.courseId = lastCourseId;
+    const result = await backendFetch(
+      '/chat',
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) },
+      45000
+    );
+    if (result.error) return { error: result.error };
+    return typeof result.reply === 'string' ? { reply: result.reply } : { error: 'No reply from Pengu.' };
+  });
 
   setInterval(() => {
     sendToPet('pet:system-idle', { seconds: powerMonitor.getSystemIdleTime() });

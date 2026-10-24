@@ -6,7 +6,8 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "node package-win.js"
   },
   "devDependencies": {
     "electron": "45.0.0",

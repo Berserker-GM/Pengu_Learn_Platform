@@ -1,4 +1,4 @@
 {
-  "backendUrl": "http://localhost:8787",
+  "backendUrl": "https://pengu-learn.onrender.com",
   "bridgePort": 47821
 }

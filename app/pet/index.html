@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Pengu</title>
-<style>
-  html, body { margin: 0; width: 100%; height: 100%; background: transparent; overflow: hidden; }
-  img { position: absolute; left: 66px; bottom: 0; width: 128px; height: 128px; }
-</style>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>Pengu</title>
+  <link rel="stylesheet" href="pet.css">
 </head>
 <body>
-<img src="../assets/animations/idle/frame-001.png" alt="Pengu">
+  <div id="stage">
+    <div id="bubble-area"></div>
+    <img id="sprite" alt="" draggable="false">
+    <div id="fallback" hidden></div>
+  </div>
+
+  <!-- Order matters: mock (defines window.pengu only if missing) -> registry -> player/state machine -> bubble -> chat -->
+  <script src="mock-pengu.js"></script>
+  <script src="animation-registry.js"></script>
+  <script src="pet.js"></script>
+  <script src="bubble.js"></script>
+  <script src="chat.js"></script>
 </body>
 </html>

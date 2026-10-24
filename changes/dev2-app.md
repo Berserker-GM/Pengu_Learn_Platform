@@ -20,3 +20,16 @@
 - Files: app/dashboard/index.html, dashboard.css, dashboard.js (new), app/courses.js, app/main.js
 - What: `dash:get-user`, `dash:get-courses` (manifest from `../content` in dev / `resources/content` packaged, §4 progress, `started` = user copy exists), `dash:start-course` (copy to `%USERPROFILE%\PenguLearn\<folder>` only if missing → find `code.cmd` via `where code`, else `%LOCALAPPDATA%\Programs\Microsoft VS Codein\code.cmd` or Program Files → install `pengu-watcher-*.vsix` if `pengu.pengu-watcher` not listed (skipped with a warning when no vsix exists yet) → `code "<path>"`), records `{ courseId, path }` in config.json `courses`. `dash:get-progress` → backend `/progress/:userId` (15 s). `dash:open-external` (http/https only). Dashboard: course cards with % bar, Start/Continue, NO_VSCODE message with download link, live `dash:progress-updated`, refresh on focus.
 - Test: click pet → dashboard → Start DSA → VS Code opens `PenguLearn\dsa`. Edit `binary-search/solution.py`, `curl -X POST localhost:47821/event -d '{"type":"file_saved","courseId":"dsa","filePath":"binary-search/solution.py"}'` → DSA shows 11%. Start again → edit kept.
+### A5 progress page
+- Files: app/dashboard/progress.js (new), app/dashboard/index.html, app/dashboard/dashboard.css
+- What: Progress tab renders `dash:get-progress`: totals (reviews, files worked on, active courses), recurring mistakes, weak concepts (mastery bar), repeated bugs, improve tips. Refresh button, empty state when there are no reviews, "server may be waking up" message on `{ error }`.
+- Test: dashboard → Progress. Fresh user shows zeros + the backend's tip.
+### A6 chat
+- Files: app/main.js
+- What: `pet:chat { message }` → `POST /chat { userId, message (trimmed, ≤500), courseId? }` with 45 s timeout; `courseId` = course of the latest bridge event, omitted if none. Returns `{ reply }` or `{ error }` (empty message, timeout, unreachable, non-2xx).
+- Test: with Dev3's pet in `app/pet`, hover the pet, type a question, Enter → reply bubble. Verified against local backend.
+### A7 Windows zip (dry run)
+- Files: app/package-win.js (new), app/package.json (`npm run package`)
+- What: runs electron-packager per docs/RELEASE.md (win32 x64, asar, prune, `content` + `pengu-watcher-*.vsix` as extra resources, icon if `assets/icon.ico` exists), copies `content/README.md` → `README-FIRST.txt`, zips to `dist/Pengu-win.zip`. Warns when backendUrl is localhost or the vsix is missing. Dry run: 151 MB zip (asar is 0.5 MB; the rest is Electron 45). Packaged `Pengu.exe` verified: animations load from app.asar, courses from resources/content, bridge `/ping` answers, `/health` reached.
+- Test: `cd app && npm run package`, then run `dist/Pengu-win32-x64/Pengu.exe`.
+- Before the real release: BRAIN puts the Render URL in `app/config.default.json`, Dev4's vsix lands in `vscode-ext/`, then rebuild and do the clean-machine test.

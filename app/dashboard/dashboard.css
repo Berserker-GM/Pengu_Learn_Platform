@@ -92,3 +92,21 @@ main { flex: 1; padding: 24px 28px; max-width: 980px; width: 100%; margin: 0 aut
 
 .foot { padding: 10px 28px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); }
 .foot code { font-size: 11px; }
+
+.progress-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.progress-head h2 { margin: 0; font-size: 18px; }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.stat strong { display: block; font-size: 24px; }
+.stat span { color: var(--muted); font-size: 12px; }
+
+.panels { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.panel h3 { margin: 0 0 10px; font-size: 14px; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.rows li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.rows li:first-child { border-top: 0; }
+.rows .bar { flex-basis: 100%; }
+.bar.small { height: 5px; }
+.muted { color: var(--muted); margin: 0; }
