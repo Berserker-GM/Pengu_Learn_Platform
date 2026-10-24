@@ -1,116 +1,116 @@
 
-#events {
+#how-it-feels {
   background-color: #000000;
 }
 
-#events .event-primary-text {
+#how-it-feels .event-primary-text {
   color: #EEEEEE;
   font-family: var(--font-body);
 }
 
-#events .event-card {
+#how-it-feels .event-card {
   background-color: #000000;
 }
 
-#events .event-content-bg {
+#how-it-feels .event-content-bg {
   background-color: #000000;
 }
 
-#events .event-card-border {
+#how-it-feels .event-card-border {
   border-color: #EEEEEE;
 }
 
-#events .event-btn-active {
+#how-it-feels .event-btn-active {
   background-color: #EEEEEE;
   color: #111111;
 }
 
-#events .event-btn-inactive {
+#how-it-feels .event-btn-inactive {
   color: #EEEEEE;
   background-color: transparent !important;
 }
 
-#events .event-btn-inactive:hover {
+#how-it-feels .event-btn-inactive:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-#events .event-badge {
+#how-it-feels .event-badge {
   background-color: #000000;
   color: #EEEEEE;
 }
 
-#events .event-footer-btn {
+#how-it-feels .event-footer-btn {
   background-color: #EEEEEE;
   color: #000000;
 }
 
-#events .event-subtext {
+#how-it-feels .event-subtext {
   color: #BBBBBB;
 }
 
-#events .event-image-bg {
+#how-it-feels .event-image-bg {
   background-color: #111111;
 }
 
-#events .event-image-bg img {
+#how-it-feels .event-image-bg img {
   height: 100% !important;
   width: 100% !important;
   object-fit: cover !important;
 }
 
 /* Light Theme Overrides (Pixel Perfect to Screenshot) */
-.light-theme #events {
+.light-theme #how-it-feels {
   background-color: #FFFFFF !important;
 }
 
-.light-theme #events .event-primary-text {
+.light-theme #how-it-feels .event-primary-text {
   color: #111111 !important;
 }
 
-.light-theme #events .event-card {
+.light-theme #how-it-feels .event-card {
   background-color: #F5F5F5 !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06) !important;
   backdrop-filter: none !important;
 }
 
-.light-theme #events .event-content-bg {
+.light-theme #how-it-feels .event-content-bg {
   background-color: #F5F5F5 !important;
 }
 
-.light-theme #events .event-card-border {
+.light-theme #how-it-feels .event-card-border {
   border-color: #111111 !important;
 }
 
-.light-theme #events .event-btn-active {
+.light-theme #how-it-feels .event-btn-active {
   background-color: #111111 !important;
   color: #FFFFFF !important;
 }
 
-.light-theme #events .event-btn-inactive {
+.light-theme #how-it-feels .event-btn-inactive {
   color: #111111 !important;
   background-color: transparent !important;
 }
 
-.light-theme #events .event-btn-inactive:hover {
+.light-theme #how-it-feels .event-btn-inactive:hover {
   background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-.light-theme #events .event-badge {
+.light-theme #how-it-feels .event-badge {
   background-color: #FFFFFF !important;
   color: #111111 !important;
 }
 
-.light-theme #events .event-footer-btn {
+.light-theme #how-it-feels .event-footer-btn {
   background-color: #111111 !important;
   color: #FFFFFF !important;
 }
 
-.light-theme #events .event-subtext {
+.light-theme #how-it-feels .event-subtext {
   color: #111111 !important;
 }
 
-.light-theme #events .event-image-bg {
+.light-theme #how-it-feels .event-image-bg {
   background-color: #EEEEEE !important;
 }
 
@@ -118,3 +118,9 @@
 .light-theme #how-it-feels img {
   filter: none !important;
 }
+
+
+/* Keep the intro readable on the light page background. */
+.light-theme #how-it-feels > div > motion-div { color: #111827; }
+.light-theme #how-it-feels .event-primary-text { color: #111827 !important; }
+.light-theme #how-it-feels .event-subtext { color: #475569 !important; }

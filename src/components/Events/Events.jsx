@@ -102,14 +102,14 @@ const PenguModulesScroll = () => {
           </div>
 
           <h2 
-            className="event-primary-text font-bold tracking-tighter max-w-[420px]"
-            style={{ fontSize: "clamp(32px, 4vw, 56px)", lineHeight: "1.15", wordSpacing: "0.2em" }}
+            className="event-primary-text font-bold tracking-tighter max-w-5xl"
+            style={{ fontSize: "clamp(32px, 4vw, 56px)", lineHeight: "1.15" }}
           >
             How It Feels <br /> To Use Pengu
           </h2>
 
           <p 
-            className="event-subtext text-[15px] md:text-[17px] leading-[1.6] max-w-[420px] font-normal mt-1 text-neutral-300"
+            className="event-subtext text-[15px] md:text-[17px] leading-[1.6] max-w-3xl font-normal mt-1 text-neutral-300"
             style={{ fontFamily: "var(--font-body)" }}
           >
             A desktop character that wanders, naps, and jumps when hovered. It opens your editor with interview problems, nudges you when you slip, and remembers repeat mistakes.
