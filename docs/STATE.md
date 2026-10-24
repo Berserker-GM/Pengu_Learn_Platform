@@ -13,9 +13,9 @@ Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
   key expires 2026-10-31. Free models take 5-40 s per review. Clients must use 45 s timeouts (CONTRACT §1).
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
-- Done: –
+- Done: A1 — Electron skeleton. `cd app && npm start` opens a 260×260 transparent always-on-top pet window (placeholder idle sprite in `app/pet/index.html`). UUID in `%APPDATA%\pengu\user.json` and `%USERPROFILE%\.pengu\config.json` (backendUrl `http://localhost:8787`, bridgePort 47821).
 - In progress: –
-- Next: A1
+- Next: A2 pet IPC
 - Blockers: –
 - Known bugs: –
 
