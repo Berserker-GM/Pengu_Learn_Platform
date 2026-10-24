@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, Github, Mail } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { PenguIcon } from "../Pengu/PenguLogo";
 import "./Footer.css";
 
@@ -44,12 +44,6 @@ export default function Footer() {
               <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Get in touch</h3>
               <a href="mailto:support@pengulearn.com" className="footer-new-link mt-4 inline-flex items-center gap-2 text-sm text-slate-200">
                 <Mail size={16} /> support@pengulearn.com
-              </a>
-            </div>
-            <div className="lg:text-right">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Built for curious minds</h3>
-              <a href="https://github.com/Vansh-Baranwal/Pengu_Learn_Platform" target="_blank" rel="noopener noreferrer" className="footer-new-link mt-4 inline-flex items-center gap-2 text-sm text-slate-200 lg:justify-end">
-                <Github size={16} /> View the project <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
