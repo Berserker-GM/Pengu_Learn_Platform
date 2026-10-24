@@ -7,9 +7,10 @@ Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
 - Done: backend verified live (OpenRouter free models + FalkorDB Cloud). Integration: Dev3 pet -> app/pet, Dev4 extension -> vscode-ext
   (+ vsix), content/README.md; staging folders pengu-dev3/ pengu-dev4/ removed. New art from pengu-vid.zip -> 5 states
   (hello, idle, hover_jump, talking, sleeping; transparent 256px @12fps). Real Electron launch: animations load, bridge bubble OK.
-- In progress: Render deploy (human)
-- Next: prod URL -> app/config.default.json, release build, clean-machine test (docs/RELEASE.md)
-- Blockers: Render URL
+- In progress: release. Prod smoke test passed (review, dedupe, error review, chat, progress); app/config.default.json -> prod;
+  `npm run package` builds dist/Pengu-win.zip (165 MB, no warnings, vsix + content bundled); packaged exe starts and writes prod config.
+- Next: clean-machine test (docs/RELEASE.md), GitHub Release v0.1.0, share link
+- Blockers: none
 - Known bugs / limits: free OpenRouter key = 50 req/day (backend caps 45, then seed questions), key expires 2026-10-31.
   walk/dragged/thinking/sending have no art yet (fall back to idle). backend/src/server.js got Razorpay routes from the web team
   without BRAIN review: self-contained, no new deps, not on the pet path.

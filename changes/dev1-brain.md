@@ -23,3 +23,8 @@
 - Files: app/assets/animations/*, app/pet/* (Dev3), vscode-ext/* (Dev4), content/README.md (Dev4), docs/STATE.md
 - What: converted pengu-vid.zip to transparent frames (flood-fill cutout, 12 fps); moved staged dev work into owned folders
 - Test: `cd app && npm start` -> penguin waves (hello) then idles; hover = jump; sleep after 5 min idle
+
+### Prod
+- Files: app/config.default.json, docs/STATE.md
+- What: Render backend https://pengu-learn.onrender.com verified; app points at it; release zip built
+- Test: `curl https://pengu-learn.onrender.com/health`
