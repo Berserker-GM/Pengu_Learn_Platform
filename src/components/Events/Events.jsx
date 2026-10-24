@@ -86,15 +86,15 @@ const PenguModulesScroll = () => {
       style={{ fontFamily: "var(--font-body)" }}
       id="how-it-feels"
     >
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
+      <div className="max-w-[1400px] mx-auto flex flex-col gap-10 md:gap-12">
       
-        {/* Left Column - Sticky Content */}
+        {/* Section Intro */}
         <motion.div 
           variants={leftColVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="w-full lg:w-[450px] flex-shrink-0 lg:sticky lg:top-36 self-start flex flex-col items-start text-left gap-5 md:gap-6"
+          className="w-full flex flex-col items-start text-left gap-5 md:gap-6"
         >
           <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-sky-400">
             <Sparkles size={14} />
@@ -125,14 +125,14 @@ const PenguModulesScroll = () => {
           </a>
         </motion.div>
 
-        {/* Right Column - Module Cards */}
-        <div className="flex-1 w-full">
+        {/* Module Cards */}
+        <div className="w-full">
           <motion.div 
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
+            className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6"
           >
             <AnimatePresence mode="popLayout">
               {modules.map((item) => (
@@ -144,10 +144,10 @@ const PenguModulesScroll = () => {
                   exit="exit"
                   key={item.slug}
                   onClick={handleCardClick}
-                  className="event-card group flex flex-col rounded-t-[16px] overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1 border border-white/10"
+                  className="event-card group flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-sky-300/40 hover:shadow-xl hover:shadow-sky-950/20 border border-white/10 shadow-lg shadow-black/20"
                 >
                   {/* Image Placeholder Area */}
-                  <div className="event-image-bg w-full h-[240px] md:h-[260px] relative overflow-hidden">
+                  <div className="event-image-bg w-full h-[190px] md:h-[210px] relative overflow-hidden">
                     <div className="absolute top-4 right-4 z-20 flex gap-2">
                       <span className="event-badge px-[8px] md:px-[10px] py-[4px] text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase rounded-[3px] bg-white text-black" style={{ fontFamily: "var(--font-heading)" }}>
                         {item.badge}
@@ -163,7 +163,7 @@ const PenguModulesScroll = () => {
                   </div>
 
                   {/* Content Area */}
-                  <div className="event-content-bg relative z-20 -mt-5 rounded-t-[20px] p-6 md:p-8 flex-1 flex flex-col justify-between text-left bg-neutral-900 border-t border-white/10">
+                  <div className="event-content-bg relative z-20 -mt-4 rounded-t-2xl p-5 md:p-6 flex-1 flex flex-col justify-between text-left bg-neutral-900 border-t border-white/10">
                     <div>
                       <h3 className="event-primary-text text-[22px] md:text-[24px] font-bold leading-tight mb-2.5 tracking-tight text-white" style={{ fontFamily: "var(--font-heading)" }}>
                         {item.displayName}
@@ -175,7 +175,7 @@ const PenguModulesScroll = () => {
                   </div>
 
                   {/* Footer Bar */}
-                  <div className="event-card-border border-t border-white/10 flex items-stretch justify-between transition-colors bg-neutral-950">
+                  <div className="event-card-border border-t border-white/10 flex items-stretch justify-between transition-colors bg-neutral-950/80">
                     <div className="flex items-center">
                       <span className="event-primary-text text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase px-6 md:px-8 text-neutral-300 group-hover:text-sky-400 transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
                         EXPLORE WORKFLOW
