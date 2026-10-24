@@ -28,3 +28,8 @@
 - Files: app/main.js
 - What: `pet:chat { message }` → `POST /chat { userId, message (trimmed, ≤500), courseId? }` with 45 s timeout; `courseId` = course of the latest bridge event, omitted if none. Returns `{ reply }` or `{ error }` (empty message, timeout, unreachable, non-2xx).
 - Test: with Dev3's pet in `app/pet`, hover the pet, type a question, Enter → reply bubble. Verified against local backend.
+### A7 Windows zip (dry run)
+- Files: app/package-win.js (new), app/package.json (`npm run package`)
+- What: runs electron-packager per docs/RELEASE.md (win32 x64, asar, prune, `content` + `pengu-watcher-*.vsix` as extra resources, icon if `assets/icon.ico` exists), copies `content/README.md` → `README-FIRST.txt`, zips to `dist/Pengu-win.zip`. Warns when backendUrl is localhost or the vsix is missing. Dry run: 151 MB zip (asar is 0.5 MB; the rest is Electron 45). Packaged `Pengu.exe` verified: animations load from app.asar, courses from resources/content, bridge `/ping` answers, `/health` reached.
+- Test: `cd app && npm run package`, then run `dist/Pengu-win32-x64/Pengu.exe`.
+- Before the real release: BRAIN puts the Render URL in `app/config.default.json`, Dev4's vsix lands in `vscode-ext/`, then rebuild and do the clean-machine test.

@@ -13,10 +13,10 @@ Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
   key expires 2026-10-31. Free models take 5-40 s per review. Clients must use 45 s timeouts (CONTRACT §1).
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
-- Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch. A4 dashboard (course cards, % bar, Start copies course → opens VS Code, installs vsix when present). A5 Progress tab (audit lists, refresh, empty/error states). A6 `pet:chat` → POST /chat.
+- Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch. A4 dashboard (course cards, % bar, Start copies course → opens VS Code, installs vsix when present). A5 Progress tab (audit lists, refresh, empty/error states). A6 `pet:chat` → POST /chat. A7 dry run: `cd app && npm run package` → `dist/Pengu-win.zip` (151 MB), packaged exe verified locally.
 - In progress: –
-- Next: A7 Windows zip (dry run; final build needs prod backendUrl + vsix)
-- Blockers: Dev3's files are in `pengu-dev3/app/pet/`, not yet copied into `app/pet/` (Dev3's human). No `vscode-ext/pengu-watcher-*.vsix` yet (E3), so Start skips the extension install.
+- Next: final release build once prod backendUrl + vsix exist; clean-machine test (RELEASE.md)
+- Blockers: Dev3's files are in `pengu-dev3/app/pet/`, not yet copied into `app/pet/` (Dev3's human). No `vscode-ext/pengu-watcher-*.vsix` yet (E3), so Start skips the extension install. Prod Render URL needed in `app/config.default.json`.
 - Known bugs: –
 
 ## Dev3 free Claude (app/pet)
