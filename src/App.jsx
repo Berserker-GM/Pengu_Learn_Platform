@@ -17,7 +17,6 @@ import { Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "./components/Navbar/Navbar";
-import PenguBuddy from "./components/Pengu/PenguBuddy";
 import Preloader from "./components/Preloader/Preloader";
 import Home from "./Pages/Home";
 import "./App.css";
@@ -199,7 +198,6 @@ function App() {
               {isLightMode ? <Moon size={22} /> : <Sun size={22} />}
             </button>
           )}
-          {!loading && <PenguBuddy />}
         </div>
         <Analytics />
       </PreloaderContext.Provider>

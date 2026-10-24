@@ -122,7 +122,7 @@ const PhoneMenu = ({
                 className="w-full py-3 rounded-xl bg-black text-white text-center text-xs font-bold uppercase tracking-wider block"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Download Product ($19 / Voucher)
+                Download Product ($19)
               </a>
             </div>
           </motion.div>

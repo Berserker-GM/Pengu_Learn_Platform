@@ -57,7 +57,6 @@ const DesktopFooter = () => {
             { name: 'THE IDEA', href: '#the-idea', hoverColor: '#38bdf8' },
             { name: 'HOW IT WORKS', href: '#how-it-feels', hoverColor: '#38bdf8' },
             { name: 'DOWNLOAD PRODUCT', href: '#download', hoverColor: '#38bdf8' },
-            { name: 'REDEEM VOUCHER', href: '#download', hoverColor: '#f59e0b' },
           ].map((link, idx) => (
             <a
               key={idx}
@@ -261,7 +260,6 @@ const MobileFooter = () => {
     { name: 'The Idea', href: '#the-idea' },
     { name: 'How It Works', href: '#how-it-feels' },
     { name: 'Download Product ($19)', href: '#download' },
-    { name: 'Redeem Voucher', href: '#download' },
   ];
 
   return (
