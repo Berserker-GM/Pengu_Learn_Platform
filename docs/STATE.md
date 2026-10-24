@@ -4,13 +4,15 @@ Backend URL: `http://localhost:8787` (local) · prod: _TBD, BRAIN fills after Re
 Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
 
 ## Dev1 BRAIN (backend, docs)
-- Done: kit, content, placeholder art, backend. Verified LIVE: OpenRouter free models (nemotron-3-ultra primary, laguna-xs fallback)
-  give good Socratic questions; FalkorDB Cloud (ap-south-1, no TLS) causal/temporal/entity views + audit verified with real writes.
-- In progress: Render deploy (human: create service from render.yaml, paste OPENROUTER_API_KEY + FALKORDB_HOST/USERNAME/PASSWORD)
-- Next: smoke test prod URL, put it at the top of this file; CP1 at T+0:45
+- Done: backend verified live (OpenRouter free models + FalkorDB Cloud). Integration: Dev3 pet -> app/pet, Dev4 extension -> vscode-ext
+  (+ vsix), content/README.md; staging folders pengu-dev3/ pengu-dev4/ removed. New art from pengu-vid.zip -> 5 states
+  (hello, idle, hover_jump, talking, sleeping; transparent 256px @12fps). Real Electron launch: animations load, bridge bubble OK.
+- In progress: Render deploy (human)
+- Next: prod URL -> app/config.default.json, release build, clean-machine test (docs/RELEASE.md)
 - Blockers: Render URL
-- Known bugs / limits: free OpenRouter key = 50 free requests/day total (backend caps at 45, then seed-question fallback);
-  key expires 2026-10-31. Free models take 5-40 s per review. Clients must use 45 s timeouts (CONTRACT §1).
+- Known bugs / limits: free OpenRouter key = 50 req/day (backend caps 45, then seed questions), key expires 2026-10-31.
+  walk/dragged/thinking/sending have no art yet (fall back to idle). backend/src/server.js got Razorpay routes from the web team
+  without BRAIN review: self-contained, no new deps, not on the pet path.
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
 - Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch. A4 dashboard (course cards, % bar, Start copies course → opens VS Code, installs vsix when present). A5 Progress tab (audit lists, refresh, empty/error states). A6 `pet:chat` → POST /chat. A7 dry run: `cd app && npm run package` → `dist/Pengu-win.zip` (151 MB), packaged exe verified locally.
@@ -20,15 +22,16 @@ Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
 - Known bugs: –
 
 ## Dev3 free Claude (app/pet)
-- Done: –
+- Done: P1 player, P2 state machine/drag/click/wander/sleep, P3 bubble, P4 hover chat + optional voice (all headless-smoke-tested in jsdom; no errors)
 - In progress: –
-- Next: P1
+- Next: test in real Electron with Dev2's main (file:/// frames, drag feel, focus for chat input)
 - Blockers: –
-- Known bugs: –
+- Known bugs: untested in real Electron/Chrome GUI. Walk flips sprite with CSS `scale` when going left (set FLIP_WHEN_WALKING_LEFT=false in pet.js if art is asymmetric). Voice untested.
 
 ## Dev4 free Claude (vscode-ext, content)
-- Done: –
-- In progress: –
-- Next: E1
-- Blockers: –
-- Known bugs: –
+- E1: DONE (smoke-tested with stub vscode + mock backend)
+- E2: DONE (smoke-tested: file_saved, review_start, review_result reach mock bridge)
+- E3: DONE, vscode-ext/pengu-watcher-0.1.0.vsix built. Dev2: bundle it as pengu-watcher.vsix (id pengu.pengu-watcher)
+- C1: PARTIAL, manifest/lessons never pasted to me; run node vscode-ext/scripts/validate-content.js and send me any PROBLEMS
+- C2: DONE, content/README.md
+- Blockers: none. Not yet tested against real Electron bridge or real VS Code (needs your F5 run).

@@ -18,3 +18,8 @@
 - Files: backend/src/{config,llm,chat}.js, prompts/*, render.yaml
 - What: free OpenRouter models + daily budget; FalkorDB Cloud connected and all graph views verified, test data removed
 - Test: `curl <backend>/health` → llm: openrouter, db: falkordb, llmBudget
+
+### Integration + pet art
+- Files: app/assets/animations/*, app/pet/* (Dev3), vscode-ext/* (Dev4), content/README.md (Dev4), docs/STATE.md
+- What: converted pengu-vid.zip to transparent frames (flood-fill cutout, 12 fps); moved staged dev work into owned folders
+- Test: `cd app && npm start` -> penguin waves (hello) then idles; hover = jump; sleep after 5 min idle
