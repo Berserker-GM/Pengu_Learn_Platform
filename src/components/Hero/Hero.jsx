@@ -271,7 +271,7 @@ const PenguHero = () => {
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
                 <PenguPixelAvatar size={18} mood="wave" className="w-4 h-4" />
-                <span>Adopt Pengu ($19 / Voucher)</span>
+                <span>Adopt Pengu ($19)</span>
               </a>
               <a
                 href="#the-idea"

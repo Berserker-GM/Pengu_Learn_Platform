@@ -39,9 +39,6 @@ export const DownloadSection = () => {
   const [licenseKey, setLicenseKey] = useState(() => {
     return localStorage.getItem("pengu_license_key") || "";
   });
-  const [voucherInput, setVoucherInput] = useState("");
-  const [voucherError, setVoucherError] = useState("");
-  const [voucherSuccess, setVoucherSuccess] = useState("");
   const [copiedKey, setCopiedKey] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -55,29 +52,23 @@ export const DownloadSection = () => {
     }
   }, [isUnlocked, licenseKey]);
 
-  const handleVoucherRedeem = (e) => {
-    e.preventDefault();
-    setVoucherError("");
-    setVoucherSuccess("");
-
-    const cleaned = voucherInput.trim().toUpperCase();
-    if (!cleaned) {
-      setVoucherError("Please enter a voucher code.");
-      return;
+  // Internal voucher redemption via URL param (e.g. ?voucher=PENGUFREE)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const voucherParam = params.get("voucher");
+    if (voucherParam && !isUnlocked) {
+      const cleaned = voucherParam.trim().toUpperCase();
+      if (VALID_VOUCHERS.includes(cleaned)) {
+        const newKey = "PL-" + cleaned + "-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem("pengu_license_unlocked", "true");
+        localStorage.setItem("pengu_license_key", newKey);
+        setIsUnlocked(true);
+        setLicenseKey(newKey);
+        // Clean the URL
+        window.history.replaceState({}, "", window.location.pathname + window.location.hash);
+      }
     }
-
-    if (VALID_VOUCHERS.includes(cleaned)) {
-      const newKey = "PL-" + cleaned + "-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-      localStorage.setItem("pengu_license_unlocked", "true");
-      localStorage.setItem("pengu_license_key", newKey);
-      setIsUnlocked(true);
-      setLicenseKey(newKey);
-      setVoucherSuccess(`Voucher "${cleaned}" verified! 100% bypass granted.`);
-      setVoucherInput("");
-    } else {
-      setVoucherError('Invalid voucher code. Try "PENGUFREE" or "POLARIS2026" for testing!');
-    }
-  };
+  }, []);
 
   const handleMockPayment = () => {
     setIsProcessingPayment(true);
@@ -97,8 +88,6 @@ export const DownloadSection = () => {
     localStorage.removeItem("pengu_license_key");
     setIsUnlocked(false);
     setLicenseKey("");
-    setVoucherSuccess("");
-    setVoucherError("");
     setDownloadSuccessNotice("");
   };
 
@@ -112,7 +101,7 @@ export const DownloadSection = () => {
 
   const triggerDownload = (os, filename) => {
     if (!isUnlocked) {
-      alert("Please complete payment or enter a voucher code to unlock the download!");
+      alert("Please complete payment to unlock the download!");
       return;
     }
 
@@ -194,7 +183,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             ) : (
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
                 <Lock size={14} className="text-amber-400" />
-                <span>Download Locked — Complete Payment or Voucher Below</span>
+                <span>Download Locked — Complete Payment Below</span>
               </div>
             )}
           </div>
@@ -242,11 +231,11 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             )}
           </AnimatePresence>
 
-          {/* Pricing & Voucher Card */}
-          <div className="w-full mt-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+          {/* Pricing Card */}
+          <div className="w-full mt-8 max-w-xl mx-auto">
             
-            {/* Left Card: Payment Option */}
-            <div className={`md:col-span-6 p-6 sm:p-8 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${
+            {/* Payment Card */}
+            <div className={`p-6 sm:p-8 rounded-2xl border transition-all duration-300 flex flex-col justify-between ${
               isUnlocked 
                 ? "bg-neutral-900/60 border-white/10 opacity-75" 
                 : "bg-neutral-900/90 border-sky-500/30 shadow-[0_0_30px_rgba(56,189,248,0.1)]"
@@ -312,79 +301,6 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                     <span>Pay $19 & Unlock Product</span>
                   </button>
                 )}
-              </div>
-            </div>
-
-            {/* Right Card: Voucher Bypass Option */}
-            <div className="md:col-span-6 p-6 sm:p-8 rounded-2xl bg-neutral-900/80 border border-white/10 flex flex-col justify-between relative overflow-hidden">
-              
-              {/* Peeking Pengu Mascot on top right */}
-              <div className="absolute top-4 right-4 flex items-center gap-2">
-                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
-                  BYPASS OPTION
-                </span>
-                <PenguPixelAvatar size={34} mood={isUnlocked ? "jump" : "wave"} className="w-8 h-8 drop-shadow-md" />
-              </div>
-
-              <div>
-                <span className="text-xs font-mono uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
-                  <Ticket size={14} /> VOUCHER ACCESS
-                </span>
-
-                <h3 className="text-lg sm:text-xl font-bold text-white mt-4" style={{ fontFamily: "var(--font-heading)" }}>
-                  Have a Promo or VIP Voucher?
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-400 mt-2 leading-relaxed">
-                  Early beta testers, students, and Polaris evaluators can enter their voucher code here to bypass payment completely.
-                </p>
-
-                {/* Voucher Form */}
-                <form onSubmit={handleVoucherRedeem} className="mt-5 space-y-3">
-                  <div className="flex items-stretch gap-2">
-                    <input
-                      type="text"
-                      placeholder="e.g. PENGUFREE or POLARIS2026"
-                      value={voucherInput}
-                      onChange={(e) => {
-                        setVoucherInput(e.target.value);
-                        setVoucherError("");
-                      }}
-                      className="flex-1 bg-black/50 border border-white/20 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-neutral-500 uppercase font-mono tracking-wider outline-none transition-colors"
-                    />
-                    <button
-                      type="submit"
-                      className="px-4 sm:px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap active:scale-[0.98]"
-                      style={{ fontFamily: 'var(--font-heading)' }}
-                    >
-                      Redeem
-                    </button>
-                  </div>
-
-                  {voucherError && (
-                    <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium">
-                      <AlertCircle size={14} />
-                      <span>{voucherError}</span>
-                    </div>
-                  )}
-
-                  {voucherSuccess && (
-                    <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
-                      <CheckCircle2 size={14} />
-                      <span>{voucherSuccess}</span>
-                    </div>
-                  )}
-
-                  <div className="pt-2 text-[11px] text-neutral-400 flex items-center justify-between">
-                    <span>Test Voucher Code:</span>
-                    <button
-                      type="button"
-                      onClick={() => setVoucherInput("PENGUFREE")}
-                      className="text-amber-400 hover:underline font-mono font-semibold"
-                    >
-                      PENGUFREE (Click to fill)
-                    </button>
-                  </div>
-                </form>
               </div>
 
               {/* License Key Display (If Unlocked) */}
@@ -652,7 +568,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               </button>
 
               <p className="text-[11px] text-center text-neutral-500 mt-3">
-                Demo simulation mode. Or use voucher <strong className="text-amber-400">PENGUFREE</strong> to bypass!
+                Demo simulation mode. No real charge will occur.
               </p>
             </motion.div>
           </div>
