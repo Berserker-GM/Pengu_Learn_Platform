@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { AboutWorkspacePlaceholder, AboutDashboardPlaceholder } from '../Pengu/Placeholders';
+import { AboutDashboardPlaceholder } from '../Pengu/Placeholders';
+import { PenguPixelAvatar } from '../Pengu/PenguLogo';
+import { Sparkles, Terminal, Volume2 } from 'lucide-react';
 
 const ScrollRevealWord = ({ word, index, count, progress }) => {
   const reducedMotion = useReducedMotion();
@@ -59,30 +61,66 @@ const AboutSection = () => {
       {/* 2. Unified Content Section */}
       <section className="pt-4 pb-8 md:pb-32 px-6 md:px-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-stretch">
 
-        {/* Left Column: Heading + App Workspace Mockup Frame */}
+        {/* Left Column: Heading + Video Frame */}
         <div className="md:col-span-5 flex flex-col justify-between pt-2 pb-8">
           <div className="space-y-4">
-            <span className="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">
-              THE PENGU WORKSPACE
+            <span className="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold flex items-center gap-1.5">
+              <Sparkles size={14} /> PENGU TUTOR ENGINE
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-heading)' }}>
-              Native Performance. Zero Distractions.
+              Interactive Guidance. <br />Always Cheering You On.
             </h2>
             <p className="text-neutral-400 text-sm sm:text-base leading-relaxed">
-              No endless browser tabs, notifications, or slow load times. Pengu Learn runs as a lightweight native application directly on your machine.
+              No dull textbooks or endless video pause-and-play. Pengu lives directly on your desktop, reacting to your progress, guiding algorithms, and cheering every solved challenge.
             </p>
           </div>
 
-          {/* Left Video / Workspace Frame Placeholder */}
+          {/* Left Video Frame with Pengu Wave Animation */}
           <div className="relative w-full max-w-[450px] mx-auto md:max-w-none md:w-full mt-8 md:mt-auto">
             <motion.div
               initial={{ clipPath: 'inset(0 100% 0 0)' }}
               whileInView={{ clipPath: 'inset(0 0 0 0)' }}
               viewport={{ once: true, margin: "0px" }}
               transition={{ duration: 1.4, ease: "anticipate" }}
-              className="aspect-[4/5] md:aspect-[3/4] bg-neutral-900 w-full overflow-hidden rounded-2xl z-0 relative shadow-2xl border border-white/10"
+              className="aspect-[4/5] md:aspect-[3/4] bg-neutral-900 w-full overflow-hidden rounded-2xl z-0 relative shadow-2xl border border-white/10 flex flex-col justify-between"
             >
-              <AboutWorkspacePlaceholder />
+              {/* Header Bar */}
+              <div className="relative z-10 p-3.5 bg-black/70 backdrop-blur-md border-b border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-neutral-300 font-mono">
+                  <span>pengu-tutor.mp4</span>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-500/30">
+                  LIVE STREAM
+                </span>
+              </div>
+
+              {/* Looping Pengu Video */}
+              <div className="relative flex-1 w-full h-full overflow-hidden bg-black flex items-center justify-center">
+                <video
+                  src="/pengu/pengu-wave.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Bottom Caption Pill */}
+              <div className="relative z-10 p-3.5 bg-black/80 backdrop-blur-md border-t border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <PenguPixelAvatar size={24} mood="smile" className="w-6 h-6" />
+                  <span className="text-xs text-neutral-200 font-medium">
+                    "Great work on that algorithm tree!"
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-sky-400">60 FPS</span>
+              </div>
             </motion.div>
           </div>
         </div>

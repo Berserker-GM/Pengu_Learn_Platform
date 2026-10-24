@@ -16,10 +16,10 @@ import {
   Terminal, 
   AlertCircle,
   X,
-  ExternalLink
+  PartyPopper
 } from "lucide-react";
 import { LampContainer } from "../ui/lamp";
-import { PenguIcon } from "../Pengu/PenguLogo";
+import { PenguPixelAvatar } from "../Pengu/PenguLogo";
 
 const VALID_VOUCHERS = [
   "PENGUFREE",
@@ -116,7 +116,6 @@ export const DownloadSection = () => {
       return;
     }
 
-    // Trigger an actual download in the user's browser
     const content = `================================================
 PENGU LEARN DESKTOP SUITE - RELEASE v2.4.1
 ================================================
@@ -180,17 +179,60 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
           {/* Status Pill Badge */}
           <div className="mt-6 flex items-center gap-2">
             {isUnlocked ? (
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold backdrop-blur-md shadow-[0_0_20px_rgba(52,211,153,0.2)]">
-                <Unlock size={14} className="text-emerald-400" />
-                <span>Product Unlocked & Ready for Download</span>
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold backdrop-blur-md shadow-[0_0_20px_rgba(52,211,153,0.25)] animate-bounce-subtle">
+                <PenguPixelAvatar size={20} mood="jump" className="w-5 h-5" />
+                <span>Product Unlocked & Verified • Ready to Download!</span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
+              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
                 <Lock size={14} className="text-amber-400" />
-                <span>Download Locked — Payment or Voucher Required</span>
+                <span>Download Locked — Complete Payment or Voucher Below</span>
               </div>
             )}
           </div>
+
+          {/* Celebration Video Banner when Unlocked */}
+          <AnimatePresence>
+            {isUnlocked && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full mt-6 p-4 rounded-2xl bg-gradient-to-r from-sky-950/70 via-emerald-950/60 to-black border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl"
+              >
+                <div className="flex items-center gap-4">
+                  {/* Embedded Looping Jumping Pengu Video */}
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-black flex-shrink-0 border border-emerald-400/40 shadow-md">
+                    <video
+                      src="/pengu/pengu-jump.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                      <PartyPopper size={14} />
+                      <span>Celebration Mode Activated!</span>
+                    </div>
+                    <h4 className="text-base sm:text-lg font-bold text-white mt-0.5">
+                      Pengu is thrilled to learn with you!
+                    </h4>
+                    <p className="text-xs text-neutral-300">
+                      Your lifetime license has been verified. Choose your OS below to download.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-black/60 border border-emerald-400/30 text-center sm:text-right">
+                  <div className="text-[10px] text-neutral-400 uppercase tracking-widest font-mono">Status</div>
+                  <div className="text-xs font-mono font-bold text-emerald-400">UNLIMITED ACCESS</div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Pricing & Voucher Card */}
           <div className="w-full mt-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
@@ -258,22 +300,26 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             </div>
 
             {/* Right Card: Voucher Bypass Option */}
-            <div className="md:col-span-6 p-6 sm:p-8 rounded-2xl bg-neutral-900/80 border border-white/10 flex flex-col justify-between">
+            <div className="md:col-span-6 p-6 sm:p-8 rounded-2xl bg-neutral-900/80 border border-white/10 flex flex-col justify-between relative overflow-hidden">
+              
+              {/* Peeking Pengu Mascot on top right */}
+              <div className="absolute top-4 right-4 flex items-center gap-2">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
+                  BYPASS OPTION
+                </span>
+                <PenguPixelAvatar size={34} mood={isUnlocked ? "jump" : "wave"} className="w-8 h-8 drop-shadow-md" />
+              </div>
+
               <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
-                    <Ticket size={14} /> VOUCHER ACCESS
-                  </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold">
-                    BYPASS OPTION
-                  </span>
-                </div>
+                <span className="text-xs font-mono uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
+                  <Ticket size={14} /> VOUCHER ACCESS
+                </span>
 
                 <h3 className="text-lg sm:text-xl font-bold text-white mt-4" style={{ fontFamily: "var(--font-heading)" }}>
                   Have a Promo or VIP Voucher?
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-400 mt-2 leading-relaxed">
-                  Early beta testers, students, event participants, and Polaris evaluators can enter their voucher code here to bypass payment completely.
+                  Early beta testers, students, and Polaris evaluators can enter their voucher code here to bypass payment completely.
                 </p>
 
                 {/* Voucher Form */}
@@ -329,7 +375,10 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               {isUnlocked && licenseKey && (
                 <div className="mt-6 pt-4 border-t border-white/10">
                   <div className="flex items-center justify-between text-xs text-neutral-400 mb-1.5">
-                    <span className="font-medium">Your Activated License Key:</span>
+                    <span className="font-medium flex items-center gap-1">
+                      <Sparkles size={12} className="text-emerald-400" />
+                      <span>Your Activated License Key:</span>
+                    </span>
                     <button 
                       onClick={copyLicenseToClipboard}
                       className="text-sky-400 hover:text-sky-300 text-xs font-semibold flex items-center gap-1"
@@ -361,8 +410,9 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               </div>
 
               {isUnlocked ? (
-                <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold self-start sm:self-auto">
-                  DOWNLOAD PERMITTED
+                <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold self-start sm:self-auto flex items-center gap-1.5">
+                  <PenguPixelAvatar size={16} mood="jump" className="w-4 h-4" />
+                  <span>DOWNLOAD PERMITTED</span>
                 </span>
               ) : (
                 <span className="text-xs font-mono px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold self-start sm:self-auto flex items-center gap-1.5">
@@ -391,11 +441,11 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <Laptop size={24} className="text-sky-400" />
-                    <span className="text-[10px] font-mono text-neutral-400">.exe</span>
+                    <PenguPixelAvatar size={22} mood="smile" className="w-5 h-5 opacity-80" />
                   </div>
                   <h4 className="text-base font-bold text-white">Windows</h4>
                   <p className="text-xs text-neutral-400 mt-0.5">Windows 10 / 11 (64-bit)</p>
-                  <p className="text-[11px] font-mono text-neutral-500 mt-2">Size: ~84.5 MB</p>
+                  <p className="text-[11px] font-mono text-neutral-500 mt-2">Installer: .exe (~84.5 MB)</p>
                 </div>
                 <button
                   onClick={() => triggerDownload("Windows", "PenguLearn-Setup-v2.4.1.exe")}
@@ -421,11 +471,11 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <Apple size={24} className="text-neutral-200" />
-                    <span className="text-[10px] font-mono text-neutral-400">.dmg</span>
+                    <PenguPixelAvatar size={22} mood="blush" className="w-5 h-5 opacity-80" />
                   </div>
                   <h4 className="text-base font-bold text-white">macOS</h4>
                   <p className="text-xs text-neutral-400 mt-0.5">Apple Silicon & Intel</p>
-                  <p className="text-[11px] font-mono text-neutral-500 mt-2">Size: ~91.2 MB</p>
+                  <p className="text-[11px] font-mono text-neutral-500 mt-2">Disk Image: .dmg (~91.2 MB)</p>
                 </div>
                 <button
                   onClick={() => triggerDownload("macOS", "PenguLearn-v2.4.1.dmg")}
@@ -451,11 +501,11 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <Terminal size={24} className="text-amber-400" />
-                    <span className="text-[10px] font-mono text-neutral-400">.AppImage</span>
+                    <PenguPixelAvatar size={22} mood="step" className="w-5 h-5 opacity-80" />
                   </div>
                   <h4 className="text-base font-bold text-white">Linux</h4>
                   <p className="text-xs text-neutral-400 mt-0.5">Ubuntu, Debian, Fedora</p>
-                  <p className="text-[11px] font-mono text-neutral-500 mt-2">Size: ~78.0 MB</p>
+                  <p className="text-[11px] font-mono text-neutral-500 mt-2">AppImage: .AppImage (~78.0 MB)</p>
                 </div>
                 <button
                   onClick={() => triggerDownload("Linux", "PenguLearn-v2.4.1.AppImage")}
@@ -509,8 +559,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               </button>
 
               <div className="flex items-center gap-3 mb-5">
-                <div className="p-2.5 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30">
-                  <CreditCard size={22} />
+                <div className="p-1 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30 flex items-center justify-center">
+                  <PenguPixelAvatar size={32} mood="wave" className="w-8 h-8" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold" style={{ fontFamily: "var(--font-heading)" }}>
@@ -569,7 +619,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               <button
                 onClick={handleMockPayment}
                 disabled={isProcessingPayment}
-                className="w-full py-3 px-4 rounded-xl bg-sky-400 hover:bg-sky-300 text-black font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
+                className="w-full py-3 px-4 rounded-xl bg-sky-400 hover:bg-sky-300 text-black font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 {isProcessingPayment ? (
@@ -586,7 +636,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
               </button>
 
               <p className="text-[11px] text-center text-neutral-500 mt-3">
-                Demo simulation mode. No real card will be charged.
+                Demo simulation mode. Or use voucher <strong className="text-amber-400">PENGUFREE</strong> to bypass!
               </p>
             </motion.div>
           </div>

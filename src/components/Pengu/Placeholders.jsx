@@ -14,7 +14,7 @@ import {
   ShieldCheck, 
   Play
 } from "lucide-react";
-import { PenguIcon } from "./PenguLogo";
+import { PenguPixelAvatar } from "./PenguLogo";
 
 // ── 1. Hero Rotating Cards Placeholder ──────────────────────────────
 export const HeroCardPlaceholder = ({ card }) => {
@@ -47,10 +47,10 @@ export const HeroCardPlaceholder = ({ card }) => {
       {/* Center Visual Mockup */}
       <div className="relative z-10 my-auto py-2">
         {isCard1 && (
-          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10">
+          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
             <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-[11px] font-mono text-white/80 flex items-center gap-1.5">
-                <Terminal size={12} className="text-red-300" /> ~/interactive-lab.pengu
+                <Terminal size={12} className="text-sky-300" /> ~/interactive-lab.pengu
               </span>
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">LIVE</span>
             </div>
@@ -65,17 +65,18 @@ export const HeroCardPlaceholder = ({ card }) => {
             </div>
             {/* Visual simulation bar */}
             <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden mt-1">
-              <div className="bg-gradient-to-r from-red-400 to-amber-300 h-full w-4/5 rounded-full" />
+              <div className="bg-gradient-to-r from-sky-400 to-indigo-300 h-full w-4/5 rounded-full" />
             </div>
           </div>
         )}
 
         {isCard2 && (
-          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10">
+          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-white/90 flex items-center gap-1.5">
-                <Award size={13} className="text-purple-300" /> Quest: Logic Trees
-              </span>
+              <div className="flex items-center gap-2">
+                <PenguPixelAvatar size={24} mood="jump" className="w-6 h-6" />
+                <span className="text-[11px] font-semibold text-white/90">Quest: Logic Trees</span>
+              </div>
               <span className="text-[10px] font-bold text-amber-300">+250 XP</span>
             </div>
             <div className="grid grid-cols-3 gap-1.5 pt-1">
@@ -100,11 +101,12 @@ export const HeroCardPlaceholder = ({ card }) => {
         )}
 
         {isCard3 && (
-          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10">
+          <div className="flex flex-col gap-2.5 p-3 sm:p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-white/90 flex items-center gap-1.5">
-                <WifiOff size={13} className="text-orange-300" /> Zero-Cloud Desktop
-              </span>
+              <div className="flex items-center gap-2">
+                <PenguPixelAvatar size={24} mood="stand" className="w-6 h-6" />
+                <span className="text-[11px] font-semibold text-white/90">Zero-Cloud Desktop</span>
+              </div>
               <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-200 font-mono">OFFLINE</span>
             </div>
             <div className="p-2 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
@@ -134,7 +136,7 @@ export const HeroCardPlaceholder = ({ card }) => {
   );
 };
 
-// ── 2. About Section Left Workspace Mockup (Replaces video1.webm) ──
+// ── 2. About Section Left Workspace Mockup ──────────────────────────
 export const AboutWorkspacePlaceholder = () => {
   return (
     <div className="w-full h-full bg-gradient-to-br from-[#0c1222] via-[#0b101b] to-[#050811] flex flex-col justify-between p-5 sm:p-6 text-white border border-white/10 select-none">
@@ -146,7 +148,7 @@ export const AboutWorkspacePlaceholder = () => {
           <div className="w-3 h-3 rounded-full bg-green-500/80" />
         </div>
         <div className="flex items-center gap-1.5 text-xs text-neutral-400 font-mono">
-          <PenguIcon size={16} className="text-sky-400" />
+          <PenguPixelAvatar size={18} mood="smile" className="w-4 h-4" />
           <span>Pengu Learn Desktop Studio</span>
         </div>
         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-400/30">
@@ -205,7 +207,7 @@ export const AboutWorkspacePlaceholder = () => {
   );
 };
 
-// ── 3. About Section Right Dashboard Mockup (Replaces group.webp) ──
+// ── 3. About Section Right Dashboard Mockup ──────────────────────────
 export const AboutDashboardPlaceholder = () => {
   return (
     <div className="w-full h-full bg-gradient-to-br from-[#121829] via-[#0d121f] to-[#070b14] p-6 sm:p-8 flex flex-col justify-between text-white border border-white/10 select-none">
@@ -216,8 +218,8 @@ export const AboutDashboardPlaceholder = () => {
             Designed for Active Mastery
           </h3>
         </div>
-        <div className="p-2 rounded-xl bg-sky-500/15 border border-sky-400/30">
-          <Compass className="text-sky-400 w-5 h-5" />
+        <div className="p-1.5 rounded-xl bg-sky-500/15 border border-sky-400/30">
+          <PenguPixelAvatar size={28} mood="smile" className="w-7 h-7" />
         </div>
       </div>
 
@@ -247,13 +249,13 @@ export const AboutDashboardPlaceholder = () => {
   );
 };
 
-// ── 4. Module Card Placeholder (Replaces event photos in Events.jsx) ──
+// ── 4. Module Card Placeholder with Pengu Mascot Avatars ─────────────
 export const ModuleCardPlaceholder = ({ slug, title, category }) => {
   const getTheme = () => {
     switch (slug) {
       case "interactive-labs":
         return {
-          icon: Layers,
+          mood: "step",
           gradient: "from-sky-900/60 via-slate-900 to-black",
           accent: "text-sky-400",
           border: "border-sky-500/30",
@@ -261,7 +263,7 @@ export const ModuleCardPlaceholder = ({ slug, title, category }) => {
         };
       case "adaptive-quests":
         return {
-          icon: Award,
+          mood: "jump",
           gradient: "from-purple-900/60 via-slate-900 to-black",
           accent: "text-purple-400",
           border: "border-purple-500/30",
@@ -269,7 +271,7 @@ export const ModuleCardPlaceholder = ({ slug, title, category }) => {
         };
       case "offline-suite":
         return {
-          icon: WifiOff,
+          mood: "stand",
           gradient: "from-amber-900/60 via-slate-900 to-black",
           accent: "text-amber-400",
           border: "border-amber-500/30",
@@ -278,7 +280,7 @@ export const ModuleCardPlaceholder = ({ slug, title, category }) => {
       case "pengu-companion":
       default:
         return {
-          icon: Sparkles,
+          mood: "wave",
           gradient: "from-emerald-900/60 via-slate-900 to-black",
           accent: "text-emerald-400",
           border: "border-emerald-500/30",
@@ -288,7 +290,6 @@ export const ModuleCardPlaceholder = ({ slug, title, category }) => {
   };
 
   const theme = getTheme();
-  const Icon = theme.icon;
 
   return (
     <div className={`w-full h-full bg-gradient-to-br ${theme.gradient} p-6 flex flex-col justify-between border-b ${theme.border} select-none relative overflow-hidden`}>
@@ -301,20 +302,20 @@ export const ModuleCardPlaceholder = ({ slug, title, category }) => {
         }}
       />
 
-      {/* Top Tag & Icon */}
+      {/* Top Tag & Avatar */}
       <div className="relative z-10 flex items-center justify-between">
         <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded bg-white/10 text-white/90 border border-white/10">
           {theme.tag}
         </span>
-        <div className={`p-2 rounded-xl bg-white/10 backdrop-blur-md ${theme.accent}`}>
-          <Icon size={20} />
+        <div className="p-1.5 rounded-xl bg-white/10 backdrop-blur-md">
+          <PenguPixelAvatar size={24} mood={theme.mood} className="w-6 h-6" />
         </div>
       </div>
 
-      {/* Center Artistic Graphic */}
+      {/* Center Mascot Artwork */}
       <div className="relative z-10 flex items-center justify-center py-2">
-        <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform duration-500 shadow-xl">
-          <Icon size={36} className={theme.accent} />
+        <div className="w-24 h-24 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
+          <PenguPixelAvatar size={64} mood={theme.mood} className="w-16 h-16 drop-shadow-lg" />
         </div>
       </div>
 
