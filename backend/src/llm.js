@@ -21,10 +21,10 @@ function budgetStatus() {
   return { used: budget.day === day ? budget.used : 0, cap: config.llmDailyCap };
 }
 
-async function callModel(model, messages, { json, maxTokens }) {
+async function callModel(model, messages, { json, maxTokens, timeoutMs }) {
   spend();
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), config.llmTimeoutMs);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(URL, {
       method: 'POST',
@@ -40,7 +40,8 @@ async function callModel(model, messages, { json, maxTokens }) {
         messages,
         temperature: 0.3,
         // Free reasoning models spend tokens thinking first; keep it short and out of the content.
-        max_tokens: Math.max(maxTokens, 1000),
+        // Hidden reasoning tokens count toward max_tokens; 1000 truncated the JSON mid-answer.
+        max_tokens: Math.max(maxTokens, 3000),
         reasoning: { effort: 'low', exclude: true },
         // json_object mode makes some free models return empty content; the prompt asks for JSON and parseJson extracts it.
         ...(json && process.env.LLM_JSON_MODE === '1' ? { response_format: { type: 'json_object' } } : {}),
@@ -50,6 +51,7 @@ async function callModel(model, messages, { json, maxTokens }) {
     const body = await res.json();
     const text = body.choices?.[0]?.message?.content;
     if (!text) throw new Error('openrouter: empty completion');
+    if (body.choices[0].finish_reason === 'length') console.warn(`[llm] ${model} hit max_tokens (usage ${JSON.stringify(body.usage)})`);
     return text;
   } finally {
     clearTimeout(timer);
@@ -59,9 +61,13 @@ async function callModel(model, messages, { json, maxTokens }) {
 // Returns raw text from the first model that answers. Throws if both fail.
 async function complete(messages, { json = false, maxTokens = 300 } = {}) {
   let lastErr;
-  for (const model of [config.model, config.fallbackModel]) {
+  const attempts = [
+    [config.model, config.llmTimeoutMs],
+    [config.fallbackModel, config.llmFallbackTimeoutMs],
+  ];
+  for (const [model, timeoutMs] of attempts) {
     try {
-      return await callModel(model, messages, { json, maxTokens });
+      return await callModel(model, messages, { json, maxTokens, timeoutMs });
     } catch (err) {
       lastErr = err;
       console.warn(`[llm] ${model} failed: ${err.message}`);

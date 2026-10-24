@@ -6,7 +6,7 @@ const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
 
-const BACKEND_TIMEOUT_MS = 45000;
+const BACKEND_TIMEOUT_MS = 60000;
 const BRIDGE_TIMEOUT_MS = 2000;
 const INTERVAL_MS = 10000;
 const IDLE_MS = 20000;
@@ -16,6 +16,7 @@ const MAX_CONTENT = 20000;
 const MAX_DIAGS = 20;
 const MAX_MSG = 300;
 const CONFIG_TTL_MS = 30000;
+const RETRY_AFTER_LIMIT_MS = 12000; // backend lets idle through 10 s after the last review
 const SKIP_FILES = new Set(['readme.md', '.pengu-course.json']);
 const SEVERITY = ['error', 'warning', 'info', 'hint']; // vscode.DiagnosticSeverity 0..3
 
@@ -198,10 +199,12 @@ function stopTimers(st) {
     if (st.interval) clearInterval(st.interval);
     if (st.idle) clearTimeout(st.idle);
     if (st.errTimer) clearTimeout(st.errTimer);
+    if (st.retry) clearTimeout(st.retry);
   } catch (e) { /* ignore */ }
   st.interval = null;
   st.idle = null;
   st.errTimer = null;
+  st.retry = null;
 }
 
 async function send(st, trigger) {
@@ -265,6 +268,13 @@ async function send(st, trigger) {
         };
         log('snapshot ok reviewed=' + j.reviewed + ' severity=' + j.severity +
           (j.question ? ' question="' + j.question + '"' : '') + (j.reason ? ' reason=' + j.reason : ''));
+        if (j.reviewed === false && j.reason === 'rate_limited') {
+          // Not reviewed: forget it was sent and try the latest code again once the server allows it.
+          st.lastHash = null;
+          if (!st.retry) {
+            st.retry = setTimeout(() => { st.retry = null; send(st, 'idle'); }, RETRY_AFTER_LIMIT_MS);
+          }
+        }
       }
     } catch (e) {
       st.lastHash = null;
@@ -304,7 +314,7 @@ function getState(doc) {
   if (!st) {
     st = {
       doc, interval: null, idle: null, errTimer: null,
-      lastHash: null, lastErrSig: '', lastSentAt: 0,
+      lastHash: null, lastErrSig: '', lastSentAt: 0, retry: null,
       inFlight: false, pending: null, seenErrors: new Set()
     };
     states.set(key, st);
@@ -358,6 +368,10 @@ function onSave(doc) {
     if (!cfg) return;
     bridge(cfg, { type: 'file_saved', courseId: info.courseId, filePath: info.filePath });
     log('file_saved ' + info.filePath);
+    // Saving is the natural "check my code" moment: review now instead of waiting for the timers.
+    const st = getState(doc);
+    stopTimers(st);
+    send(st, 'idle');
   } catch (e) {
     log('onSave error: ' + (e && e.message ? e.message : e));
   }

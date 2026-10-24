@@ -7,7 +7,7 @@ All JSON is UTF-8. Timestamps are ISO-8601 strings. `userId` is a UUID v4 string
 ## 1. Backend HTTP API
 Base URL: `BACKEND_URL` (production value lives in `app/config.default.json`; local dev `http://localhost:8787`).
 CORS open. Body limit 256 KB. Every error is `{ "error": "<message>" }` with 4xx/5xx. Clients **ignore errors silently**.
-Cold start on Render can take ~40 s: timeouts **45 s** for /snapshot and /chat, 15 s for /progress.
+Cold start on Render can take ~40 s: timeouts **60 s** for /snapshot and /chat (free LLMs take 15-45 s), 15 s for /progress.
 
 ### GET /health
 ```json
@@ -45,7 +45,7 @@ Response 200 (always 200 for valid input, even when nothing was reviewed):
 - `question`: string ≤ 25 words, or `null` (nothing worth saying). Never contains code or the full answer.
 - `severity` ∈ `none | low | medium | high`.
 - When not reviewed: `{ "reviewed": false, "question": null, "mistakes": [], "severity": "none", "reason": "duplicate|rate_limited|empty" }`.
-- Server rules: dedupe by sha256(content) per user+file; ≤1 LLM call per user per 30 s; `error` trigger may bypass
+- Server rules: dedupe by sha256(content) per user+file; ≤1 LLM call per user per 30 s; `error` and `idle` triggers may bypass
   the 30 s window if ≥10 s since the last call; hard cap 60 LLM calls/user/hour.
 - `mistakes[].type` and `.concept` are lowercase `snake_case`.
 

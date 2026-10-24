@@ -21,7 +21,9 @@ module.exports = {
   // Free-tier models only. Free keys get ~50 free requests/day across all models, hence llmDailyCap.
   model: env.LLM_MODEL || 'nvidia/nemotron-3-ultra-550b-a55b:free',
   fallbackModel: env.LLM_FALLBACK_MODEL || 'poolside/laguna-xs-2.1:free',
-  llmTimeoutMs: Number(env.LLM_TIMEOUT_MS || 25000),
+  // Free-tier Nemotron takes 15-40+ s. Primary + fallback (55 s) must stay under the clients' 60 s timeout.
+  llmTimeoutMs: Number(env.LLM_TIMEOUT_MS || 45000),
+  llmFallbackTimeoutMs: Number(env.LLM_FALLBACK_TIMEOUT_MS || 10000),
   llmDailyCap: Number(env.LLM_DAILY_CAP || 45),
   forceStub: env.STUB === '1',
 

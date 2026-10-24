@@ -19,7 +19,8 @@ function check(userId, { trigger, kind = 'review' } = {}, now = Date.now()) {
   if (u.calls.length >= config.llmHourlyCap) return 'rate_limited';
   if (kind === 'review') {
     const since = now - u.last;
-    const minGap = trigger === 'error' ? config.errorBypassMinMs : config.llmMinIntervalMs;
+    // error and idle (user paused / saved) are the moments feedback matters most: shorter gap.
+    const minGap = trigger === 'error' || trigger === 'idle' ? config.errorBypassMinMs : config.llmMinIntervalMs;
     if (since < minGap) return 'rate_limited';
   }
   return null;

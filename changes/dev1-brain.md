@@ -28,3 +28,9 @@
 - Files: app/config.default.json, docs/STATE.md
 - What: Render backend https://pengu-learn.onrender.com verified; app points at it; release zip built
 - Test: `curl https://pengu-learn.onrender.com/health`
+
+### Fix: pet not correcting while coding
+- Files: vscode-ext/extension.js (+0.1.2 vsix), app/courses.js, app/main.js, backend/src/{limits,llm,config}.js, docs/CONTRACT.md
+- Root causes: no review on save (timers died with the window); rate_limited reviews marked as sent, never retried;
+  idle check blocked by 30 s window; LLM timeout 25 s < free-model latency; reasoning tokens truncated JSON at 1000
+- Test: open a lesson, add a bug, Ctrl+S -> pet thinks, bubble with a question within ~15-45 s

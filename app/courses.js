@@ -143,13 +143,16 @@ function findVsix(app) {
 }
 
 async function ensureExtension(app, codePath) {
-  const listed = await runCode(codePath, ['--list-extensions'], 30000);
-  if (listed.ok && listed.stdout.toLowerCase().split(/\r?\n/).some((l) => l.trim() === EXTENSION_ID)) return true;
   const vsix = findVsix(app);
   if (!vsix) {
     console.warn('Pengu extension .vsix not found; skipping install.');
     return true;
   }
+  // Reinstall when the bundled version differs from the installed one, so app updates ship extension fixes.
+  const version = (path.basename(vsix).match(/^pengu-watcher-(.+)\.vsix$/i) || [])[1] || '';
+  const listed = await runCode(codePath, ['--list-extensions', '--show-versions'], 30000);
+  const wanted = `${EXTENSION_ID}@${version}`.toLowerCase();
+  if (listed.ok && listed.stdout.toLowerCase().split(/\r?\n/).some((l) => l.trim() === wanted)) return true;
   const installed = await runCode(codePath, ['--install-extension', vsix, '--force'], 120000);
   if (!installed.ok) console.error('Extension install failed:', installed.stderr);
   return installed.ok;
