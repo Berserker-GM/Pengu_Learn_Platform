@@ -38,6 +38,7 @@ google-service-account.json
 
 # Deployment
 .vercel/
+Pengu-win.zip
 
 # Editor directories and files
 .vscode/*
