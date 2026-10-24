@@ -1,0 +1,29 @@
+# Render Blueprint: New > Blueprint > pick this repo. Secrets are set in the Render dashboard (sync: false).
+services:
+  - type: web
+    name: pengu-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: CONTENT_DIR
+        value: ../content
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: anthropic/claude-haiku-5.5
+      - key: LLM_FALLBACK_MODEL
+        value: google/gemini-3.1-flash-lite
+      - key: FALKORDB_HOST
+        sync: false
+      - key: FALKORDB_PORT
+        sync: false
+      - key: FALKORDB_USERNAME
+        sync: false
+      - key: FALKORDB_PASSWORD
+        sync: false
