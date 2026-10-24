@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config');
@@ -14,126 +13,102 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '256kb' }));
 
-const PRODUCT_PRICE = 95000; // INR 950.00, approximately USD 10.
-const PRODUCT_CURRENCY = 'INR';
 const DOWNLOADS = {
   windows: { file: 'PenguLearn-Setup-v2.4.1.exe', name: 'PenguLearn-Setup-v2.4.1.exe' },
   macos: { file: 'PenguLearn-v2.4.1.dmg', name: 'PenguLearn-v2.4.1.dmg' },
   linux: { file: 'PenguLearn-v2.4.1.AppImage', name: 'PenguLearn-v2.4.1.AppImage' },
 };
 
-app.get('/payments/downloads/:platform', (req, res) => {
-  const artifact = DOWNLOADS[req.params.platform];
-  if (!artifact) return res.status(404).json({ error: 'Unknown platform' });
-  const filePath = path.join(__dirname, '..', 'downloads', artifact.file);
-  res.json({ available: fs.existsSync(filePath) });
+const accessTableUrl = () => `${config.supabaseUrl}/rest/v1/download_access`;
+const serviceHeaders = () => ({
+  apikey: config.supabaseServiceRoleKey,
+  Authorization: `Bearer ${config.supabaseServiceRoleKey}`,
+  'Content-Type': 'application/json',
 });
 
-app.get('/payments/config', (_req, res) => {
-  if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-    return res.status(503).json({ error: 'Razorpay is not configured' });
+async function authenticateSupabaseUser(req) {
+  if (!config.supabaseUrl || !config.supabaseServiceRoleKey) {
+    const error = new Error('Account access is not configured on the server.');
+    error.status = 503;
+    throw error;
   }
-  res.json({ keyId: process.env.RAZORPAY_KEY_ID, amount: PRODUCT_PRICE, currency: PRODUCT_CURRENCY });
+  const token = req.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
+  if (!token) {
+    const error = new Error('Sign in with Google to continue.');
+    error.status = 401;
+    throw error;
+  }
+  const response = await fetch(`${config.supabaseUrl}/auth/v1/user`, {
+    headers: { apikey: config.supabaseServiceRoleKey, Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    const error = new Error('Your sign-in expired. Sign in again to continue.');
+    error.status = 401;
+    throw error;
+  }
+  return response.json();
+}
+
+async function getUserAccess(userId) {
+  const query = new URLSearchParams({
+    select: 'status,created_at,payment_reference,source',
+    user_id: `eq.${userId}`,
+    order: 'created_at.desc',
+    limit: '20',
+  });
+  const response = await fetch(`${accessTableUrl()}?${query}`, { headers: serviceHeaders() });
+  if (!response.ok) throw new Error('Could not check account access.');
+  const requests = await response.json();
+  return requests.find((request) => request.status === 'approved') || requests[0] || null;
+}
+
+app.get('/access/status', async (req, res, next) => {
+  try {
+    const user = await authenticateSupabaseUser(req);
+    res.json({ access: await getUserAccess(user.id) });
+  } catch (err) { next(err); }
 });
 
-app.post('/payments/order', async (_req, res) => {
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
-
+app.post('/access/request', async (req, res, next) => {
   try {
-    const response = await fetch('https://api.razorpay.com/v1/orders', {
+    const user = await authenticateSupabaseUser(req);
+    const paymentReference = str(req.body?.paymentReference, 80).trim();
+    if (paymentReference.length < 6) return res.status(400).json({ error: 'Enter the UPI transaction reference from your payment app.' });
+    const existing = await getUserAccess(user.id);
+    if (existing?.status === 'approved') return res.json({ access: existing });
+    const response = await fetch(accessTableUrl(), {
       method: 'POST',
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount: PRODUCT_PRICE,
-        currency: PRODUCT_CURRENCY,
-        receipt: `pengu_${crypto.randomUUID().replace(/-/g, '')}`,
-        notes: { product: 'Pengu Learn Desktop License' },
-      }),
+      headers: { ...serviceHeaders(), Prefer: 'return=representation' },
+      body: JSON.stringify({ user_id: user.id, status: 'pending', payment_reference: paymentReference, source: 'manual_upi' }),
     });
-    const order = await response.json();
-    if (!response.ok) {
-      console.error('[razorpay order]', order);
-      return res.status(502).json({ error: 'Could not create a payment order' });
-    }
-    res.json({ orderId: order.id, amount: order.amount, currency: order.currency, keyId });
-  } catch (err) {
-    console.error('[razorpay order]', err);
-    res.status(502).json({ error: 'Could not reach Razorpay' });
-  }
+    if (!response.ok) throw new Error('Could not submit the payment for review.');
+    res.status(201).json({ access: (await response.json())[0] });
+  } catch (err) { next(err); }
 });
 
-app.post('/payments/verify', async (req, res) => {
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  const { orderId, paymentId, signature } = req.body || {};
-  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
-  if (![orderId, paymentId, signature].every((v) => typeof v === 'string' && v.length < 200) ||
-      !/^order_[A-Za-z0-9]+$/.test(orderId) || !/^pay_[A-Za-z0-9]+$/.test(paymentId) || !/^[a-f0-9]{64}$/.test(signature)) {
-    return res.status(400).json({ error: 'Invalid payment details' });
-  }
-
-  const expected = crypto.createHmac('sha256', keySecret).update(`${orderId}|${paymentId}`).digest();
-  const received = Buffer.from(signature, 'hex');
-  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
-    return res.status(400).json({ error: 'Payment signature did not verify' });
-  }
-
+app.get('/access/downloads/:platform', async (req, res, next) => {
   try {
-    const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
-      headers: { Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}` },
-    });
-    const payment = await response.json();
-    if (!response.ok || payment.status !== 'captured' || payment.order_id !== orderId ||
-        payment.amount !== PRODUCT_PRICE || payment.currency !== PRODUCT_CURRENCY) {
-      return res.status(402).json({ error: 'Payment is not captured or does not match this order' });
-    }
-    res.json({ verified: true });
-  } catch (err) {
-    console.error('[razorpay verify]', err);
-    res.status(502).json({ error: 'Could not verify payment status' });
-  }
-});
-
-app.post('/payments/download', async (req, res) => {
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  const { orderId, paymentId, signature, platform } = req.body || {};
-  const artifact = DOWNLOADS[platform];
-  if (!artifact) return res.status(400).json({ error: 'Unknown platform' });
-  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
-  if (![orderId, paymentId, signature].every((v) => typeof v === 'string' && v.length < 200) ||
-      !/^order_[A-Za-z0-9]+$/.test(orderId) || !/^pay_[A-Za-z0-9]+$/.test(paymentId) || !/^[a-f0-9]{64}$/.test(signature)) {
-    return res.status(400).json({ error: 'Invalid payment details' });
-  }
-
-  const expected = crypto.createHmac('sha256', keySecret).update(`${orderId}|${paymentId}`).digest();
-  const received = Buffer.from(signature, 'hex');
-  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
-    return res.status(403).json({ error: 'Payment signature did not verify' });
-  }
-
-  try {
-    const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
-      headers: { Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}` },
-    });
-    const payment = await response.json();
-    if (!response.ok || payment.status !== 'captured' || payment.order_id !== orderId ||
-        payment.amount !== PRODUCT_PRICE || payment.currency !== PRODUCT_CURRENCY) {
-      return res.status(402).json({ error: 'Payment is not captured or does not match this order' });
-    }
-
+    const user = await authenticateSupabaseUser(req);
+    const access = await getUserAccess(user.id);
+    if (access?.status !== 'approved') return res.status(403).json({ error: 'Your account does not have download access yet.' });
+    const artifact = DOWNLOADS[req.params.platform];
+    if (!artifact) return res.status(404).json({ error: 'Unknown platform' });
     const filePath = path.join(__dirname, '..', 'downloads', artifact.file);
-    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Installer is not published yet' });
+    res.json({ available: fs.existsSync(filePath) });
+  } catch (err) { next(err); }
+});
+
+app.get('/access/download/:platform', async (req, res, next) => {
+  try {
+    const user = await authenticateSupabaseUser(req);
+    const access = await getUserAccess(user.id);
+    if (access?.status !== 'approved') return res.status(403).json({ error: 'Your account does not have download access yet.' });
+    const artifact = DOWNLOADS[req.params.platform];
+    if (!artifact) return res.status(404).json({ error: 'Unknown platform' });
+    const filePath = path.join(__dirname, '..', 'downloads', artifact.file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Installer is not published yet.' });
     return res.download(filePath, artifact.name);
-  } catch (err) {
-    console.error('[razorpay download]', err);
-    return res.status(502).json({ error: 'Could not verify payment or deliver the download' });
-  }
+  } catch (err) { next(err); }
 });
 
 const TRIGGERS = ['interval', 'idle', 'error'];

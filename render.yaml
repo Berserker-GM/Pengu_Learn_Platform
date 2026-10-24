@@ -29,7 +29,7 @@ services:
         sync: false
       - key: FALKORDB_PASSWORD
         sync: false
-      - key: RAZORPAY_KEY_ID
+      - key: SUPABASE_URL
         sync: false
-      - key: RAZORPAY_KEY_SECRET
+      - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false

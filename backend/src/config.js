@@ -13,6 +13,8 @@ const env = process.env;
 module.exports = {
   port: Number(env.PORT || 8787),
   version: require('../package.json').version,
+  supabaseUrl: env.SUPABASE_URL || '',
+  supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY || '',
 
   openrouterKey: env.OPENROUTER_API_KEY || '',
   // Free-tier models only. Free keys get ~50 free requests/day across all models, hence llmDailyCap.
