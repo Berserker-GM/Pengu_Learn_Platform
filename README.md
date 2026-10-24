@@ -1,12 +1,32 @@
-# React + Vite
+# Pengu Learn Platform 🐧
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interactive learning platform and desktop suite designed for deep conceptual mastery, visual algorithm simulations, adaptive quests, and zero-distraction offline study.
 
-Currently, two official plugins are available:
+## Core Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive Visual Labs**: Real-time sandboxes for science, algorithms, and logic.
+- **Adaptive Quest Engine**: Gamified difficulty progression tuning to learner retention.
+- **Zero-Cloud Offline Desktop Suite**: Fast native performance on Windows, macOS, and Linux.
+- **Gated Product Downloads**: Instant purchase ($19) or VIP voucher bypass (`PENGUFREE`, `POLARIS2026`).
+- **Interactive Pengu Buddy**: Cheerful mascot providing context-sensitive tips and guidance.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Development
+```bash
+npm install
+npm run dev
+```
+
+### Production Build
+```bash
+npm run build
+npm run preview
+```
+
+## Tech Stack
+
+- **Framework**: React 19 + Vite 6
+- **Styling**: Tailwind CSS v4 + Framer Motion
+- **Icons**: Lucide React
+- **Typography**: Sora, Urbanist, Georgia Pro
