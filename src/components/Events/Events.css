@@ -114,7 +114,7 @@
   background-color: #EEEEEE !important;
 }
 
-/* Fix global image invert for this specific component */
-.light-theme #events img {
+/* Keep the How It Feels card artwork from inheriting global image inversion. */
+.light-theme #how-it-feels img {
   filter: none !important;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Download, 
@@ -21,75 +21,17 @@ import {
 import { LampContainer } from "../ui/lamp";
 import { PenguPixelAvatar } from "../Pengu/PenguLogo";
 
-const VALID_VOUCHERS = [
-  "PENGUFREE",
-  "POLARIS2026",
-  "EARLYBIRD",
-  "VIPACCESS",
-  "PENGU",
-  "BUILDER",
-  "FREEPASS",
-  "STUDENT100"
-];
+const PAYMENT_API_BASE = import.meta.env.VITE_PAYMENT_API_URL || (import.meta.env.DEV ? "http://localhost:8787" : "");
+const PAYMENT_RECEIPT_KEY = "pengu_razorpay_receipt";
 
 export const DownloadSection = () => {
-  const [isUnlocked, setIsUnlocked] = useState(() => {
-    return localStorage.getItem("pengu_license_unlocked") === "true";
-  });
-  const [licenseKey, setLicenseKey] = useState(() => {
-    return localStorage.getItem("pengu_license_key") || "";
-  });
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [licenseKey, setLicenseKey] = useState("");
   const [copiedKey, setCopiedKey] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [downloadSuccessNotice, setDownloadSuccessNotice] = useState("");
-
-  useEffect(() => {
-    if (isUnlocked && !licenseKey) {
-      const generated = "PL-VIP-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-      setLicenseKey(generated);
-      localStorage.setItem("pengu_license_key", generated);
-    }
-  }, [isUnlocked, licenseKey]);
-
-  // Internal voucher redemption via URL param (e.g. ?voucher=PENGUFREE)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const voucherParam = params.get("voucher");
-    if (voucherParam && !isUnlocked) {
-      const cleaned = voucherParam.trim().toUpperCase();
-      if (VALID_VOUCHERS.includes(cleaned)) {
-        const newKey = "PL-" + cleaned + "-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-        localStorage.setItem("pengu_license_unlocked", "true");
-        localStorage.setItem("pengu_license_key", newKey);
-        setIsUnlocked(true);
-        setLicenseKey(newKey);
-        // Clean the URL
-        window.history.replaceState({}, "", window.location.pathname + window.location.hash);
-      }
-    }
-  }, []);
-
-  const handleMockPayment = () => {
-    setIsProcessingPayment(true);
-    setTimeout(() => {
-      const newKey = "PL-PAID-" + Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-      localStorage.setItem("pengu_license_unlocked", "true");
-      localStorage.setItem("pengu_license_key", newKey);
-      setIsUnlocked(true);
-      setLicenseKey(newKey);
-      setIsProcessingPayment(false);
-      setIsPaymentModalOpen(false);
-    }, 1200);
-  };
-
-  const handleResetAccess = () => {
-    localStorage.removeItem("pengu_license_unlocked");
-    localStorage.removeItem("pengu_license_key");
-    setIsUnlocked(false);
-    setLicenseKey("");
-    setDownloadSuccessNotice("");
-  };
+  const handleMockPayment = () => setIsPaymentModalOpen(false);
 
   const copyLicenseToClipboard = () => {
     if (licenseKey) {
@@ -100,11 +42,6 @@ export const DownloadSection = () => {
   };
 
   const triggerDownload = (os, filename) => {
-    if (!isUnlocked) {
-      alert("Please complete payment to unlock the download!");
-      return;
-    }
-
     const content = `================================================
 PENGU LEARN DESKTOP PET - RELEASE v2.4.1
 ================================================
@@ -142,6 +79,92 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
 
     setDownloadSuccessNotice(`Started download for ${os} (${filename})!`);
     setTimeout(() => setDownloadSuccessNotice(""), 6000);
+  };
+
+  const loadRazorpay = () => new Promise((resolve, reject) => {
+    if (window.Razorpay) return resolve();
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Could not load Razorpay Checkout."));
+    document.body.appendChild(script);
+  });
+
+  const verifyPayment = async (receipt) => {
+    const response = await fetch(`${PAYMENT_API_BASE}/payments/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(receipt),
+    });
+    const result = await response.json();
+    if (!response.ok || result.verified !== true) throw new Error(result.error || "Payment could not be verified.");
+  };
+
+  const handleDownload = async (os, filename) => {
+    if (isProcessingPayment) return;
+    setIsProcessingPayment(true);
+    setDownloadSuccessNotice("");
+    try {
+      const savedReceipt = localStorage.getItem(PAYMENT_RECEIPT_KEY);
+      if (savedReceipt) {
+        try {
+          await verifyPayment(JSON.parse(savedReceipt));
+          setIsUnlocked(true);
+          triggerDownload(os, filename);
+          setIsProcessingPayment(false);
+          return;
+        } catch {
+          localStorage.removeItem(PAYMENT_RECEIPT_KEY);
+          setIsUnlocked(false);
+        }
+      }
+
+      if (!PAYMENT_API_BASE) throw new Error("Payment service is not configured. Please try again later.");
+      await loadRazorpay();
+      const orderResponse = await fetch(`${PAYMENT_API_BASE}/payments/order`, { method: "POST" });
+      const order = await orderResponse.json();
+      if (!orderResponse.ok) throw new Error(order.error || "Could not start checkout.");
+
+      const checkout = new window.Razorpay({
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Pengu Learn",
+        description: "Lifetime desktop license",
+        order_id: order.orderId,
+        theme: { color: "#38bdf8" },
+        handler: async (response) => {
+          try {
+            await verifyPayment({
+              orderId: response.razorpay_order_id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+            });
+            localStorage.setItem(PAYMENT_RECEIPT_KEY, JSON.stringify({
+              orderId: response.razorpay_order_id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+            }));
+            setIsUnlocked(true);
+            setLicenseKey(`PL-${response.razorpay_payment_id.slice(-8).toUpperCase()}`);
+            triggerDownload(os, filename);
+          } catch (error) {
+            setDownloadSuccessNotice(error.message || "Payment verification failed. Contact support before retrying.");
+          } finally {
+            setIsProcessingPayment(false);
+          }
+        },
+        modal: { ondismiss: () => setIsProcessingPayment(false) },
+      });
+      checkout.on("payment.failed", (event) => {
+        setDownloadSuccessNotice(event.error?.description || "Payment failed. Please try again.");
+        setIsProcessingPayment(false);
+      });
+      checkout.open();
+    } catch (error) {
+      setDownloadSuccessNotice(error.message || "Could not start payment. Please try again.");
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -252,7 +275,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
 
                 <div className="flex items-baseline gap-2 mt-4">
                   <span className="text-4xl sm:text-5xl font-black text-white" style={{ fontFamily: "var(--font-heading)" }}>
-                    $19
+                    $10
                   </span>
                   <span className="text-sm text-neutral-400 line-through">$49</span>
                   <span className="text-xs text-emerald-400 font-semibold ml-1">60% OFF</span>
@@ -293,12 +316,12 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   </div>
                 ) : (
                   <button
-                    onClick={() => setIsPaymentModalOpen(true)}
+                    onClick={() => document.getElementById("download-options")?.scrollIntoView({ behavior: "smooth" })}
                     className="w-full py-3.5 px-6 rounded-xl bg-white text-black font-bold text-sm tracking-wide uppercase hover:bg-neutral-200 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg"
                     style={{ fontFamily: 'var(--font-heading)' }}
                   >
                     <CreditCard size={16} />
-                    <span>Pay $19 & Unlock Product</span>
+                    <span>Choose Your Download â€¢ $10 / â‚¹950</span>
                   </button>
                 )}
               </div>
@@ -329,7 +352,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
           </div>
 
           {/* Download Options Section */}
-          <div className="w-full mt-10 p-6 sm:p-8 rounded-2xl bg-neutral-900/60 border border-white/10">
+          <div id="download-options" className="w-full mt-10 p-6 sm:p-8 rounded-2xl bg-neutral-900/60 border border-white/10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-white/10">
               <div>
                 <h3 className="text-xl font-bold text-white flex items-center gap-2" style={{ fontFamily: "var(--font-heading)" }}>
@@ -380,8 +403,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   <p className="text-[11px] font-mono text-neutral-500 mt-2">Installer: .exe (~84.5 MB)</p>
                 </div>
                 <button
-                  onClick={() => triggerDownload("Windows", "PenguLearn-Setup-v2.4.1.exe")}
-                  disabled={!isUnlocked}
+                  onClick={() => handleDownload("Windows", "PenguLearn-Setup-v2.4.1.exe")}
+                  disabled={isProcessingPayment}
                   className={`mt-5 w-full py-2.5 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                     isUnlocked
                       ? "bg-sky-500 hover:bg-sky-400 text-black cursor-pointer shadow-md hover:shadow-sky-500/25"
@@ -389,8 +412,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   }`}
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  {isUnlocked ? <Download size={14} /> : <Lock size={14} />}
-                  <span>{isUnlocked ? "Download .exe" : "Locked"}</span>
+                  {isUnlocked ? <Download size={14} /> : <CreditCard size={14} />}
+                  <span>{isProcessingPayment ? "Processingâ€¦" : "Download .exe"}</span>
                 </button>
               </div>
 
@@ -410,8 +433,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   <p className="text-[11px] font-mono text-neutral-500 mt-2">Disk Image: .dmg (~91.2 MB)</p>
                 </div>
                 <button
-                  onClick={() => triggerDownload("macOS", "PenguLearn-v2.4.1.dmg")}
-                  disabled={!isUnlocked}
+                  onClick={() => handleDownload("macOS", "PenguLearn-v2.4.1.dmg")}
+                  disabled={isProcessingPayment}
                   className={`mt-5 w-full py-2.5 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                     isUnlocked
                       ? "bg-sky-500 hover:bg-sky-400 text-black cursor-pointer shadow-md hover:shadow-sky-500/25"
@@ -419,8 +442,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   }`}
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  {isUnlocked ? <Download size={14} /> : <Lock size={14} />}
-                  <span>{isUnlocked ? "Download .dmg" : "Locked"}</span>
+                  {isUnlocked ? <Download size={14} /> : <CreditCard size={14} />}
+                  <span>{isProcessingPayment ? "Processingâ€¦" : "Download .dmg"}</span>
                 </button>
               </div>
 
@@ -440,8 +463,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   <p className="text-[11px] font-mono text-neutral-500 mt-2">AppImage: .AppImage (~78.0 MB)</p>
                 </div>
                 <button
-                  onClick={() => triggerDownload("Linux", "PenguLearn-v2.4.1.AppImage")}
-                  disabled={!isUnlocked}
+                  onClick={() => handleDownload("Linux", "PenguLearn-v2.4.1.AppImage")}
+                  disabled={isProcessingPayment}
                   className={`mt-5 w-full py-2.5 px-4 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
                     isUnlocked
                       ? "bg-sky-500 hover:bg-sky-400 text-black cursor-pointer shadow-md hover:shadow-sky-500/25"
@@ -449,8 +472,8 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   }`}
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-                  {isUnlocked ? <Download size={14} /> : <Lock size={14} />}
-                  <span>{isUnlocked ? "Download .AppImage" : "Locked"}</span>
+                  {isUnlocked ? <Download size={14} /> : <CreditCard size={14} />}
+                  <span>{isProcessingPayment ? "Processingâ€¦" : "Download .AppImage"}</span>
                 </button>
               </div>
 
@@ -458,15 +481,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
 
             {/* Helper link for testing */}
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-neutral-500 pt-4 border-t border-white/5">
-              <span>Checksum SHA-256 available in release notes.</span>
-              {isUnlocked && (
-                <button
-                  onClick={handleResetAccess}
-                  className="text-neutral-400 hover:text-white underline cursor-pointer transition-colors"
-                >
-                  Reset license status (for testing lock state)
-                </button>
-              )}
+              <span>One-time payment unlocks all three downloads.</span>
             </div>
           </div>
 
@@ -507,7 +522,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   <div className="text-sm font-semibold text-white">Lifetime Product License</div>
                   <div className="text-[11px] text-neutral-400">Desktop Suite (Win/Mac/Linux)</div>
                 </div>
-                <div className="text-xl font-bold text-sky-400 font-mono">$19.00</div>
+                <div className="text-xl font-bold text-sky-400 font-mono">$10 / â‚¹950</div>
               </div>
 
               <div className="space-y-3 mb-6">
@@ -562,7 +577,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                 ) : (
                   <>
                     <ShieldCheck size={16} />
-                    <span>Complete $19.00 Payment</span>
+                    <span>Complete $10 / â‚¹950 Payment</span>
                   </>
                 )}
               </button>

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const crypto = require('crypto');
 const config = require('./config');
 const llm = require('./llm');
 const store = require('./store');
@@ -10,6 +11,79 @@ const { progress } = require('./audit');
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '256kb' }));
+
+const PRODUCT_PRICE = 95000; // INR 950.00, approximately USD 10.
+const PRODUCT_CURRENCY = 'INR';
+
+app.get('/payments/config', (_req, res) => {
+  if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+    return res.status(503).json({ error: 'Razorpay is not configured' });
+  }
+  res.json({ keyId: process.env.RAZORPAY_KEY_ID, amount: PRODUCT_PRICE, currency: PRODUCT_CURRENCY });
+});
+
+app.post('/payments/order', async (_req, res) => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
+
+  try {
+    const response = await fetch('https://api.razorpay.com/v1/orders', {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: PRODUCT_PRICE,
+        currency: PRODUCT_CURRENCY,
+        receipt: `pengu_${crypto.randomUUID().replace(/-/g, '')}`,
+        notes: { product: 'Pengu Learn Desktop License' },
+      }),
+    });
+    const order = await response.json();
+    if (!response.ok) {
+      console.error('[razorpay order]', order);
+      return res.status(502).json({ error: 'Could not create a payment order' });
+    }
+    res.json({ orderId: order.id, amount: order.amount, currency: order.currency, keyId });
+  } catch (err) {
+    console.error('[razorpay order]', err);
+    res.status(502).json({ error: 'Could not reach Razorpay' });
+  }
+});
+
+app.post('/payments/verify', async (req, res) => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  const { orderId, paymentId, signature } = req.body || {};
+  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
+  if (![orderId, paymentId, signature].every((v) => typeof v === 'string' && v.length < 200) ||
+      !/^order_[A-Za-z0-9]+$/.test(orderId) || !/^pay_[A-Za-z0-9]+$/.test(paymentId) || !/^[a-f0-9]{64}$/.test(signature)) {
+    return res.status(400).json({ error: 'Invalid payment details' });
+  }
+
+  const expected = crypto.createHmac('sha256', keySecret).update(`${orderId}|${paymentId}`).digest();
+  const received = Buffer.from(signature, 'hex');
+  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+    return res.status(400).json({ error: 'Payment signature did not verify' });
+  }
+
+  try {
+    const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}` },
+    });
+    const payment = await response.json();
+    if (!response.ok || payment.status !== 'captured' || payment.order_id !== orderId ||
+        payment.amount !== PRODUCT_PRICE || payment.currency !== PRODUCT_CURRENCY) {
+      return res.status(402).json({ error: 'Payment is not captured or does not match this order' });
+    }
+    res.json({ verified: true });
+  } catch (err) {
+    console.error('[razorpay verify]', err);
+    res.status(502).json({ error: 'Could not verify payment status' });
+  }
+});
 
 const TRIGGERS = ['interval', 'idle', 'error'];
 const DIAG_SEVERITIES = ['error', 'warning', 'info', 'hint'];
