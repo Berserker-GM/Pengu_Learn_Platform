@@ -27,10 +27,10 @@ npm run preview
 ### Deploy the web app to Vercel
 1. Import this repository in Vercel and keep the project root set to the repository root.
 2. Vercel uses `vercel.json` to install with `npm ci`, run `npm run build`, publish `dist`, and route client-side pages back to `index.html`.
-3. The QR is served from `public/payment-qr.jpeg`. Promo downloads use a Vercel Function and a Vercel Blob URL configured as `PROMO_DOWNLOAD_URL` in Vercel Environment Variables.
+3. The QR is served from `public/payment-qr.jpeg`. Entering the `PENGUNEW` promo code redirects to its Google Drive file.
 4. Redeploy after changing environment variables. Vite embeds `VITE_*` values during the build.
 
-No Google Auth, Render service, or Supabase setup is needed for the QR and promo-code panel. The 173 MB ZIP is too large for this project's static deployment and Vercel Function responses, so upload it to Vercel Blob. From the project root, create a public Blob store with `vercel blob create-store pengu-downloads --access public`, then upload with `vercel blob put ./Pengu-win.zip --pathname Pengu-win.zip --access public --content-type application/zip`. Set the resulting Blob URL as `PROMO_DOWNLOAD_URL` in Vercel Environment Variables and redeploy. Vercel Blob serves ZIP files as downloads; see the [Blob CLI guide](https://vercel.com/docs/vercel-blob/manage-blob-storage) and [public Blob docs](https://vercel.com/docs/vercel-blob/public-storage).
+No Google Auth, Render service, Supabase setup, or promo download environment variable is needed for this panel.
 
 ## Tech Stack
 

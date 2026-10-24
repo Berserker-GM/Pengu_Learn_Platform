@@ -1,38 +1,23 @@
 ﻿import React, { useState } from "react";
 import { Clock3, QrCode, ShieldCheck, TicketCheck } from "lucide-react";
 
-const API = "/api/promo";
 const QR = import.meta.env.VITE_PAYMENT_QR_URL || "/payment-qr.jpeg";
+const PROMO_DESTINATION = "https://drive.google.com/file/d/16n4Sa-UA4uJPqoM96AdopxK1vgkZ0PAK/view?usp=drive_link";
 
 export default function DownloadSection() {
   const [promo, setPromo] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
 
-  const downloadWithPromo = async event => {
+  const downloadWithPromo = event => {
     event.preventDefault();
-    setBusy(true);
     setNotice("");
-    try {
-      const response = await fetch(API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: promo.trim() }),
-      });
-      const responseText = await response.text();
-      let result;
-      try {
-        result = responseText ? JSON.parse(responseText) : {};
-      } catch {
-        throw new Error("The Vercel promo API returned an invalid response. Redeploy the latest project changes and try again.");
-      }
-      if (!response.ok) throw new Error(result.error || `Promo API returned HTTP ${response.status}. Redeploy the latest Vercel deployment and check its function logs.`);
-      if (!result.downloadUrl) throw new Error("Promo download is not configured. Add PROMO_DOWNLOAD_URL in Vercel and redeploy.");
-      window.location.assign(result.downloadUrl);
-    } catch (error) {
-      setNotice(error.message);
-      setBusy(false);
+    if (promo.trim().toUpperCase() !== "PENGUNEW") {
+      setNotice("Invalid promo code.");
+      return;
     }
+    setBusy(true);
+    window.location.assign(PROMO_DESTINATION);
   };
 
   return (
