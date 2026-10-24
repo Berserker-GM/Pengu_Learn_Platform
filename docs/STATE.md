@@ -1,7 +1,7 @@
 # STATE (update your block on every push; newest info wins)
 
-Backend URL: `http://localhost:8787` (local) · prod: _TBD, BRAIN fills after Render deploy_
-Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
+Backend URL: **https://pengu-learn.onrender.com** (prod, verified 2026-10-24: llm=openrouter, db=falkordb) · local `http://localhost:8787`
+Phase: **release** · Code freeze: **T+2:15**
 
 ## Dev1 BRAIN (backend, docs)
 - Done: backend verified live (OpenRouter free models + FalkorDB Cloud). Integration: Dev3 pet -> app/pet, Dev4 extension -> vscode-ext
