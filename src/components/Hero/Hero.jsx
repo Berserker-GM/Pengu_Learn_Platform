@@ -1,46 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { PenguLogo, PenguPixelAvatar } from '../Pengu/PenguLogo';
-import { HeroCardPlaceholder } from '../Pengu/Placeholders';
 
 const cardConfig = [
   {
     id: 1,
-    emoji: "🐧",
+    emoji: "??",
     title: "DESKTOP PET",
     subtitle: "Lives on screen, learns alongside you",
     gradient: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
     bgColor: "from-sky-600 to-sky-700",
     video: "/pengu/pengu-wave.mp4"
-  },
-  {
-    id: 2,
-    emoji: "🧠",
-    title: "IT REMEMBERS",
-    subtitle: "Catches repeating mistake patterns",
-    gradient: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-    bgColor: "from-indigo-500 to-purple-600"
-  },
-  {
-    id: 3,
-    emoji: "🎯",
-    title: "DSA & SYSTEM DESIGN",
-    subtitle: "Built specifically for interview rounds",
-    gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
-    bgColor: "from-amber-500 to-orange-600"
   }
 ];
 
 const PenguHero = () => {
   const animationStage = 3;
-  const [cardAnimation, setCardAnimation] = useState(0);
-
-  useEffect(() => {
-    const cardTimer = setInterval(() => {
-      setCardAnimation(prev => (prev + 1) % 3);
-    }, 3400);
-    return () => clearInterval(cardTimer);
-  }, []);
+  
 
   const renderCardContent = (card, isMobile) => {
     if (card.id === 1) {
@@ -106,7 +82,7 @@ const PenguHero = () => {
       const scales = ['scale-95', 'scale-98', 'scale-100'];
       const zIndexes = ['z-10', 'z-20', 'z-30'];
 
-      const currentPosition = (cardAnimation + position) % 3;
+      const currentPosition = position;
 
       return `${rotations[currentPosition]} ${translations[currentPosition]} ${zIndexes[currentPosition]} ${scales[currentPosition]}`;
     };
@@ -132,7 +108,7 @@ const PenguHero = () => {
       <motion.div
         className="absolute inset-0 opacity-[0.08] md:opacity-[0.25]"
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(231, 231, 231, 0.8) 1.5px, transparent 1.5px)",
+          backgroundImage: "radial-gradient(circle, rgba(85, 85, 85, 0.9) 1.5px, transparent 1.5px)",
           backgroundSize: '80px 80px'
         }}
       />
@@ -289,3 +265,5 @@ const PenguHero = () => {
 };
 
 export default PenguHero;
+
+
