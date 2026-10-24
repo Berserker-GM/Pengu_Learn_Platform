@@ -24,3 +24,7 @@
 - Files: app/dashboard/progress.js (new), app/dashboard/index.html, app/dashboard/dashboard.css
 - What: Progress tab renders `dash:get-progress`: totals (reviews, files worked on, active courses), recurring mistakes, weak concepts (mastery bar), repeated bugs, improve tips. Refresh button, empty state when there are no reviews, "server may be waking up" message on `{ error }`.
 - Test: dashboard → Progress. Fresh user shows zeros + the backend's tip.
+### A6 chat
+- Files: app/main.js
+- What: `pet:chat { message }` → `POST /chat { userId, message (trimmed, ≤500), courseId? }` with 45 s timeout; `courseId` = course of the latest bridge event, omitted if none. Returns `{ reply }` or `{ error }` (empty message, timeout, unreachable, non-2xx).
+- Test: with Dev3's pet in `app/pet`, hover the pet, type a question, Enter → reply bubble. Verified against local backend.
