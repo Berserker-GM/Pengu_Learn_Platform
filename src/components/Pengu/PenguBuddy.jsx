@@ -6,32 +6,32 @@ import { PenguPixelAvatar } from "./PenguLogo";
 const PENGU_TIPS = [
   {
     mood: "wave",
-    message: "Hi there! I'm Pengu, your interactive study companion! 👋",
-    action: "Explore Modules",
-    href: "#features"
+    message: "Hi there! I'm Pengu, a desktop pet that learns alongside you for coding interviews! 👋",
+    action: "See The Idea",
+    href: "#the-idea"
+  },
+  {
+    mood: "smile",
+    message: "“Are you sure that’s the right way to loop here?” I ask questions to build intuition without spoiling the answer! 💡",
+    action: "How It Feels",
+    href: "#how-it-feels"
   },
   {
     mood: "jump",
-    message: "Psst! Use voucher code 'PENGUFREE' to bypass payment and get the desktop suite for free! 🎉",
+    message: "Psst! Use voucher code 'PENGUFREE' to bypass payment and unlock the desktop build for free! 🎉",
     action: "Redeem Voucher",
     href: "#download"
   },
   {
-    mood: "smile",
-    message: "Did you know? Pengu Learn runs 100% offline with zero cloud latency or distracting ads! ⚡",
-    action: "See Offline Mode",
-    href: "#about"
-  },
-  {
     mood: "blush",
-    message: "Active simulation builds 3x stronger memory retention than passive video lectures! 💡",
-    action: "How It Works",
-    href: "#about"
+    message: "I remember repeat mistakes! If you made the same error last week, I'll flag it so you don't fail your interview rounds. 🧠",
+    action: "See Mistake Tracking",
+    href: "#the-idea"
   },
   {
     mood: "step",
-    message: "Ready to supercharge your problem-solving? Grab the build for your OS! 🚀",
-    action: "Download App",
+    message: "You can talk to me anytime by typing or voice. I answer briefly like a friend, not a lecture! 🎙️",
+    action: "Download Desktop App",
     href: "#download"
   }
 ];

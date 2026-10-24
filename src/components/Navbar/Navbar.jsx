@@ -63,8 +63,8 @@ export default function Navbar() {
 
   const navItems = [
     { to: "/#hero", label: "Home" },
-    { to: "/#about", label: "About" },
-    { to: "/#features", label: "Modules" },
+    { to: "/#the-idea", label: "The Idea" },
+    { to: "/#how-it-feels", label: "How It Works" },
     { to: "/#download", label: "Download & Pricing" },
     { to: "/#footer", label: "Contact" },
   ];
@@ -111,7 +111,7 @@ export default function Navbar() {
             </a>
 
             {/* Desktop Menu Pill */}
-            <div className="hidden md:flex items-center bg-[#E8E8E8] rounded-full px-1.5 py-1.5 gap-0.5 shadow-sm">
+            <div className="hidden md:flex items-center bg-[#E8E8E8] rounded-full px-2 py-1.5 gap-0.5 shadow-sm">
               {navItems.map((item) => (
                 <a
                   key={item.to}
@@ -124,16 +124,6 @@ export default function Navbar() {
                 </a>
               ))}
             </div>
-
-            {/* Direct Get Product Action Pill */}
-            <a
-              href="/#download"
-              onClick={(e) => handleNavClick(e, "/#download")}
-              className="hidden md:flex items-center justify-center px-4 py-2 rounded-full bg-black text-white hover:bg-neutral-800 text-[13px] font-bold tracking-wider uppercase transition-all shadow-sm"
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
-              Get Product
-            </a>
 
             {/* Mobile Menu Button */}
             <button

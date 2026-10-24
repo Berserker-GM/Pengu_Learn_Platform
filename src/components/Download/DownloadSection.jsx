@@ -117,7 +117,7 @@ export const DownloadSection = () => {
     }
 
     const content = `================================================
-PENGU LEARN DESKTOP SUITE - RELEASE v2.4.1
+PENGU LEARN DESKTOP PET - RELEASE v2.4.1
 ================================================
 Target OS: ${os}
 License Key: ${licenseKey || "PL-VERIFIED-LIFETIME"}
@@ -125,9 +125,17 @@ Status: Activated & Verified
 
 Thank you for downloading Pengu Learn!
 To start your learning journey:
-1. Run the installer for your platform.
+1. Run the installer for ${os}.
 2. Enter your personal license key above when prompted.
-3. Access all interactive visual modules, labs, and adaptive quests.
+3. Open your favorite code editor—Pengu will wander, watch quietly, ask Socratic questions, and track your recurring mistake patterns.
+
+Features included:
+- Desktop mascot living on screen (wanders, naps, jumps)
+- DSA & System Design tracks
+- Socratic mentor questions ("Asks, not tells")
+- Recurring mistake pattern tracking
+- Voice & text chat anytime
+- Any language: Python, C++, Java, JS/TS, Go, Rust
 
 Support: support@pengulearn.com
 Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
@@ -173,7 +181,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             className="text-center text-neutral-400 text-sm sm:text-base max-w-2xl font-normal leading-relaxed mt-2"
             style={{ fontFamily: 'var(--font-body)' }}
           >
-            Experience our next-generation interactive learning platform. One-time license gives you lifetime desktop access, offline labs, and zero monthly subscriptions.
+            Built for students and job seekers preparing for coding interviews who study alone and want personal guidance without paying $100+/hr for a human tutor.
           </motion.p>
 
           {/* Status Pill Badge */}
@@ -264,19 +272,27 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                 <ul className="mt-6 space-y-2.5 text-xs sm:text-sm text-neutral-300">
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                    <span>Instant download for Windows, macOS & Linux</span>
+                    <span>Desktop pet living on screen (Windows, macOS & Linux)</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                    <span>All interactive labs, visualizers & simulations</span>
+                    <span>DSA & System Design tracks ready in your editor</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                    <span>Lifetime offline mode & zero subscriptions</span>
+                    <span>Socratic mentor prompts: asks instead of tells</span>
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
-                    <span>Free feature upgrades for v2.x</span>
+                    <span>Tracks recurring mistake patterns across weeks</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                    <span>Talk anytime by typing or voice like a friend</span>
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                    <span>Works with any programming language</span>
                   </li>
                 </ul>
               </div>

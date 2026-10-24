@@ -22,12 +22,12 @@ const DesktopFooter = () => {
                   PENGU LEARN
                 </h3>
                 <p className="text-sky-400 text-[12px] tracking-[0.2em] font-mono font-medium uppercase mt-0.5">
-                  DESKTOP SUITE v2.4
+                  DESKTOP CODING PET
                 </p>
               </div>
             </div>
             <p className="text-neutral-400 text-sm leading-relaxed max-w-sm">
-              The modern interactive learning environment built for visual understanding, adaptive problem-solving, and distraction-free offline study.
+              The desktop pet that learns alongside you. Quietly watches as you practice, asks mentor questions, and remembers recurring mistake patterns for interview prep.
             </p>
           </div>
 
@@ -54,8 +54,8 @@ const DesktopFooter = () => {
         {/* ── Middle Column: Nav Links ── */}
         <div className="w-[34%] flex flex-col border-r border-[#1f1f1f]">
           {[
-            { name: 'ABOUT PENGU', href: '#about', hoverColor: '#38bdf8' },
-            { name: 'LEARNING MODULES', href: '#features', hoverColor: '#38bdf8' },
+            { name: 'THE IDEA', href: '#the-idea', hoverColor: '#38bdf8' },
+            { name: 'HOW IT WORKS', href: '#how-it-feels', hoverColor: '#38bdf8' },
             { name: 'DOWNLOAD PRODUCT', href: '#download', hoverColor: '#38bdf8' },
             { name: 'REDEEM VOUCHER', href: '#download', hoverColor: '#f59e0b' },
           ].map((link, idx) => (
@@ -82,11 +82,11 @@ const DesktopFooter = () => {
             className="text-[40px] lg:text-[48px] xl:text-[56px] font-black text-white/95 tracking-tighter leading-[0.98]"
             style={{ fontFamily: 'var(--font-heading)' }}
           >
-            EXPLORE.
+            ASKS.
             <br />
-            <span className="text-sky-400">INTERACT.</span>
+            <span className="text-sky-400">NOT TELLS.</span>
             <br />
-            <span className="text-white/60">MASTER.</span>
+            <span className="text-white/60">REMEMBERS.</span>
           </h2>
         </div>
       </div>
@@ -258,8 +258,8 @@ const SpringWaveCanvas = () => {
 // ─── Mobile Footer Component ───────────────────────────────────────────────────
 const MobileFooter = () => {
   const navLinks = [
-    { name: 'About Pengu', href: '#about' },
-    { name: 'Modules & Features', href: '#features' },
+    { name: 'The Idea', href: '#the-idea' },
+    { name: 'How It Works', href: '#how-it-feels' },
     { name: 'Download Product ($19)', href: '#download' },
     { name: 'Redeem Voucher', href: '#download' },
   ];
@@ -276,11 +276,11 @@ const MobileFooter = () => {
         {/* Big Statement */}
         <div className="px-6 sm:px-10 lg:px-16 pt-16 pb-12">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white/95 tracking-tighter leading-[0.98] max-w-4xl mx-auto text-center">
-            EXPLORE.
+            ASKS.
             <br />
-            <span className="text-sky-400">INTERACT.</span>
+            <span className="text-sky-400">NOT TELLS.</span>
             <br />
-            <span className="text-white/60">MASTER.</span>
+            <span className="text-white/60">REMEMBERS.</span>
           </h2>
         </div>
 

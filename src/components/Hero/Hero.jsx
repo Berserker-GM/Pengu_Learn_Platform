@@ -6,26 +6,26 @@ import { HeroCardPlaceholder } from '../Pengu/Placeholders';
 const cardConfig = [
   {
     id: 1,
-    emoji: "⚡",
-    title: "VISUAL LABS",
-    subtitle: "Meet Your Study Companion",
+    emoji: "🐧",
+    title: "DESKTOP PET",
+    subtitle: "Lives on screen, learns alongside you",
     gradient: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
     bgColor: "from-sky-600 to-sky-700",
     video: "/pengu/pengu-wave.mp4"
   },
   {
     id: 2,
-    emoji: "💡",
-    title: "ADAPTIVE QUESTS",
-    subtitle: "Gamified Concept Pathways",
+    emoji: "🧠",
+    title: "IT REMEMBERS",
+    subtitle: "Catches repeating mistake patterns",
     gradient: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
     bgColor: "from-indigo-500 to-purple-600"
   },
   {
     id: 3,
-    emoji: "🚀",
-    title: "OFFLINE SUITE",
-    subtitle: "Zero-Latency Desktop Engine",
+    emoji: "🎯",
+    title: "DSA & SYSTEM DESIGN",
+    subtitle: "Built specifically for interview rounds",
     gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     bgColor: "from-amber-500 to-orange-600"
   }
@@ -38,7 +38,7 @@ const PenguHero = () => {
   useEffect(() => {
     const cardTimer = setInterval(() => {
       setCardAnimation(prev => (prev + 1) % 3);
-    }, 3200);
+    }, 3400);
     return () => clearInterval(cardTimer);
   }, []);
 
@@ -54,19 +54,30 @@ const PenguHero = () => {
             playsInline
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent p-5 sm:p-6 flex flex-col justify-between pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent p-5 sm:p-6 flex flex-col justify-between pointer-events-none">
             <div className="flex items-center justify-between">
               <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
-                PENGU LIVE 🐾
+                PENGU IS WATCHING 🐾
               </span>
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             </div>
+
+            {/* Simulated Speech Bubble from Pengu */}
+            <div className="p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-sky-400/30 shadow-lg text-left">
+              <div className="text-[10px] font-mono text-sky-400 font-bold uppercase mb-0.5">
+                Pengu asks:
+              </div>
+              <p className="text-xs sm:text-sm text-white font-medium">
+                "Are you sure that’s the right way to loop here?"
+              </p>
+            </div>
+
             <div>
               <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white mb-0.5">
-                VISUAL LABS
+                NOT ANOTHER TOOL
               </h4>
               <p className="text-xs sm:text-sm text-sky-200 font-medium">
-                Interactive learning with Pengu
+                Feels like a coding friend sitting next to you
               </p>
             </div>
           </div>
@@ -129,7 +140,7 @@ const PenguHero = () => {
         }}
       />
 
-      {/* Enhanced moving gradient accent */}
+      {/* Moving gradient accent */}
       <motion.div
         className="absolute inset-0 opacity-[0.35]"
         animate={{
@@ -147,23 +158,9 @@ const PenguHero = () => {
         }}
       />
 
-      {/* Top Branding Bar */}
+      {/* Top Branding Bar - Clean without badges or extra buttons */}
       <nav className="flex justify-between items-center px-6 md:px-12 pt-6 relative z-50">
         <PenguLogo showText={true} />
-
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 text-xs font-mono font-semibold">
-            <PenguPixelAvatar size={18} mood="smile" className="w-4 h-4" />
-            <span>v2.4 STABLE RELEASE</span>
-          </div>
-          <a
-            href="#download"
-            className="text-xs font-bold px-4 py-2 rounded-full bg-white text-black hover:bg-neutral-200 transition-all uppercase tracking-wider shadow-sm"
-            style={{ fontFamily: 'var(--font-heading)' }}
-          >
-            Get Pengu
-          </a>
-        </div>
       </nav>
 
       <div className="flex flex-col justify-center min-h-screen relative px-4 pt-4 pb-24 sm:pb-12 md:pb-24 lg:pb-20 z-10">
@@ -185,13 +182,13 @@ const PenguHero = () => {
               transition={{ duration: 1.2, delay: 0.3 }}
             >
               <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl mb-2 sm:mb-4">
-                MEET
+                MEET YOUR
               </div>
               <div className="italic font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2 sm:mb-4 px-2 text-sky-400">
-                PENGU LEARN
+                DESKTOP CODING
               </div>
               <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
-                PLATFORM
+                PET
               </div>
             </motion.h1>
           </div>
@@ -208,9 +205,9 @@ const PenguHero = () => {
             <div className={`text-right transform transition-all duration-2000 ease-out ${animationStage >= 2 ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'
               }`}>
               <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight" style={{ fontFamily: 'var(--font-heading)' }}>
-                PENGU<br />
-                <span className="italic font-light text-sky-400">LEARN</span><br />
-                <span className="text-4xl lg:text-5xl xl:text-6xl">DESKTOP</span>
+                DESKTOP<br />
+                <span className="italic font-light text-sky-400">CODING</span><br />
+                <span className="text-4xl lg:text-5xl xl:text-6xl">PET</span>
               </h1>
             </div>
 
@@ -226,9 +223,9 @@ const PenguHero = () => {
             <div className={`text-left transform transition-all duration-2000 ease-out ${animationStage >= 2 ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'
               }`}>
               <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight" style={{ fontFamily: 'var(--font-heading)' }}>
-                <span className="italic font-bold">EXPLORE</span><br />
-                <span className="italic font-bold text-sky-400">INTERACT</span><br />
-                <span className="italic font-bold">MASTER</span>
+                <span className="italic font-bold">ASKS,</span><br />
+                <span className="italic font-bold text-sky-400">NOT TELLS.</span><br />
+                <span className="italic font-bold">REMEMBERS.</span>
               </h1>
             </div>
 
@@ -241,8 +238,8 @@ const PenguHero = () => {
             <div className={`transform transition-all duration-2000 ease-out ${animationStage >= 2 ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
               }`}>
               <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight text-center" style={{ fontFamily: 'var(--font-heading)' }}>
-                PENGU LEARN<br />
-                <span className="italic font-light text-sky-400">PLATFORM</span>
+                YOUR DESKTOP<br />
+                <span className="italic font-light text-sky-400">CODING PET</span>
               </h1>
             </div>
 
@@ -260,11 +257,11 @@ const PenguHero = () => {
           <div className={`mt-6 lg:mt-14 mb-12 sm:mb-0 max-w-4xl mx-auto text-center transition-all duration-1500 ease-out ${animationStage >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
             }`} style={{ transitionDelay: '800ms' }}>
             <p className="text-gray-300 text-sm sm:text-base lg:text-xl leading-relaxed px-6 sm:px-4 text-center w-full box-border" style={{ fontFamily: 'var(--font-heading)' }}>
-              Empowering curious minds through intuitive, interactive visual learning.{' '}
+              A little pet that lives on your desktop and learns alongside you.{' '}
               <br className="hidden sm:inline" />
-              Tackle complex subjects with zero distractions, adaptive quests,{' '}
+              While you practice coding for interviews, it quietly watches, notices where you slip,{' '}
               <br className="hidden sm:inline" />
-              and a lightning-fast offline desktop experience.
+              and asks you the kind of questions a good mentor would.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -274,14 +271,14 @@ const PenguHero = () => {
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
                 <PenguPixelAvatar size={18} mood="wave" className="w-4 h-4" />
-                <span>Download Suite ($19 / Voucher)</span>
+                <span>Adopt Pengu ($19 / Voucher)</span>
               </a>
               <a
-                href="#features"
+                href="#the-idea"
                 className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm uppercase tracking-wider border border-white/15 transition-all"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
-                Explore Modules
+                The Idea & How It Feels
               </a>
             </div>
           </div>

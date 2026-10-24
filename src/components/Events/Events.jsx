@@ -9,47 +9,47 @@ const PenguModulesScroll = () => {
 
   const modules = [
     {
-      slug: "interactive-labs",
-      displayName: "Visual Concept Labs",
-      description: "Interactive sandboxes that render algorithms, data flow, mathematics, and systems in real-time. Adjust variables and immediately see mathematical outcomes take shape.",
-      shortDescription: "Real-time visual sandboxes with immediate feedback.",
-      badge: "LIVE LABS",
-      category: "Visual Labs",
-      isFlagship: true
+      slug: "path-selection",
+      displayName: "Pick a Path & Open Editor",
+      description: "You click Pengu, pick your path (Data Structures & Algorithms, or System Design), and your code editor opens with the problems ready. Pengu quietly watches as you write solutions.",
+      shortDescription: "Editor opens with problems ready as you pick your track.",
+      badge: "HOW IT FEELS",
+      category: "Workflow",
+      type: "FEELS",
     },
     {
-      slug: "adaptive-quests",
-      displayName: "Adaptive Quests",
-      description: "Gamified progression tracks that dynamically calibrate challenge complexity to your personal mastery curve. Gain XP, unlock achievements, and eliminate learning blind spots.",
-      shortDescription: "Personalized challenge algorithms that scale with your progress.",
-      badge: "ADAPTIVE",
-      category: "Quests",
-      isFlagship: true
+      slug: "socratic-questions",
+      displayName: "Asks Instead of Tells",
+      description: "Questions build understanding in a way answers don't. Pengu never hands you the code. It nudges you with mentor speech bubbles: 'Are you sure that’s the right way to loop here?'",
+      shortDescription: "Nudges you to find answers yourself without spoiling them.",
+      badge: "WHAT'S DIFFERENT",
+      category: "Socratic Guidance",
+      type: "DIFFERENT",
     },
     {
-      slug: "offline-suite",
-      displayName: "Offline Desktop Core",
-      description: "A lightweight, distraction-free desktop application engineered for pure focus. Works 100% offline without mandatory account syncs, telemetry overhead, or web lag.",
-      shortDescription: "Native desktop runtime with zero cloud dependencies.",
-      badge: "OFFLINE READY",
-      category: "Desktop Suite",
-      isFlagship: false
+      slug: "mistake-patterns",
+      displayName: "Remembers Your Recurring Slip-Ups",
+      description: "It remembers: it knows you made the same error last week and says so. Your dashboard tracks what you keep getting wrong, what you've improved on, and what to work on next.",
+      shortDescription: "Memory engine tracks repeat blindspots over time.",
+      badge: "WHAT'S DIFFERENT",
+      category: "Mistake Memory",
+      type: "DIFFERENT",
     },
     {
-      slug: "pengu-companion",
-      displayName: "Contextual Guidance",
-      description: "Intelligent Socratic prompts and step-by-step conceptual hints designed to stimulate active thinking rather than simply spoiling the final answer.",
-      shortDescription: "Smart hints and problem-solving coaching built right in.",
-      badge: "SMART HINTS",
-      category: "Companion",
-      isFlagship: false
+      slug: "desktop-companion",
+      displayName: "Wanders, Naps, & Talks Anytime",
+      description: "Lives on your desktop—not another tab or homework tool. It wanders around, naps when you leave, and jumps when hovered. Talk to it anytime by typing or voice, like a friend.",
+      shortDescription: "Desktop pet that feels alive, answers like a friend.",
+      badge: "HOW IT FEELS",
+      category: "Desktop Pet",
+      type: "FEELS",
     },
   ];
 
   const filteredModules = modules.filter((m) => {
     if (filter === "ALL") return true;
-    if (filter === "CORE LABS") return m.isFlagship;
-    if (filter === "PRO MODULES") return !m.isFlagship;
+    if (filter === "HOW IT FEELS") return m.type === "FEELS";
+    if (filter === "WHY IT'S DIFFERENT") return m.type === "DIFFERENT";
     return true;
   });
 
@@ -93,7 +93,7 @@ const PenguModulesScroll = () => {
     <div
       className="preserve-color min-h-screen w-full pb-20 pt-12 md:pt-32 px-5 md:px-12 xl:px-20 transition-colors duration-300"
       style={{ fontFamily: "var(--font-body)" }}
-      id="features"
+      id="how-it-feels"
     >
       <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
       
@@ -107,26 +107,26 @@ const PenguModulesScroll = () => {
         >
           <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-widest uppercase text-sky-400">
             <Sparkles size={14} />
-            <span>MODULE SHOWCASE</span>
+            <span>HOW IT FEELS & WHAT'S DIFFERENT</span>
           </div>
 
           <h2 
             className="event-primary-text font-bold tracking-tighter max-w-[420px]"
             style={{ fontSize: "clamp(32px, 4vw, 56px)", lineHeight: "1.15", wordSpacing: "0.2em" }}
           >
-            How Pengu <br /> Accelerates You
+            How It Feels <br /> To Use Pengu
           </h2>
 
           <p 
-            className="event-subtext text-[15px] md:text-[17px] leading-[1.6] max-w-[420px] font-normal mt-1"
+            className="event-subtext text-[15px] md:text-[17px] leading-[1.6] max-w-[420px] font-normal mt-1 text-neutral-300"
             style={{ fontFamily: "var(--font-body)" }}
           >
-            A cohesive suite of visual laboratories, interactive algorithmic sandboxes, and adaptive learning tracks engineered to turn complex theory into second nature.
+            A desktop character that wanders, naps, and jumps when hovered. It opens your editor with interview problems, nudges you when you slip, and remembers repeat mistakes.
           </p>
 
           {/* Filter Pills */}
           <div className="event-card-border flex items-center mt-4 border rounded-[6px] w-fit p-[5px] bg-transparent">
-            {["ALL", "CORE LABS", "PRO MODULES"].map((f) => (
+            {["ALL", "HOW IT FEELS", "WHY IT'S DIFFERENT"].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
@@ -145,7 +145,7 @@ const PenguModulesScroll = () => {
             href="#download"
             className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-sky-400 hover:text-sky-300 mt-4 group"
           >
-            <span>Unlock All Modules in Desktop Suite</span>
+            <span>Get Pengu for Your Desktop</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </a>
         </motion.div>
@@ -203,7 +203,7 @@ const PenguModulesScroll = () => {
                   <div className="event-card-border border-t border-white/10 flex items-stretch justify-between transition-colors bg-neutral-950">
                     <div className="flex items-center">
                       <span className="event-primary-text text-[12px] md:text-[13px] font-bold tracking-[0.2em] uppercase px-6 md:px-8 text-neutral-300 group-hover:text-sky-400 transition-colors" style={{ fontFamily: "var(--font-heading)" }}>
-                        GET IN SUITE
+                        EXPLORE WORKFLOW
                       </span>
                     </div>
                     <div className="event-card-border border-l border-white/10 p-3 md:p-4 flex items-center justify-center">
@@ -222,7 +222,7 @@ const PenguModulesScroll = () => {
                 animate={{ opacity: 1 }}
                 className="col-span-1 md:col-span-2 py-12 event-subtext text-lg font-medium border border-dashed event-card-border rounded-lg flex items-center justify-center"
               >
-                No modules found for this category.
+                No items found for this filter.
               </motion.div>
             )}
           </motion.div>
