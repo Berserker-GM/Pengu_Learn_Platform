@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Clock3, QrCode, ShieldCheck, TicketCheck } from "lucide-react";
 
 const QR = import.meta.env.VITE_PAYMENT_QR_URL || "/payment-qr.jpeg";
@@ -42,6 +42,10 @@ export default function DownloadSection() {
 
             <div className="mt-6 border-t border-white/10 pt-5">
               <h2 className="flex items-center gap-2 font-semibold"><TicketCheck size={18} />Have a promo code?</h2>
+              <button type="button" onClick={() => setPromo("PENGUNEW")} className="mt-3 flex w-full items-center justify-between gap-4 rounded-xl border border-sky-300/40 bg-gradient-to-r from-sky-400/15 to-cyan-300/5 px-4 py-3 text-left transition hover:border-sky-300/70 hover:bg-sky-400/20">
+                <span><span className="block text-[11px] font-bold uppercase tracking-[0.16em] text-sky-300">Free download for new users</span><span className="mt-1 block font-mono text-xl font-black tracking-wider text-white">PENGUNEW</span></span>
+                <span className="shrink-0 rounded-full bg-sky-300 px-3 py-1.5 text-xs font-bold text-slate-950">Use code</span>
+              </button>
               <form onSubmit={downloadWithPromo} className="mt-3 space-y-3">
                 <input aria-label="Email address" type="email" required value={email} onChange={event => setEmail(event.target.value)} placeholder="Enter your email address" className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2.5 text-sm text-white" />
                 <div className="flex gap-2">
@@ -49,7 +53,7 @@ export default function DownloadSection() {
                   <button type="submit" disabled={busy || !promo.trim() || !email.trim()} className="rounded-lg bg-sky-400 px-4 py-2.5 text-sm font-bold text-black disabled:opacity-40">{busy ? "Preparing..." : "Download"}</button>
                 </div>
               </form>
-              <p className="mt-2 text-xs text-neutral-500"><Clock3 size={12} className="mr-1 inline" />PENGUNEW starts the download immediately.</p>
+              <p className="mt-2 text-xs text-neutral-500"><Clock3 size={12} className="mr-1 inline" />Add your email below, then use this code to start your download.</p>
             </div>
             {notice && <p role="status" className="mt-4 rounded-lg border border-red-400/20 bg-red-400/10 p-3 text-sm text-red-200">{notice}</p>}
           </div>
