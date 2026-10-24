@@ -79,14 +79,14 @@ export default function Navbar() {
         } top-4 left-3 right-3 md:top-5 md:left-1/2 md:right-auto md:-translate-x-1/2`}
         style={{ fontFamily: "var(--font-heading)" }}
       >
-        <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-neutral-950/85 p-2 text-white shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-xl md:w-max md:rounded-full md:px-2.5">
+        <div className="flex items-center justify-between gap-2 rounded-md border border-white/10 bg-black px-2 py-1 text-white shadow-lg md:w-max md:rounded-md md:px-2">
           <a
             href="/#hero"
             onClick={(e) => handleNavClick(e, "/#hero")}
-            className="flex shrink-0 items-center gap-2.5 rounded-full py-1 pl-1.5 pr-3 transition-colors hover:bg-white/10"
+            className="flex shrink-0 items-center gap-2 rounded-sm py-0.5 pl-1 pr-2 transition-colors hover:bg-white/10"
             title="Pengu Learn Home"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-300 text-neutral-950">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-300 text-neutral-950">
               <PenguIcon size={22} />
             </span>
             <span className="text-sm font-bold tracking-tight">Pengu<span className="text-sky-300">Learn</span></span>
@@ -98,7 +98,7 @@ export default function Navbar() {
                 key={item.to}
                 href={item.to}
                 onClick={(e) => handleNavClick(e, item.to)}
-                className="desktop-nav-link rounded-full px-3.5 py-2 text-[13px] font-medium text-white/65 transition-all duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                className="desktop-nav-link rounded-full px-3 py-1.5 text-[12px] font-medium text-white/65 transition-all duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {item.label}
@@ -109,14 +109,14 @@ export default function Navbar() {
           <a
             href="/#download"
             onClick={(e) => handleNavClick(e, "/#download")}
-            className="hidden shrink-0 items-center gap-1.5 rounded-full bg-sky-300 px-4 py-2.5 text-xs font-bold text-neutral-950 transition-colors hover:bg-sky-200 md:inline-flex"
+            className="hidden shrink-0 items-center gap-1.5 rounded-full bg-sky-300 px-3.5 py-2 text-xs font-bold text-neutral-950 transition-colors hover:bg-sky-200 md:inline-flex"
           >
             Get Pengu <ArrowUpRight size={14} />
           </a>
 
           <button
             onClick={toggleMenu}
-            className={`md:hidden hamburger-toggle flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10 transition-all ${isOpen ? "active" : ""}`}
+            className={`md:hidden hamburger-toggle flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10 transition-all ${isOpen ? "active" : ""}`}
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
           >
@@ -135,3 +135,4 @@ export default function Navbar() {
     </>
   );
 }
+
