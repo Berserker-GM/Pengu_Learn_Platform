@@ -1,7 +1,5 @@
 import React,{useCallback,useEffect,useState} from "react";
 import {Apple,CheckCircle2,Clock3,Download,Laptop,LockKeyhole,QrCode,ShieldCheck,Terminal} from "lucide-react";
-import {LampContainer} from "../ui/lamp";
-import {supabase} from "../../lib/supabaseClient";
 
 const API=import.meta.env.VITE_PAYMENT_API_URL||(import.meta.env.DEV?"http://localhost:8787":"");
 const QR=import.meta.env.VITE_PAYMENT_QR_URL||"/payment-qr.jpeg";
@@ -22,7 +20,7 @@ export default function DownloadSection(){
  const submit=async(e)=>{e.preventDefault();setBusy(true);setNotice("");try{const r=await fetch(API+"/access/request",{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+session.access_token},body:JSON.stringify({paymentReference:reference.trim()})});const j=await r.json();if(!r.ok)throw Error(j.error||"Could not submit payment.");setAccess(j.access||null);setNotice("Payment reference submitted. We will review it and enable access on this account.")}catch(e){setNotice(e.message)}finally{setBusy(false)}};
  const download=async(p)=>{setBusy(true);setNotice("");try{const r=await fetch(API+"/access/download/"+p.id,{headers:{Authorization:"Bearer "+session.access_token}});if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||"Download failed.")}const u=URL.createObjectURL(await r.blob()),a=document.createElement("a");a.href=u;a.download=p.id==="windows"?"PenguLearn-Setup-v2.4.1.exe":p.id==="macos"?"PenguLearn-v2.4.1.dmg":"PenguLearn-v2.4.1.AppImage";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}catch(e){setNotice(e.message)}finally{setBusy(false)}};
  const approved=access?.status==="approved",clock=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");
- return <section id="download" className="relative w-full overflow-hidden border-t border-white/10 bg-black text-white idea-section-wrapper"><LampContainer className="min-h-screen py-16" contentClassName="-translate-y-8 sm:-translate-y-16 md:-translate-y-48 lg:-translate-y-56"><div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 sm:px-6">
+ return <section id="download" className="relative w-full overflow-hidden border-t border-white/10 bg-black text-white idea-section-wrapper"><div className="min-h-screen py-16"><div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 sm:px-6">
  <h1 className="w-full bg-gradient-to-br from-white via-neutral-200 to-neutral-400 bg-clip-text py-2 text-center text-4xl font-semibold tracking-tight text-transparent sm:text-6xl" style={{fontFamily:"var(--font-heading)"}}>GET PENGU LEARN</h1>
  <p className="mt-3 max-w-2xl text-center text-sm text-neutral-400 sm:text-base">Lifetime desktop access. Sign in with Google to request access and manage downloads.</p>
  <div className="mt-7 w-full max-w-2xl rounded-2xl border border-white/10 bg-neutral-900/80 p-5 sm:p-8"><div className="flex items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-sky-400">Lifetime access</p>{access?.source==="promo"?<p className="mt-2 text-3xl font-black">&#8377;0 <span className="text-base font-medium text-emerald-300">FREE with PENGUNEW</span></p>:<p className="mt-2 text-3xl font-black">$10 <span className="text-base font-medium text-neutral-400">/ &#8377;950 one-time</span></p>}</div><ShieldCheck size={28} className={approved?"text-emerald-400":"text-neutral-500"}/></div>
@@ -33,5 +31,7 @@ export default function DownloadSection(){
  {access?.status==="pending"&&<p className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-sm text-amber-200">Awaiting manual payment review. This page checks for approval automatically.</p>}</div></div>}
  {notice&&<p role="status" className="mt-4 rounded-lg border border-white/10 bg-black/40 p-3 text-sm text-neutral-200">{notice}</p>}</div>
  {approved&&<div className="mt-8 grid w-full grid-cols-1 gap-4 md:grid-cols-3">{PLATFORMS.map(({Icon,...p})=><article key={p.id} className="flex flex-col justify-between rounded-xl border border-white/10 bg-neutral-900/70 p-5"><div><Icon size={25} className="mb-3 text-sky-400"/><h3 className="font-bold">{p.name}</h3><p className="mt-1 text-xs text-neutral-400">{p.detail}</p><p className="mt-2 font-mono text-xs text-neutral-500">Installer: {p.extension}</p></div><button onClick={()=>download(p)} disabled={busy} className="mt-5 flex items-center justify-center gap-2 rounded-lg bg-sky-400 px-4 py-2.5 text-sm font-bold text-black"><Download size={16}/>Download</button></article>)}</div>}
- {session&&<p className="mt-5 text-xs text-neutral-500"><LockKeyhole size={13} className="mr-1 inline"/>Signed in as {session.user?.email}</p>}</div></LampContainer></section>
+ {session&&<p className="mt-5 text-xs text-neutral-500"><LockKeyhole size={13} className="mr-1 inline"/>Signed in as {session.user?.email}</p>}</div></div></section>
 }
+
+

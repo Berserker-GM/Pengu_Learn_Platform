@@ -20,14 +20,15 @@ const DOWNLOADS = {
 };
 
 const accessTableUrl = () => `${config.supabaseUrl}/rest/v1/download_access`;
-const serviceHeaders = () => ({
-  apikey: config.supabaseServiceRoleKey,
-  Authorization: `Bearer ${config.supabaseServiceRoleKey}`,
-  'Content-Type': 'application/json',
-});
+const serviceHeaders = () => {
+  const key = config.supabaseSecretKey || config.supabaseServiceRoleKey;
+  const headers = { apikey: key, 'Content-Type': 'application/json' };
+  if (!config.supabaseSecretKey) headers.Authorization = 'Bearer ' + config.supabaseServiceRoleKey;
+  return headers;
+};
 
 async function authenticateSupabaseUser(req) {
-  if (!config.supabaseUrl || !config.supabaseServiceRoleKey) {
+  if (!config.supabaseUrl || (!config.supabaseSecretKey && !config.supabaseServiceRoleKey)) {
     const error = new Error('Account access is not configured on the server.');
     error.status = 503;
     throw error;
@@ -39,7 +40,7 @@ async function authenticateSupabaseUser(req) {
     throw error;
   }
   const response = await fetch(`${config.supabaseUrl}/auth/v1/user`, {
-    headers: { apikey: config.supabaseServiceRoleKey, Authorization: `Bearer ${token}` },
+    headers: { apikey: config.supabaseSecretKey || config.supabaseServiceRoleKey, Authorization: 'Bearer ' + token },
   });
   if (!response.ok) {
     const error = new Error('Your sign-in expired. Sign in again to continue.');

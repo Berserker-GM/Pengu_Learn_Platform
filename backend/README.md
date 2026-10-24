@@ -22,10 +22,10 @@ node scripts/smoke.js https://<render-url>
 | `LLM_MIN_INTERVAL_MS` `LLM_HOURLY_CAP` `LLM_GLOBAL_HOURLY_CAP` | 30000 / 60 / 3000 | rate limits |
 | `CONTENT_DIR` | `../content` | lesson READMEs are added to the review prompt |
 | SUPABASE_URL | - | Supabase project URL, required for access requests |
-| SUPABASE_SERVICE_ROLE_KEY | - | Render secret used by access routes; never expose it in the frontend |
+| SUPABASE_SECRET_KEY | - | Supabase secret API key for access routes; Render only, never expose it in the frontend |
 
 
-Put installers in backend/downloads/ with the filenames listed in src/server.js. The backend serves them only to accounts whose download_access status is approved. Review payment references in Supabase Table Editor and set status to approved. Apply backend/sql/download-access.sql first. Configure Google OAuth in Supabase Auth > Providers and allow your deployed site URL in Auth URL Configuration. Keep the service role key only in Render.
+Put installers in backend/downloads/ with the filenames listed in src/server.js. The backend serves them only to accounts whose download_access status is approved. Review payment references in Supabase Table Editor and set status to approved. Apply backend/sql/download-access.sql first. Configure Google OAuth in Supabase Auth > Providers and allow your deployed site URL in Auth URL Configuration. Keep the Supabase secret key only in Render. The backend accepts the new sb_secret key format.
 
 `GET /health` reports `llm: openrouter|stub` and `db: falkordb|memory`, so you can see which mode prod is in.
 

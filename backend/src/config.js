@@ -14,6 +14,7 @@ module.exports = {
   port: Number(env.PORT || 8787),
   version: require('../package.json').version,
   supabaseUrl: env.SUPABASE_URL || '',
+  supabaseSecretKey: env.SUPABASE_SECRET_KEY || '',
   supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY || '',
 
   openrouterKey: env.OPENROUTER_API_KEY || '',

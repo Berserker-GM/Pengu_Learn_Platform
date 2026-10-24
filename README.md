@@ -27,7 +27,7 @@ npm run preview
 ### Deploy the web app to Vercel
 1. Import this repository in Vercel and keep the project root set to the repository root.
 2. Vercel uses `vercel.json` to install with `npm ci`, run `npm run build`, publish `dist`, and route client-side pages back to `index.html`.
-3. Set VITE_PAYMENT_API_URL, VITE_SUPABASE_URL, and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel. The QR is served from public/payment-qr.jpeg. Deploy the API using render.yaml with SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY set as Render secrets.
+3. Set VITE_PAYMENT_API_URL, VITE_SUPABASE_URL, and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel. The QR is served from public/payment-qr.jpeg. Deploy the API using render.yaml with SUPABASE_URL and SUPABASE_SECRET_KEY set as a Render secret.
 4. Redeploy after changing environment variables. Vite embeds `VITE_*` values during the build.
 
 Run backend/sql/download-access.sql in Supabase SQL Editor, configure Google as an Auth provider with Google client credentials, add the Supabase callback URL in Google Cloud, and allow the deployed site URL in Supabase Auth redirects. Paid requests stay pending until you change the row status to approved in the Supabase download_access table. The backend only serves an installer after approval and when its file is present; see backend deployment notes.
