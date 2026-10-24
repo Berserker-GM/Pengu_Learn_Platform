@@ -13,10 +13,10 @@ Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
   key expires 2026-10-31. Free models take 5-40 s per review. Clients must use 45 s timeouts (CONTRACT §1).
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
-- Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch.
+- Done: A1 Electron skeleton + config.json. A2 pet IPC (animations, move-by, drag, click → dashboard, system-idle, set-interactive). A3 bridge on 127.0.0.1:47821 (ping, events → thinking/bubble/progress), /health ping on launch. A4 dashboard (course cards, % bar, Start copies course → opens VS Code, installs vsix when present).
 - In progress: –
-- Next: A4 dashboard + Start course
-- Blockers: Dev3's files are in `pengu-dev3/app/pet/`, not yet copied into `app/pet/` (Dev3's human).
+- Next: A5 progress page, A6 chat, A7 zip
+- Blockers: Dev3's files are in `pengu-dev3/app/pet/`, not yet copied into `app/pet/` (Dev3's human). No `vscode-ext/pengu-watcher-*.vsix` yet (E3), so Start skips the extension install.
 - Known bugs: –
 
 ## Dev3 free Claude (app/pet)

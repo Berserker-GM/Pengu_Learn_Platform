@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' file: data:; style-src 'self'; script-src 'self'">
 <title>Pengu</title>
+<link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-<h1>Pengu</h1>
+<header class="top">
+  <div class="brand">
+    <img src="../assets/animations/idle/frame-001.png" alt="" class="logo">
+    <div>
+      <h1>Pengu</h1>
+      <p class="tagline">Your desktop coding mentor</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="courses" role="tab">Courses</button>
+    <button class="tab" data-view="progress" role="tab">Progress</button>
+  </nav>
+</header>
+
+<main>
+  <section id="view-courses" class="view">
+    <p class="intro">Pick a course and press <strong>Start</strong>. It opens in VS Code, and Pengu asks you questions while you code.</p>
+    <div id="course-list" class="course-list"></div>
+  </section>
+
+  <section id="view-progress" class="view" hidden></section>
+</main>
+
+<footer class="foot">
+  <span>Anonymous ID: <code id="user-id">…</code></span>
+</footer>
+
+<script src="dashboard.js"></script>
 </body>
 </html>
