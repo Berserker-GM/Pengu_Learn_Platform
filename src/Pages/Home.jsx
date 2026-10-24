@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
 
 import Hero from '../components/Hero/Hero';
 import About from '../components/About/About';
 import Events from '../components/Events/Events';
 import Footer from '../components/Footer/Footer';
-import BuildIdeaCTA from '../components/BuildIdeaCTA/BuildIdeaCTA';
-
+import DownloadSection from '../components/Download/DownloadSection';
 
 const Home = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Check for hash on mount or route change (e.g. #footer or #events)
+    // Check for hash on mount or route change (e.g. #download, #about, #features)
     if (location.hash) {
       const targetId = location.hash.substring(1);
       const element = document.getElementById(targetId);
       if (element) {
         setTimeout(() => {
-          const topPosition = element.getBoundingClientRect().top + window.scrollY - 100;
+          const topPosition = element.getBoundingClientRect().top + window.scrollY - 80;
           window.scrollTo({ top: topPosition, behavior: 'smooth' });
-        }, 500); // Wait for preloader/content transition
+        }, 400);
       }
     }
 
@@ -33,10 +31,12 @@ const Home = () => {
         const element = document.getElementById(targetId);
 
         if (element) {
+          const topPosition = element.getBoundingClientRect().top + window.scrollY - 80;
           window.scrollTo({
-            top: element.offsetTop - 100,
+            top: topPosition,
             behavior: 'smooth'
           });
+          window.history.pushState(null, '', href);
         }
       }
     };
@@ -54,15 +54,14 @@ const Home = () => {
   }, [location.hash]);
 
   return (
-    <div className="home-page">
+    <div className="home-page bg-black text-white">
       <Hero />
       <About />
       <Events />
-      <BuildIdeaCTA />
+      <DownloadSection />
       <Footer />
     </div>
   );
-
 };
 
 export default Home;

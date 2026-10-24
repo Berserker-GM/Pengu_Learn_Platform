@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const scrambleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ£$€¥₪¤₹₽";
+const scrambleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@*+";
 
 const ScrambleText = ({ targetText, isReady }) => {
   const [text, setText] = useState(
@@ -38,7 +38,7 @@ const ScrambleText = ({ targetText, isReady }) => {
   }, [targetText, isReady]);
 
   return <span>{text}</span>;
-}
+};
 
 const Preloader = ({ onComplete }) => {
   const [step, setStep] = useState(0);
@@ -60,12 +60,10 @@ const Preloader = ({ onComplete }) => {
   if (step === 5) return null;
 
   const rows = [
-    { id: 1, w1: "E-CELL", w2: "INNOVATE" },
-    { id: 2, w1: "E-CELL", w2: "IDEATE" },
-    { id: 3, w1: "E-CELL", w2: "INSPIRE" },
+    { id: 1, w1: "PENGU", w2: "LEARN" },
+    { id: 2, w1: "PENGU", w2: "EXPLORE" },
+    { id: 3, w1: "PENGU", w2: "MASTER" },
   ];
-
-  const tickerString = "INNOVATE \u00A0 \u2022 \u00A0 IDEATE \u00A0 \u2022 \u00A0 INSPIRE \u00A0 \u2022 \u00A0 ENTREPRENEURSHIP \u00A0 \u2022 \u00A0 STARTUPS \u00A0 \u2022 \u00A0 LEADERSHIP \u00A0 \u2022 \u00A0 ";
 
   return (
     <motion.div
@@ -74,10 +72,8 @@ const Preloader = ({ onComplete }) => {
       animate={{ opacity: step === 4 ? 0 : 1 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-
       {/* MAIN CONTENT */}
       <div className="relative z-10 flex items-center justify-center w-full px-10 sm:px-24 h-screen">
-
         <AnimatePresence>
           {step < 4 && (
             <motion.div
@@ -92,8 +88,7 @@ const Preloader = ({ onComplete }) => {
                   className={`flex ${step >= 3 ? 'flex-col space-y-0 sm:-space-y-2 md:-space-y-4 lg:-space-y-3' : 'flex-row gap-0'} items-center justify-center tracking-tight sm:tracking-tighter text-white font-bold sm:font-semibold text-[35px] leading-[0.95] sm:text-5xl md:text-6xl lg:text-[80px] sm:leading-none text-center px-4`}
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
-
-                  {/* Word 1: GLOBAL */}
+                  {/* Word 1 */}
                   <motion.div
                     layout
                     layoutId={row.id === 2 ? "global-text" : undefined}
@@ -102,7 +97,7 @@ const Preloader = ({ onComplete }) => {
                     <ScrambleText targetText={row.w1} isReady={step >= 1} />
                   </motion.div>
 
-                  {/* Word 2: PAYMENTS / MONEY / TRANSFERS */}
+                  {/* Word 2 */}
                   <motion.div
                     layout
                     className="whitespace-nowrap overflow-hidden flex items-center justify-center"
@@ -113,18 +108,16 @@ const Preloader = ({ onComplete }) => {
                     <motion.div
                       layout
                       layoutId={row.id === 2 ? "money-text" : undefined}
-                      className={step >= 3 ? "pl-0  " : "pl-3 sm:pl-5"}
+                      className={step >= 3 ? "pl-0 text-sky-400" : "pl-3 sm:pl-5 text-sky-400"}
                     >
                       {row.w2}
                     </motion.div>
                   </motion.div>
-
                 </motion.div>
               ))}
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </motion.div>
   );

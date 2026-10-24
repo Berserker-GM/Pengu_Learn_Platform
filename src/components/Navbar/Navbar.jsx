@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/ecell1.png";
 import { PreloaderContext } from "../../App";
 import PhoneMenu from "./PhoneMenu";
+import { PenguIcon } from "../Pengu/PenguLogo";
 import "./PhoneMenu.css";
 import "./Navbar.css";
 
@@ -30,14 +29,9 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
-  // Hide navbar on admin routes
-  if (location.pathname.startsWith("/admin")) {
-    return null;
-  }
-
   const toggleMenu = () => {
     if (!isOpen) {
-      setIsInstantClose(false); // Reset to slow animation when opening
+      setIsInstantClose(false);
     }
     setIsOpen(!isOpen);
   };
@@ -47,18 +41,13 @@ export default function Navbar() {
       if (typeof window !== "undefined") {
         const currentScrollY = window.scrollY;
 
-        // If preloader is still running, hide navbar
         if (loading) {
           setIsVisible(false);
-        }
-        // After preloader: show at top or when scrolling up
-        else if (currentScrollY < 100 || currentScrollY < lastScrollY) {
+        } else if (currentScrollY < 100 || currentScrollY < lastScrollY) {
           setIsVisible(true);
-        }
-        // Hide navbar when scrolling down (after 100px)
-        else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
           setIsVisible(false);
-          setIsOpen(false); // Close mobile menu when hiding
+          setIsOpen(false);
         }
 
         setLastScrollY(currentScrollY);
@@ -67,21 +56,35 @@ export default function Navbar() {
 
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", controlNavbar);
-      // Run once on mount to set initial state
       controlNavbar();
       return () => window.removeEventListener("scroll", controlNavbar);
     }
   }, [lastScrollY, loading]);
 
   const navItems = [
-    { to: "/", label: "Home" },
-    { to: "/events", label: "Events" },
-    { to: "/gallery", label: "Gallery" },
-    { to: "/team", label: "Team" },
-    { to: "/alumni", label: "Alumni" },
-    { to: "/word-of-the-day", label: "Word of the Day" },
-    { to: "/build-your-idea", label: "Build Your Idea" },
+    { to: "/#hero", label: "Home" },
+    { to: "/#about", label: "About" },
+    { to: "/#features", label: "Modules" },
+    { to: "/#download", label: "Download & Pricing" },
+    { to: "/#footer", label: "Contact" },
   ];
+
+  const handleNavClick = (e, targetHref) => {
+    if (targetHref.startsWith("/#")) {
+      const hash = targetHref.replace("/", "");
+      const targetId = hash.substring(1);
+      
+      if (location.pathname === "/") {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          const topPosition = element.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: topPosition, behavior: "smooth" });
+          window.history.pushState(null, "", hash);
+        }
+      }
+    }
+  };
 
   return (
     <>
@@ -98,34 +101,39 @@ export default function Navbar() {
           {/* Main Navbar */}
           <div className="flex items-center justify-end md:justify-center gap-3 w-full md:w-fit mx-auto">
             {/* Logo Button */}
-            <Link 
-              to="/" 
-              className="hidden md:flex items-center justify-center w-[46px] h-[46px] rounded-full bg-[#E8E8E8] hover:bg-[#DCDCDC] transition-all duration-300"
+            <a 
+              href="/#hero" 
+              onClick={(e) => handleNavClick(e, "/#hero")}
+              className="hidden md:flex items-center justify-center w-[46px] h-[46px] rounded-full bg-[#E8E8E8] hover:bg-[#DCDCDC] transition-all duration-300 shadow-sm"
+              title="Pengu Learn Home"
             >
-              <img
-                src={logo}
-                alt="E-CELL Logo"
-                className="w-6 h-6 object-contain brightness-0"
-              />
-            </Link>
+              <PenguIcon size={24} className="text-black" />
+            </a>
 
             {/* Desktop Menu Pill */}
-            <div className="hidden md:flex items-center bg-[#E8E8E8] rounded-full px-1.5 py-1.5 gap-0.5">
+            <div className="hidden md:flex items-center bg-[#E8E8E8] rounded-full px-1.5 py-1.5 gap-0.5 shadow-sm">
               {navItems.map((item) => (
-                <Link
+                <a
                   key={item.to}
-                  to={item.to}
-                  className={`desktop-nav-link px-5 py-1.5 rounded-full text-[14px] tracking-wide transition-all duration-300 whitespace-nowrap ${
-                    location.pathname === item.to
-                      ? "bg-[#D4D4D4] text-black font-semibold shadow-sm"
-                      : "text-[#555555] hover:text-black font-medium hover:bg-[#DCDCDC]/50"
-                  }`}
+                  href={item.to}
+                  onClick={(e) => handleNavClick(e, item.to)}
+                  className="desktop-nav-link px-5 py-1.5 rounded-full text-[14px] tracking-wide transition-all duration-300 whitespace-nowrap text-[#555555] hover:text-black font-medium hover:bg-[#DCDCDC]/50"
                   style={{ fontFamily: 'var(--font-body)' }}
                 >
                   {item.label}
-                </Link>
+                </a>
               ))}
             </div>
+
+            {/* Direct Get Product Action Pill */}
+            <a
+              href="/#download"
+              onClick={(e) => handleNavClick(e, "/#download")}
+              className="hidden md:flex items-center justify-center px-4 py-2 rounded-full bg-black text-white hover:bg-neutral-800 text-[13px] font-bold tracking-wider uppercase transition-all shadow-sm"
+              style={{ fontFamily: 'var(--font-heading)' }}
+            >
+              Get Product
+            </a>
 
             {/* Mobile Menu Button */}
             <button
