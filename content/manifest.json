@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "dsa",
+      "title": "DSA Interview Prep",
+      "folder": "dsa",
+      "track": "dsa",
+      "description": "9 classic coding-interview patterns. Solve each in Python, JavaScript, Go or Java; Pengu nudges you when you slip.",
+      "lessons": [
+        {
+          "id": "recursion-basics",
+          "title": "Recursion Basics",
+          "folder": "recursion-basics",
+          "concepts": [
+            "recursion",
+            "base_cases",
+            "call_stack"
+          ],
+          "difficulty": 1
+        },
+        {
+          "id": "binary-search",
+          "title": "Binary Search",
+          "folder": "binary-search",
+          "concepts": [
+            "binary_search",
+            "array_indexing",
+            "loop_invariants",
+            "edge_cases"
+          ],
+          "difficulty": 2
+        },
+        {
+          "id": "two-pointers",
+          "title": "Two Pointers",
+          "folder": "two-pointers",
+          "concepts": [
+            "two_pointers",
+            "array_indexing",
+            "time_complexity",
+            "edge_cases"
+          ],
+          "difficulty": 2
+        },
+        {
+          "id": "hash-maps",
+          "title": "Hash Maps",
+          "folder": "hash-maps",
+          "concepts": [
+            "hash_maps",
+            "time_complexity",
+            "edge_cases"
+          ],
+          "difficulty": 2
+        },
+        {
+          "id": "stacks-queues",
+          "title": "Stacks and Queues",
+          "folder": "stacks-queues",
+          "concepts": [
+            "stacks",
+            "queues",
+            "edge_cases",
+            "time_complexity"
+          ],
+          "difficulty": 2
+        },
+        {
+          "id": "linked-list-reversal",
+          "title": "Linked List Reversal",
+          "folder": "linked-list-reversal",
+          "concepts": [
+            "linked_lists",
+            "pointers",
+            "edge_cases",
+            "recursion"
+          ],
+          "difficulty": 2
+        },
+        {
+          "id": "sliding-window",
+          "title": "Sliding Window",
+          "folder": "sliding-window",
+          "concepts": [
+            "sliding_window",
+            "array_indexing",
+            "time_complexity",
+            "edge_cases"
+          ],
+          "difficulty": 3
+        },
+        {
+          "id": "graph-bfs-dfs",
+          "title": "Graphs - BFS and DFS",
+          "folder": "graph-bfs-dfs",
+          "concepts": [
+            "graphs",
+            "bfs",
+            "dfs",
+            "stacks",
+            "queues",
+            "recursion"
+          ],
+          "difficulty": 3
+        },
+        {
+          "id": "dp-intro",
+          "title": "Dynamic Programming Intro",
+          "folder": "dp-intro",
+          "concepts": [
+            "dp",
+            "memoization",
+            "optimal_substructure",
+            "recursion",
+            "time_complexity"
+          ],
+          "difficulty": 3
+        }
+      ]
+    },
+    {
+      "id": "system-design",
+      "title": "System Design Basics",
+      "folder": "system-design",
+      "track": "system_design",
+      "description": "Write short design docs for classic interview systems. Pengu asks the questions an interviewer would.",
+      "lessons": [
+        {
+          "id": "url-shortener",
+          "title": "URL Shortener",
+          "folder": "url-shortener",
+          "concepts": [
+            "api_design",
+            "bottlenecks",
+            "caching",
+            "capacity_estimation",
+            "data_modeling",
+            "failure_handling",
+            "replication",
+            "requirements_analysis",
+            "scaling",
+            "sharding",
+            "tradeoffs"
+          ],
+          "difficulty": 3
+        },
+        {
+          "id": "rate-limiter",
+          "title": "Rate Limiter",
+          "folder": "rate-limiter",
+          "concepts": [
+            "api_design",
+            "bottlenecks",
+            "caching",
+            "capacity_estimation",
+            "data_modeling",
+            "failure_handling",
+            "replication",
+            "requirements_analysis",
+            "scaling",
+            "sharding",
+            "tradeoffs"
+          ],
+          "difficulty": 3
+        }
+      ]
+    }
+  ]
+}
