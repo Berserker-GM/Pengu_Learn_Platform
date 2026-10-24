@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+    <g transform="translate(0, -8) rotate(0 64 64)">
+      
+    <ellipse cx="48" cy="112" rx="12" ry="5" fill="#f39c12"/>
+    <ellipse cx="80" cy="112" rx="12" ry="5" fill="#f39c12"/>
+  
+      <ellipse cx="22" cy="50" rx="8" ry="18" fill="#1b263b" transform="rotate(-40 22 50)"/><ellipse cx="106" cy="50" rx="8" ry="18" fill="#1b263b" transform="rotate(40 106 50)"/>
+      <!-- Body -->
+      <ellipse cx="64" cy="68" rx="38" ry="44" fill="#1b263b"/>
+      <!-- White Belly -->
+      <ellipse cx="64" cy="74" rx="27" ry="34" fill="#f0f3f8"/>
+      <!-- Cheeks -->
+      <ellipse cx="44" cy="59" rx="5" ry="3" fill="#ffb4a2" opacity="0.6"/>
+      <ellipse cx="84" cy="59" rx="5" ry="3" fill="#ffb4a2" opacity="0.6"/>
+      <!-- Eyes -->
+      
+      <path d="M50 47 L56 53 M56 47 L50 53" stroke="#1b263b" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M72 47 L78 53 M78 47 L72 53" stroke="#1b263b" stroke-width="2.5" stroke-linecap="round"/>
+    
+      <!-- Beak -->
+      
+      <polygon points="56,58 72,58 64,69" fill="#f39c12"/>
+      <ellipse cx="64" cy="62" rx="4" ry="3" fill="#c0392b"/>
+    
+      
+    </g>
+  </svg>
