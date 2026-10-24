@@ -7,29 +7,53 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+
+# Production & Build outputs
+dist/
+dist-ssr/
+build/
+out/
+
+# Cache & Temporary
+.cache/
+.vite/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+coverage/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.local
+secrets/
+google-service-account.json
+
+# Deployment
+.vercel/
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Agents
+# Operating System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Agents & AI
 .agents
-
-
-# Environment
-.env
-.env.local
-
-secrets/
-google-service-account.json
