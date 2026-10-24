@@ -132,10 +132,7 @@ const PenguHero = () => {
       <motion.div
         className="absolute inset-0 opacity-[0.08] md:opacity-[0.25]"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(231, 231, 231, 0.8) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 251, 251, 0.8) 1px, transparent 1px)
-          `,
+          backgroundImage: "radial-gradient(circle, rgba(231, 231, 231, 0.8) 1.5px, transparent 1.5px)",
           backgroundSize: '80px 80px'
         }}
       />

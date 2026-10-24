@@ -115,7 +115,7 @@ function App() {
   const hasSeenPreloader = sessionStorage.getItem("preloaderShown");
   const [loading, setLoading] = useState(!hasSeenPreloader);
   const [showContent, setShowContent] = useState(!!hasSeenPreloader);
-  const [themePreference, setThemePreference] = useState(() => localStorage.getItem("pengu-theme-preference"));
+  const [themePreference, setThemePreference] = useState(() => localStorage.getItem("pengu-theme-preference") || "light");
 
   const isLightMode = themePreference === "light";
 
