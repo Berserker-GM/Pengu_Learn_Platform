@@ -58,3 +58,11 @@ test('limits: 30 s window, error trigger bypass after 10 s', () => {
   assert.equal(limits.check('u-limits-1', { trigger: 'error' }, t0 + 11000), null);
   assert.equal(limits.check('u-limits-1', {}, t0 + 31000), null);
 });
+
+test('limits: idle trigger (user stopped typing) also passes after 10 s', () => {
+  const t0 = 2_000_000_000;
+  limits.record('u-limits-2', {}, t0);
+  assert.equal(limits.check('u-limits-2', { trigger: 'idle' }, t0 + 5000), 'rate_limited');
+  assert.equal(limits.check('u-limits-2', { trigger: 'idle' }, t0 + 11000), null);
+  assert.equal(limits.check('u-limits-2', { trigger: 'interval' }, t0 + 11000), 'rate_limited');
+});

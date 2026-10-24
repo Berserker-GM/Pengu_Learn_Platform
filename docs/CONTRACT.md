@@ -45,7 +45,7 @@ Response 200 (always 200 for valid input, even when nothing was reviewed):
 - `question`: string ≤ 25 words, or `null` (nothing worth saying). Never contains code or the full answer.
 - `severity` ∈ `none | low | medium | high`.
 - When not reviewed: `{ "reviewed": false, "question": null, "mistakes": [], "severity": "none", "reason": "duplicate|rate_limited|empty" }`.
-- Server rules: dedupe by sha256(content) per user+file; ≤1 LLM call per user per 30 s; `error` trigger may bypass
+- Server rules: dedupe by sha256(content) per user+file; ≤1 LLM call per user per 30 s; `error` and `idle` triggers may bypass
   the 30 s window if ≥10 s since the last call; hard cap 60 LLM calls/user/hour.
 - `mistakes[].type` and `.concept` are lowercase `snake_case`.
 
