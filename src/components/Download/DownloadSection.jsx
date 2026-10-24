@@ -5,6 +5,7 @@ const QR = import.meta.env.VITE_PAYMENT_QR_URL || "/payment-qr.jpeg";
 const PROMO_DESTINATION = "https://drive.google.com/file/d/16n4Sa-UA4uJPqoM96AdopxK1vgkZ0PAK/view?usp=drive_link";
 
 export default function DownloadSection() {
+  const [email, setEmail] = useState("");
   const [promo, setPromo] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -41,9 +42,12 @@ export default function DownloadSection() {
 
             <div className="mt-6 border-t border-white/10 pt-5">
               <h2 className="flex items-center gap-2 font-semibold"><TicketCheck size={18} />Have a promo code?</h2>
-              <form onSubmit={downloadWithPromo} className="mt-3 flex gap-2">
-                <input aria-label="Promo code" value={promo} onChange={event => setPromo(event.target.value)} placeholder="Enter promo code" className="min-w-0 flex-1 rounded-lg border border-white/10 bg-neutral-950 px-3 py-2.5 text-sm text-white" />
-                <button type="submit" disabled={busy || !promo.trim()} className="rounded-lg bg-sky-400 px-4 py-2.5 text-sm font-bold text-black disabled:opacity-40">{busy ? "Preparing..." : "Download"}</button>
+              <form onSubmit={downloadWithPromo} className="mt-3 space-y-3">
+                <input aria-label="Email address" type="email" required value={email} onChange={event => setEmail(event.target.value)} placeholder="Enter your email address" className="w-full rounded-lg border border-white/10 bg-neutral-950 px-3 py-2.5 text-sm text-white" />
+                <div className="flex gap-2">
+                  <input aria-label="Promo code" value={promo} onChange={event => setPromo(event.target.value)} placeholder="Enter promo code" className="min-w-0 flex-1 rounded-lg border border-white/10 bg-neutral-950 px-3 py-2.5 text-sm text-white" />
+                  <button type="submit" disabled={busy || !promo.trim() || !email.trim()} className="rounded-lg bg-sky-400 px-4 py-2.5 text-sm font-bold text-black disabled:opacity-40">{busy ? "Preparing..." : "Download"}</button>
+                </div>
               </form>
               <p className="mt-2 text-xs text-neutral-500"><Clock3 size={12} className="mr-1 inline" />PENGUNEW starts the download immediately.</p>
             </div>
