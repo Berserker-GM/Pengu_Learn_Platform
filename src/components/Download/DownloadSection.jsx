@@ -1,3 +1,4 @@
+import {supabase} from "../../lib/supabaseClient";
 import React,{useCallback,useEffect,useState} from "react";
 import {Apple,CheckCircle2,Clock3,Download,Laptop,LockKeyhole,QrCode,ShieldCheck,Terminal} from "lucide-react";
 
@@ -33,5 +34,7 @@ export default function DownloadSection(){
  {approved&&<div className="mt-8 grid w-full grid-cols-1 gap-4 md:grid-cols-3">{PLATFORMS.map(({Icon,...p})=><article key={p.id} className="flex flex-col justify-between rounded-xl border border-white/10 bg-neutral-900/70 p-5"><div><Icon size={25} className="mb-3 text-sky-400"/><h3 className="font-bold">{p.name}</h3><p className="mt-1 text-xs text-neutral-400">{p.detail}</p><p className="mt-2 font-mono text-xs text-neutral-500">Installer: {p.extension}</p></div><button onClick={()=>download(p)} disabled={busy} className="mt-5 flex items-center justify-center gap-2 rounded-lg bg-sky-400 px-4 py-2.5 text-sm font-bold text-black"><Download size={16}/>Download</button></article>)}</div>}
  {session&&<p className="mt-5 text-xs text-neutral-500"><LockKeyhole size={13} className="mr-1 inline"/>Signed in as {session.user?.email}</p>}</div></div></section>
 }
+
+
 
 
