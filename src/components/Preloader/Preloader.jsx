@@ -1,126 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { LoaderCircle } from "lucide-react";
 
-const scrambleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@*+";
-
-const ScrambleText = ({ targetText, isReady }) => {
-  const [text, setText] = useState(
-    targetText.split("").map(() => scrambleChars[Math.floor(Math.random() * scrambleChars.length)]).join("")
-  );
+export default function Preloader({ onComplete }) {
+  const onCompleteRef = useRef(onComplete);
 
   useEffect(() => {
-    let interval;
-    if (isReady) {
-      let start = Date.now();
-      const scrambleDuration = 400;
-
-      interval = setInterval(() => {
-        let now = Date.now();
-        let progress = (now - start) / scrambleDuration;
-
-        if (progress >= 1) {
-          setText(targetText);
-          clearInterval(interval);
-        } else {
-          let scrambled = targetText.split("").map((c, i) => {
-            if (progress > (i / targetText.length)) return c;
-            return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-          }).join("");
-          setText(scrambled);
-        }
-      }, 30);
-    } else {
-      interval = setInterval(() => {
-        setText(targetText.split("").map(() => scrambleChars[Math.floor(Math.random() * scrambleChars.length)]).join(""));
-      }, 50);
-    }
-    return () => clearInterval(interval);
-  }, [targetText, isReady]);
-
-  return <span>{text}</span>;
-};
-
-const Preloader = ({ onComplete }) => {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    const t0 = setTimeout(() => setStep(1), 300);  // Scramble locks
-    const t1 = setTimeout(() => setStep(2), 800); // Reveal words horizontally
-    const t2 = setTimeout(() => setStep(3), 1400); // Slide words BELOW (stack vertically)
-
-    const t3 = setTimeout(() => setStep(4), 2200); // Fade out entire preloader
-    const t4 = setTimeout(() => {
-      setStep(5);
-      if (onComplete) onComplete();
-    }, 2800); // Unmount and transition
-
-    return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+    onCompleteRef.current = onComplete;
   }, [onComplete]);
 
-  if (step === 5) return null;
-
-  const rows = [
-    { id: 1, w1: "PENGU", w2: "LEARN" },
-    { id: 2, w1: "PENGU", w2: "EXPLORE" },
-    { id: 3, w1: "PENGU", w2: "MASTER" },
-  ];
+  useEffect(() => {
+    const timer = window.setTimeout(() => onCompleteRef.current?.(), 2400);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
-    <motion.div
-      className="fixed inset-0 z-[9999] bg-[#000000] flex items-center justify-center overflow-hidden"
+    <motion.main
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#050b13] px-5 text-white"
       initial={{ opacity: 1 }}
-      animate={{ opacity: step === 4 ? 0 : 1 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      exit={{ opacity: 0 }}
+      aria-label="Loading Pengu Learn"
+      role="status"
+      transition={{ duration: 0.35 }}
     >
-      {/* MAIN CONTENT */}
-      <div className="relative z-10 flex items-center justify-center w-full px-10 sm:px-24 h-screen">
-        <AnimatePresence>
-          {step < 4 && (
-            <motion.div
-              className="flex flex-col items-center gap-6 sm:gap-10 md:gap-14 justify-center absolute w-full h-full"
-              exit={{ opacity: 0, scale: 1.1, filter: "blur(5px)" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {rows.map((row) => (
-                <motion.div
-                  layout
-                  key={row.id}
-                  className={`flex ${step >= 3 ? 'flex-col space-y-0 sm:-space-y-2 md:-space-y-4 lg:-space-y-3' : 'flex-row gap-0'} items-center justify-center tracking-tight sm:tracking-tighter text-white font-bold sm:font-semibold text-[35px] leading-[0.95] sm:text-5xl md:text-6xl lg:text-[80px] sm:leading-none text-center px-4`}
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  {/* Word 1 */}
-                  <motion.div
-                    layout
-                    layoutId={row.id === 2 ? "global-text" : undefined}
-                    className="whitespace-nowrap text-[#B8C0C2]"
-                  >
-                    <ScrambleText targetText={row.w1} isReady={step >= 1} />
-                  </motion.div>
-
-                  {/* Word 2 */}
-                  <motion.div
-                    layout
-                    className="whitespace-nowrap overflow-hidden flex items-center justify-center"
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={step >= 2 ? { width: "auto", opacity: 1 } : { width: 0, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <motion.div
-                      layout
-                      layoutId={row.id === 2 ? "money-text" : undefined}
-                      className={step >= 3 ? "pl-0 text-sky-400" : "pl-3 sm:pl-5 text-sky-400"}
-                    >
-                      {row.w2}
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <div className="pointer-events-none absolute inset-0 opacity-30" style={{ backgroundImage: "radial-gradient(circle, rgba(125,211,252,0.5) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050b13]/25 to-[#050b13]" />
+      <div className="relative z-10 flex w-full max-w-sm flex-col items-center text-center">
+        <motion.div
+          className="h-56 w-56 overflow-hidden rounded-[2rem] border border-sky-200/20 bg-slate-900 shadow-[0_20px_90px_rgba(14,165,233,0.2)] sm:h-64 sm:w-64"
+          initial={{ opacity: 0, scale: 0.92, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+        >
+          <video
+            src="/pengu-preloader.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="h-full w-full object-cover"
+            aria-label="Pengu Learn animation"
+          />
+        </motion.div>
+        <p className="mt-7 text-xs font-semibold uppercase tracking-[0.3em] text-sky-300">Pengu Learn</p>
+        <div className="mt-4 flex items-center gap-3 text-sm text-slate-300">
+          <LoaderCircle size={19} className="animate-spin text-sky-300" aria-hidden="true" />
+          <span>Getting your workspace ready</span>
+        </div>
+        <div className="mt-6 h-1 w-40 overflow-hidden rounded-full bg-white/10">
+          <motion.div className="h-full origin-left rounded-full bg-sky-300" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 2.2, ease: "easeInOut" }} />
+        </div>
       </div>
-    </motion.div>
+    </motion.main>
   );
-};
-
-export default Preloader;
+}

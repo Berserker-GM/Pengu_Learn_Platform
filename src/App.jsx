@@ -112,9 +112,8 @@ const NavigationWatcher = ({ setLoading, setShowContent, setDisplayLocation }) =
 function App() {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
-  const hasSeenPreloader = sessionStorage.getItem("preloaderShown");
-  const [loading, setLoading] = useState(!hasSeenPreloader);
-  const [showContent, setShowContent] = useState(!!hasSeenPreloader);
+  const [loading, setLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
   const [themePreference, setThemePreference] = useState(() => localStorage.getItem("pengu-theme-preference") || "light");
 
   const isLightMode = themePreference === "light";
@@ -146,7 +145,6 @@ function App() {
   };
 
   const handlePreloaderComplete = () => {
-    sessionStorage.setItem("preloaderShown", "true");
     setDisplayLocation(location);
     setLoading(false);
     setTimeout(() => setShowContent(true), 100);
