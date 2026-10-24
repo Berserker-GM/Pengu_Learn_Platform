@@ -1,0 +1,413 @@
+{
+ "variables": {
+  "name": "Variables",
+  "requires": [],
+  "questions": [
+   "What value does this variable hold right after this line runs?"
+  ]
+ },
+ "functions": {
+  "name": "Functions",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "What goes in, and what comes out of this function?"
+  ]
+ },
+ "conditionals": {
+  "name": "Conditionals",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "Which inputs make this condition true? Which make it false?"
+  ]
+ },
+ "loops": {
+  "name": "Loops",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "How many times does this loop body run for an input of size 3?"
+  ]
+ },
+ "arrays": {
+  "name": "Arrays and lists",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "What is stored at each position of this list after the loop?"
+  ]
+ },
+ "strings": {
+  "name": "Strings",
+  "requires": [
+   "arrays"
+  ],
+  "questions": [
+   "How is a string like a list of characters? Where do they differ?"
+  ]
+ },
+ "array_indexing": {
+  "name": "Array indexing",
+  "requires": [
+   "arrays"
+  ],
+  "questions": [
+   "A list has 5 elements. What are the smallest and largest valid indexes?",
+   "Which index does your loop read on its very last iteration?"
+  ]
+ },
+ "edge_cases": {
+  "name": "Edge cases",
+  "requires": [
+   "conditionals"
+  ],
+  "questions": [
+   "What is the smallest input this function could receive? What does your code do with it?",
+   "What happens with empty input?"
+  ]
+ },
+ "loop_invariants": {
+  "name": "Loop invariants",
+  "requires": [
+   "loops",
+   "array_indexing"
+  ],
+  "questions": [
+   "What is true at the top of every iteration, before the body runs?",
+   "After the loop ends, what does that fact tell you about the answer?"
+  ]
+ },
+ "iteration_safety": {
+  "name": "Safe iteration",
+  "requires": [
+   "loops",
+   "arrays"
+  ],
+  "questions": [
+   "While you walk a list, what happens to the positions of the items after one you remove?"
+  ]
+ },
+ "time_complexity": {
+  "name": "Time complexity",
+  "requires": [
+   "loops"
+  ],
+  "questions": [
+   "If the input doubles, roughly what happens to the number of steps?"
+  ]
+ },
+ "binary_search": {
+  "name": "Binary search",
+  "requires": [
+   "loop_invariants",
+   "array_indexing"
+  ],
+  "questions": [
+   "What does each comparison let you throw away?"
+  ]
+ },
+ "two_pointers": {
+  "name": "Two pointers",
+  "requires": [
+   "array_indexing",
+   "loop_invariants"
+  ],
+  "questions": [
+   "What does moving each pointer rule out?"
+  ]
+ },
+ "sliding_window": {
+  "name": "Sliding window",
+  "requires": [
+   "two_pointers"
+  ],
+  "questions": [
+   "When the window slides one step, what enters and what leaves?"
+  ]
+ },
+ "base_cases": {
+  "name": "Base cases",
+  "requires": [
+   "functions",
+   "conditionals"
+  ],
+  "questions": [
+   "What is the smallest input for which you already know the answer?",
+   "Does every recursive call get closer to that input?"
+  ]
+ },
+ "call_stack": {
+  "name": "The call stack",
+  "requires": [
+   "functions"
+  ],
+  "questions": [
+   "When this call returns, where does execution continue?"
+  ]
+ },
+ "recursion": {
+  "name": "Recursion",
+  "requires": [
+   "base_cases",
+   "call_stack"
+  ],
+  "questions": [
+   "How does the problem shrink with each call?"
+  ]
+ },
+ "tree_traversal": {
+  "name": "Tree traversal",
+  "requires": [
+   "recursion"
+  ],
+  "questions": [
+   "When does the node get visited relative to its two subtrees?"
+  ]
+ },
+ "pointers": {
+  "name": "Pointers and references",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "If you overwrite this reference, can you still reach what it used to point to?"
+  ]
+ },
+ "linked_lists": {
+  "name": "Linked lists",
+  "requires": [
+   "pointers"
+  ],
+  "questions": [
+   "What does the last node's next point to?"
+  ]
+ },
+ "stacks": {
+  "name": "Stacks",
+  "requires": [
+   "arrays"
+  ],
+  "questions": [
+   "Which item leaves a stack first?"
+  ]
+ },
+ "queues": {
+  "name": "Queues",
+  "requires": [
+   "arrays"
+  ],
+  "questions": [
+   "Which item leaves a queue first?"
+  ]
+ },
+ "hash_maps": {
+  "name": "Hash maps",
+  "requires": [
+   "arrays",
+   "time_complexity"
+  ],
+  "questions": [
+   "What question about earlier items can a map answer in one step?"
+  ]
+ },
+ "graphs": {
+  "name": "Graphs",
+  "requires": [
+   "arrays",
+   "hash_maps"
+  ],
+  "questions": [
+   "Which nodes can you reach in one step from this node?"
+  ]
+ },
+ "bfs": {
+  "name": "Breadth-first search",
+  "requires": [
+   "graphs",
+   "queues"
+  ],
+  "questions": [
+   "In what order are nodes discovered, and why does that give shortest paths?"
+  ]
+ },
+ "dfs": {
+  "name": "Depth-first search",
+  "requires": [
+   "graphs",
+   "stacks",
+   "recursion"
+  ],
+  "questions": [
+   "How far does the search go before it backs up?"
+  ]
+ },
+ "memoization": {
+  "name": "Memoization",
+  "requires": [
+   "recursion",
+   "hash_maps"
+  ],
+  "questions": [
+   "Which calls repeat the same work?"
+  ]
+ },
+ "optimal_substructure": {
+  "name": "Optimal substructure",
+  "requires": [
+   "recursion"
+  ],
+  "questions": [
+   "Is the best answer built from best answers to smaller problems?"
+  ]
+ },
+ "dp": {
+  "name": "Dynamic programming",
+  "requires": [
+   "memoization",
+   "optimal_substructure"
+  ],
+  "questions": [
+   "What is the smallest subproblem, and what does each larger one combine?"
+  ]
+ },
+ "debugging_by_tracing": {
+  "name": "Debugging by tracing",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "Write down the value of each variable after every line for one small input. Where does reality first differ from your expectation?"
+  ]
+ },
+ "reading_error_messages": {
+  "name": "Reading error messages",
+  "requires": [
+   "variables"
+  ],
+  "questions": [
+   "Which line does the message point at, and what does it say about that line?"
+  ]
+ },
+ "requirements_analysis": {
+  "name": "Requirements analysis",
+  "requires": [],
+  "questions": [
+   "Who uses this and what must they be able to do? What is explicitly out of scope?"
+  ]
+ },
+ "capacity_estimation": {
+  "name": "Capacity estimation",
+  "requires": [
+   "requirements_analysis"
+  ],
+  "questions": [
+   "How many requests per second at peak, and how many bytes does each one store?"
+  ]
+ },
+ "data_modeling": {
+  "name": "Data modeling",
+  "requires": [
+   "requirements_analysis"
+  ],
+  "questions": [
+   "What is the main key you look records up by?"
+  ]
+ },
+ "api_design": {
+  "name": "API design",
+  "requires": [
+   "requirements_analysis"
+  ],
+  "questions": [
+   "What does a client send, and what can come back when things go wrong?"
+  ]
+ },
+ "caching": {
+  "name": "Caching",
+  "requires": [
+   "data_modeling"
+  ],
+  "questions": [
+   "Which reads repeat often enough to be worth remembering, and when does the copy go stale?"
+  ]
+ },
+ "scaling": {
+  "name": "Scaling",
+  "requires": [
+   "capacity_estimation"
+  ],
+  "questions": [
+   "Which component hits its limit first as traffic grows ten times?"
+  ]
+ },
+ "sharding": {
+  "name": "Sharding",
+  "requires": [
+   "scaling",
+   "data_modeling"
+  ],
+  "questions": [
+   "What key splits the data evenly, and what happens to a query that needs two shards?"
+  ]
+ },
+ "replication": {
+  "name": "Replication",
+  "requires": [
+   "scaling"
+  ],
+  "questions": [
+   "If one copy dies, which copy serves the next request, and could it be behind?"
+  ]
+ },
+ "bottlenecks": {
+  "name": "Bottlenecks",
+  "requires": [
+   "scaling"
+  ],
+  "questions": [
+   "If one key gets a thousand times more traffic than the rest, what breaks?"
+  ]
+ },
+ "failure_handling": {
+  "name": "Failure handling",
+  "requires": [
+   "replication"
+  ],
+  "questions": [
+   "What does the user see when this dependency is down?"
+  ]
+ },
+ "tradeoffs": {
+  "name": "Trade-offs",
+  "requires": [
+   "bottlenecks"
+  ],
+  "questions": [
+   "What did you give up by choosing this, and when would you choose differently?"
+  ]
+ },
+ "id_generation": {
+  "name": "ID generation",
+  "requires": [
+   "data_modeling"
+  ],
+  "questions": [
+   "How do you guarantee two servers never hand out the same id?"
+  ]
+ },
+ "rate_limiting": {
+  "name": "Rate limiting",
+  "requires": [
+   "api_design",
+   "caching"
+  ],
+  "questions": [
+   "Where is the counter stored, and what happens at the boundary between two time windows?"
+  ]
+ }
+}

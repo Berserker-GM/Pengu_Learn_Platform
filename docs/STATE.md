@@ -4,11 +4,12 @@ Backend URL: `http://localhost:8787` (local) · prod: _TBD, BRAIN fills after Re
 Phase: **T+0:20 kit + stub backend** · Code freeze: **T+2:15**
 
 ## Dev1 BRAIN (backend, docs)
-- Done: kit (docs/*), content imported, placeholder animations, backend stub + real implementation
-- In progress: Render deploy (needs human: Render account + env vars)
-- Next: integrator checkpoint 1 (T+0:45)
-- Blockers: OPENROUTER_API_KEY, FALKORDB_* creds from human
-- Known bugs: –
+- Done: kit (docs/*), content imported (11 lessons), placeholder animations, backend complete in stub+memory mode
+  (/health /snapshot /chat /progress, guard, rate limits, OpenRouter client, FalkorDB store + audit), 7 unit tests + smoke pass locally
+- In progress: Render deploy (needs human: Render account + OPENROUTER_API_KEY + FALKORDB_* env vars)
+- Next: verify FalkorDB writes against FalkorDB Cloud; real-LLM prompt check on 3 sample snapshots; CP1 at T+0:45
+- Blockers: Render URL + secrets from human
+- Known bugs: FalkorDB path not yet run against a live instance (falls back to memory on any error)
 
 ## Dev2 Cursor (app: Electron main, dashboard, packaging)
 - Done: –
