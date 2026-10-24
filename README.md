@@ -7,7 +7,7 @@ Interactive learning platform and desktop suite designed for deep conceptual mas
 - **Interactive Visual Labs**: Real-time sandboxes for science, algorithms, and logic.
 - **Adaptive Quest Engine**: Gamified difficulty progression tuning to learner retention.
 - **Zero-Cloud Offline Desktop Suite**: Fast native performance on Windows, macOS, and Linux.
-- **Gated Product Downloads**: Google sign-in, UPI QR payment submission with manual review, and free access using promo code PENGUNEW.
+- **Gated Product Downloads**: UPI QR payment submission with manual review, and free access using promo code PENGUNEW.
 - **Interactive Pengu Buddy**: Cheerful mascot providing context-sensitive tips and guidance.
 
 ## Getting Started
@@ -27,10 +27,10 @@ npm run preview
 ### Deploy the web app to Vercel
 1. Import this repository in Vercel and keep the project root set to the repository root.
 2. Vercel uses `vercel.json` to install with `npm ci`, run `npm run build`, publish `dist`, and route client-side pages back to `index.html`.
-3. Set VITE_PAYMENT_API_URL, VITE_SUPABASE_URL, and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel. The QR is served from public/payment-qr.jpeg. Deploy the API using render.yaml with SUPABASE_URL and SUPABASE_SECRET_KEY set as a Render secret.
+3. Add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` as Vercel environment variables. The QR is served from `public/payment-qr.jpeg`; the access API runs as Vercel Functions under `/api/access`.
 4. Redeploy after changing environment variables. Vite embeds `VITE_*` values during the build.
 
-Run backend/sql/download-access.sql in Supabase SQL Editor, configure Google as an Auth provider with Google client credentials, add the Supabase callback URL in Google Cloud, and allow the deployed site URL in Supabase Auth redirects. Paid requests stay pending until you change the row status to approved in the Supabase download_access table. The backend only serves an installer after approval and when its file is present; see backend deployment notes.
+Run `backend/sql/download-access.sql` in Supabase SQL Editor. No Google Auth or Render service is required for download access. Paid requests stay pending until you change the row status to `approved` in the Supabase `download_access` table. Vercel serves an installer only after approval and when its file is present in `backend/downloads/`.
 
 ## Tech Stack
 
