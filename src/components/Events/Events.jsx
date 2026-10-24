@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowRight, Sparkles } from "lucide-react";
 import "./Events.css";
 import { ModuleCardPlaceholder } from "../Pengu/Placeholders";
 
 const PenguModulesScroll = () => {
-  const [filter, setFilter] = useState("ALL");
-
   const modules = [
     {
       slug: "path-selection",
@@ -45,13 +43,6 @@ const PenguModulesScroll = () => {
       type: "FEELS",
     },
   ];
-
-  const filteredModules = modules.filter((m) => {
-    if (filter === "ALL") return true;
-    if (filter === "HOW IT FEELS") return m.type === "FEELS";
-    if (filter === "WHY IT'S DIFFERENT") return m.type === "DIFFERENT";
-    return true;
-  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -124,22 +115,6 @@ const PenguModulesScroll = () => {
             A desktop character that wanders, naps, and jumps when hovered. It opens your editor with interview problems, nudges you when you slip, and remembers repeat mistakes.
           </p>
 
-          {/* Filter Pills */}
-          <div className="event-card-border flex items-center mt-4 border rounded-[6px] w-fit p-[5px] bg-transparent">
-            {["ALL", "HOW IT FEELS", "WHY IT'S DIFFERENT"].map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-3.5 md:px-5 py-[6px] text-[11px] md:text-[12px] font-semibold tracking-wide transition-colors rounded-[4px] cursor-pointer ${
-                  filter === f
-                    ? "event-btn-active bg-white text-black"
-                    : "event-btn-inactive bg-transparent text-neutral-400 hover:text-white"
-                }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
 
           <a
             href="#download"
@@ -160,7 +135,7 @@ const PenguModulesScroll = () => {
             className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
           >
             <AnimatePresence mode="popLayout">
-              {filteredModules.map((item) => (
+              {modules.map((item) => (
                 <motion.div
                   layout
                   variants={cardVariants}
@@ -216,15 +191,6 @@ const PenguModulesScroll = () => {
               ))}
             </AnimatePresence>
             
-            {filteredModules.length === 0 && (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }}
-                className="col-span-1 md:col-span-2 py-12 event-subtext text-lg font-medium border border-dashed event-card-border rounded-lg flex items-center justify-center"
-              >
-                No items found for this filter.
-              </motion.div>
-            )}
           </motion.div>
         </div>
       
