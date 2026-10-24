@@ -1,7 +1,7 @@
 ﻿import React, { useState } from "react";
 import { Clock3, QrCode, ShieldCheck, TicketCheck } from "lucide-react";
 
-const API = "/api/access/promo";
+const API = "/api/promo";
 const QR = import.meta.env.VITE_PAYMENT_QR_URL || "/payment-qr.jpeg";
 
 export default function DownloadSection() {
@@ -26,7 +26,7 @@ export default function DownloadSection() {
       } catch {
         throw new Error("The Vercel promo API returned an invalid response. Redeploy the latest project changes and try again.");
       }
-      if (!response.ok) throw new Error(result.error || "Promo code could not be applied.");
+      if (!response.ok) throw new Error(result.error || `Promo API returned HTTP ${response.status}. Redeploy the latest Vercel deployment and check its function logs.`);
       if (!result.downloadUrl) throw new Error("Promo download is not configured. Add PROMO_DOWNLOAD_URL in Vercel and redeploy.");
       window.location.assign(result.downloadUrl);
     } catch (error) {
