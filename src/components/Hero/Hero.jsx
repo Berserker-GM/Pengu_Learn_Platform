@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PenguLogo } from '../Pengu/PenguLogo';
+import { PenguLogo, PenguPixelAvatar } from '../Pengu/PenguLogo';
 import { HeroCardPlaceholder } from '../Pengu/Placeholders';
 
 const cardConfig = [
@@ -8,9 +8,10 @@ const cardConfig = [
     id: 1,
     emoji: "⚡",
     title: "VISUAL LABS",
-    subtitle: "Interactive Science & Code",
+    subtitle: "Meet Your Study Companion",
     gradient: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-    bgColor: "from-sky-600 to-sky-700"
+    bgColor: "from-sky-600 to-sky-700",
+    video: "/pengu/pengu-wave.mp4"
   },
   {
     id: 2,
@@ -37,11 +38,42 @@ const PenguHero = () => {
   useEffect(() => {
     const cardTimer = setInterval(() => {
       setCardAnimation(prev => (prev + 1) % 3);
-    }, 2800);
+    }, 3200);
     return () => clearInterval(cardTimer);
   }, []);
 
-  const renderCardContent = (card) => {
+  const renderCardContent = (card, isMobile) => {
+    if (card.id === 1) {
+      return (
+        <div className="w-full h-full overflow-hidden rounded-3xl relative select-none bg-neutral-900">
+          <video
+            src="/pengu/pengu-wave.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent p-5 sm:p-6 flex flex-col justify-between pointer-events-none">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white border border-white/20">
+                PENGU LIVE 🐾
+              </span>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            </div>
+            <div>
+              <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white mb-0.5">
+                VISUAL LABS
+              </h4>
+              <p className="text-xs sm:text-sm text-sky-200 font-medium">
+                Interactive learning with Pengu
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="w-full h-full overflow-hidden rounded-3xl">
         <HeroCardPlaceholder card={card} />
@@ -120,9 +152,10 @@ const PenguHero = () => {
         <PenguLogo showText={true} />
 
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline-flex text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300">
-            v2.4 STABLE RELEASE
-          </span>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 text-xs font-mono font-semibold">
+            <PenguPixelAvatar size={18} mood="smile" className="w-4 h-4" />
+            <span>v2.4 STABLE RELEASE</span>
+          </div>
           <a
             href="#download"
             className="text-xs font-bold px-4 py-2 rounded-full bg-white text-black hover:bg-neutral-200 transition-all uppercase tracking-wider shadow-sm"
@@ -237,10 +270,11 @@ const PenguHero = () => {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
                 href="#download"
-                className="px-6 py-3 rounded-full bg-white text-black font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-neutral-200 transition-all shadow-md"
+                className="px-6 py-3 rounded-full bg-white text-black font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-neutral-200 transition-all shadow-md flex items-center gap-2"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
-                Download Suite ($19 / Voucher)
+                <PenguPixelAvatar size={18} mood="wave" className="w-4 h-4" />
+                <span>Download Suite ($19 / Voucher)</span>
               </a>
               <a
                 href="#features"
