@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 const config = require('./config');
 const llm = require('./llm');
 const store = require('./store');
@@ -14,6 +16,18 @@ app.use(express.json({ limit: '256kb' }));
 
 const PRODUCT_PRICE = 95000; // INR 950.00, approximately USD 10.
 const PRODUCT_CURRENCY = 'INR';
+const DOWNLOADS = {
+  windows: { file: 'PenguLearn-Setup-v2.4.1.exe', name: 'PenguLearn-Setup-v2.4.1.exe' },
+  macos: { file: 'PenguLearn-v2.4.1.dmg', name: 'PenguLearn-v2.4.1.dmg' },
+  linux: { file: 'PenguLearn-v2.4.1.AppImage', name: 'PenguLearn-v2.4.1.AppImage' },
+};
+
+app.get('/payments/downloads/:platform', (req, res) => {
+  const artifact = DOWNLOADS[req.params.platform];
+  if (!artifact) return res.status(404).json({ error: 'Unknown platform' });
+  const filePath = path.join(__dirname, '..', 'downloads', artifact.file);
+  res.json({ available: fs.existsSync(filePath) });
+});
 
 app.get('/payments/config', (_req, res) => {
   if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
@@ -82,6 +96,43 @@ app.post('/payments/verify', async (req, res) => {
   } catch (err) {
     console.error('[razorpay verify]', err);
     res.status(502).json({ error: 'Could not verify payment status' });
+  }
+});
+
+app.post('/payments/download', async (req, res) => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  const { orderId, paymentId, signature, platform } = req.body || {};
+  const artifact = DOWNLOADS[platform];
+  if (!artifact) return res.status(400).json({ error: 'Unknown platform' });
+  if (!keyId || !keySecret) return res.status(503).json({ error: 'Razorpay is not configured' });
+  if (![orderId, paymentId, signature].every((v) => typeof v === 'string' && v.length < 200) ||
+      !/^order_[A-Za-z0-9]+$/.test(orderId) || !/^pay_[A-Za-z0-9]+$/.test(paymentId) || !/^[a-f0-9]{64}$/.test(signature)) {
+    return res.status(400).json({ error: 'Invalid payment details' });
+  }
+
+  const expected = crypto.createHmac('sha256', keySecret).update(`${orderId}|${paymentId}`).digest();
+  const received = Buffer.from(signature, 'hex');
+  if (received.length !== expected.length || !crypto.timingSafeEqual(received, expected)) {
+    return res.status(403).json({ error: 'Payment signature did not verify' });
+  }
+
+  try {
+    const response = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
+      headers: { Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}` },
+    });
+    const payment = await response.json();
+    if (!response.ok || payment.status !== 'captured' || payment.order_id !== orderId ||
+        payment.amount !== PRODUCT_PRICE || payment.currency !== PRODUCT_CURRENCY) {
+      return res.status(402).json({ error: 'Payment is not captured or does not match this order' });
+    }
+
+    const filePath = path.join(__dirname, '..', 'downloads', artifact.file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'Installer is not published yet' });
+    return res.download(filePath, artifact.name);
+  } catch (err) {
+    console.error('[razorpay download]', err);
+    return res.status(502).json({ error: 'Could not verify payment or deliver the download' });
   }
 });
 

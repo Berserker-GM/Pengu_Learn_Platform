@@ -41,7 +41,31 @@ export const DownloadSection = () => {
     }
   };
 
-  const triggerDownload = (os, filename) => {
+  const triggerDownload = async (os, filename) => {
+    const receipt = JSON.parse(localStorage.getItem(PAYMENT_RECEIPT_KEY) || "null");
+    const platform = { Windows: "windows", macOS: "macos", Linux: "linux" }[os];
+    const response = await fetch(`${PAYMENT_API_BASE}/payments/download`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...receipt, platform }),
+    });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      throw new Error(result.error || `Could not download the ${os} installer.`);
+    }
+    const installer = await response.blob();
+    const installerUrl = URL.createObjectURL(installer);
+    const installerLink = document.createElement("a");
+    installerLink.href = installerUrl;
+    installerLink.download = filename;
+    document.body.appendChild(installerLink);
+    installerLink.click();
+    installerLink.remove();
+    URL.revokeObjectURL(installerUrl);
+    setDownloadSuccessNotice(`Started download for ${os} (${filename})!`);
+    setTimeout(() => setDownloadSuccessNotice(""), 6000);
+    return;
+
     const content = `================================================
 PENGU LEARN DESKTOP PET - RELEASE v2.4.1
 ================================================
@@ -109,17 +133,24 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
       if (savedReceipt) {
         try {
           await verifyPayment(JSON.parse(savedReceipt));
-          setIsUnlocked(true);
-          triggerDownload(os, filename);
+        } catch {
+          setDownloadSuccessNotice("We couldn't verify your saved payment right now. Please try again shortly.");
           setIsProcessingPayment(false);
           return;
-        } catch {
-          localStorage.removeItem(PAYMENT_RECEIPT_KEY);
-          setIsUnlocked(false);
         }
+        setIsUnlocked(true);
+        await triggerDownload(os, filename);
+        setIsProcessingPayment(false);
+        return;
       }
 
       if (!PAYMENT_API_BASE) throw new Error("Payment service is not configured. Please try again later.");
+      const platform = { Windows: "windows", macOS: "macos", Linux: "linux" }[os];
+      const availabilityResponse = await fetch(`${PAYMENT_API_BASE}/payments/downloads/${platform}`);
+      const availability = await availabilityResponse.json();
+      if (!availabilityResponse.ok || !availability.available) {
+        throw new Error(`${os} installer is not published yet. Please check back later.`);
+      }
       await loadRazorpay();
       const orderResponse = await fetch(`${PAYMENT_API_BASE}/payments/order`, { method: "POST" });
       const order = await orderResponse.json();
@@ -147,7 +178,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             }));
             setIsUnlocked(true);
             setLicenseKey(`PL-${response.razorpay_payment_id.slice(-8).toUpperCase()}`);
-            triggerDownload(os, filename);
+            await triggerDownload(os, filename);
           } catch (error) {
             setDownloadSuccessNotice(error.message || "Payment verification failed. Contact support before retrying.");
           } finally {
@@ -206,7 +237,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
             ) : (
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-semibold backdrop-blur-md">
                 <Lock size={14} className="text-amber-400" />
-                <span>Download Locked — Complete Payment Below</span>
+                <span>Choose an OS below to pay and download</span>
               </div>
             )}
           </div>
@@ -277,7 +308,7 @@ Website: https://github.com/Vansh-Baranwal/Pengu_Learn_Platform
                   <span className="text-4xl sm:text-5xl font-black text-white" style={{ fontFamily: "var(--font-heading)" }}>
                     $10
                   </span>
-                  <span className="text-sm text-neutral-400 line-through">$49</span>
+                  <span className="text-sm text-neutral-400 line-through">$25</span>
                   <span className="text-xs text-emerald-400 font-semibold ml-1">60% OFF</span>
                 </div>
 

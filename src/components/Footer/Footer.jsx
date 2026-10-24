@@ -259,7 +259,7 @@ const MobileFooter = () => {
   const navLinks = [
     { name: 'The Idea', href: '#the-idea' },
     { name: 'How It Works', href: '#how-it-feels' },
-    { name: 'Download Product ($19)', href: '#download' },
+    { name: 'Download Product ($10 / ₹950)', href: '#download' },
   ];
 
   return (

@@ -18,8 +18,8 @@ const PENGU_TIPS = [
   },
   {
     mood: "jump",
-    message: "Psst! Use voucher code 'PENGUFREE' to bypass payment and unlock the desktop build for free! 🎉",
-    action: "Redeem Voucher",
+    message: "Choose your operating system and complete checkout to download Pengu Learn!",
+    action: "Get Pengu Learn",
     href: "#download"
   },
   {

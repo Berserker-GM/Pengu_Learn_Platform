@@ -7,7 +7,7 @@ Interactive learning platform and desktop suite designed for deep conceptual mas
 - **Interactive Visual Labs**: Real-time sandboxes for science, algorithms, and logic.
 - **Adaptive Quest Engine**: Gamified difficulty progression tuning to learner retention.
 - **Zero-Cloud Offline Desktop Suite**: Fast native performance on Windows, macOS, and Linux.
-- **Gated Product Downloads**: Instant purchase ($19) or VIP voucher bypass (`PENGUFREE`, `POLARIS2026`).
+- **Gated Product Downloads**: One-time Razorpay checkout ($10 / approximately ₹950), with server-verified payment before download.
 - **Interactive Pengu Buddy**: Cheerful mascot providing context-sensitive tips and guidance.
 
 ## Getting Started
