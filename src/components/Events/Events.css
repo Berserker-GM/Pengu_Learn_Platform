@@ -121,6 +121,5 @@
 
 
 /* Keep the intro readable on the light page background. */
-.light-theme #how-it-feels > div > motion-div { color: #111827; }
 .light-theme #how-it-feels .event-primary-text { color: #111827 !important; }
 .light-theme #how-it-feels .event-subtext { color: #475569 !important; }
