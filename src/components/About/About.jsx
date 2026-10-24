@@ -56,10 +56,10 @@ const AboutSection = () => {
             <AlertTriangle size={14} /> THE PROBLEM WE ARE SOLVING
           </span>
         </div>
-        <div className="w-full text-left" style={{ fontFamily: 'var(--font-body)' }}>
+        <div className="w-full text-left" style={{ fontFamily: 'var(--font-heading)' }}>
           <ScrollRevealText
             text="Learning to code for interviews is lonely and passive. You grind problems, get stuck, and nobody notices. Tutorials give answers, not understanding. When you finally fail an interview round, you don’t know why, because no one tracked the same mistakes you keep making."
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-semibold tracking-wide leading-[1.35] md:leading-[1.3] text-neutral-200"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl font-medium tracking-tight leading-[1.3] md:leading-[1.25] text-neutral-100"
           />
         </div>
       </section>
