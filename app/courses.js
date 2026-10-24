@@ -1,5 +1,8 @@
+const { execFile, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+
+const EXTENSION_ID = 'pengu.pengu-watcher';
 
 // Bundled content: ../content in dev, resources/content when packaged (docs/RELEASE.md).
 function contentDir(app) {
@@ -78,10 +81,125 @@ function courseProgress(app, course) {
   return Math.round((touched / lessons.length) * 100);
 }
 
+// First Start copies the bundled course; later Starts never overwrite the user's edits (CONTRACT §4).
+function ensureUserCopy(app, course) {
+  const dest = userCoursePath(app, course);
+  if (fs.existsSync(dest)) return dest;
+  try {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.cpSync(bundledCoursePath(app, course), dest, { recursive: true, errorOnExist: true });
+  } catch (err) {
+    fs.rmSync(dest, { recursive: true, force: true });
+    throw err;
+  }
+  return dest;
+}
+
+function quote(arg) {
+  return `"${String(arg).replace(/"/g, '')}"`;
+}
+
+// code.cmd is a batch file, so it has to run through cmd.exe.
+function runCode(codePath, args, timeoutMs) {
+  return new Promise((resolve) => {
+    execFile(
+      process.env.ComSpec || 'cmd.exe',
+      ['/d', '/s', '/c', `"${[codePath, ...args].map(quote).join(' ')}"`],
+      { windowsVerbatimArguments: true, windowsHide: true, timeout: timeoutMs },
+      (err, stdout, stderr) => resolve({ ok: !err, stdout: String(stdout || ''), stderr: String(stderr || '') })
+    );
+  });
+}
+
+function whereCode() {
+  return new Promise((resolve) => {
+    execFile('where', ['code'], { windowsHide: true, timeout: 5000 }, (err, stdout) => {
+      if (err) return resolve(null);
+      const found = String(stdout).split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+      resolve(found.find((p) => /\.cmd$/i.test(p)) || null);
+    });
+  });
+}
+
+async function findVsCode() {
+  const onPath = await whereCode();
+  if (onPath) return onPath;
+  const candidates = [
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, 'Programs', 'Microsoft VS Code', 'bin', 'code.cmd'),
+    process.env.ProgramFiles && path.join(process.env.ProgramFiles, 'Microsoft VS Code', 'bin', 'code.cmd'),
+  ].filter(Boolean);
+  return candidates.find((p) => fs.existsSync(p)) || null;
+}
+
+// Packaged: resources/pengu-watcher-*.vsix (docs/RELEASE.md). Dev: ../vscode-ext/.
+function findVsix(app) {
+  const dir = app.isPackaged ? process.resourcesPath : path.join(__dirname, '..', 'vscode-ext');
+  try {
+    const name = fs.readdirSync(dir).filter((f) => /^pengu-watcher-.*\.vsix$/i.test(f)).sort().pop();
+    return name ? path.join(dir, name) : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+async function ensureExtension(app, codePath) {
+  const listed = await runCode(codePath, ['--list-extensions'], 30000);
+  if (listed.ok && listed.stdout.toLowerCase().split(/\r?\n/).some((l) => l.trim() === EXTENSION_ID)) return true;
+  const vsix = findVsix(app);
+  if (!vsix) {
+    console.warn('Pengu extension .vsix not found; skipping install.');
+    return true;
+  }
+  const installed = await runCode(codePath, ['--install-extension', vsix, '--force'], 120000);
+  if (!installed.ok) console.error('Extension install failed:', installed.stderr);
+  return installed.ok;
+}
+
+function openInVsCode(codePath, folder) {
+  const child = spawn(
+    process.env.ComSpec || 'cmd.exe',
+    ['/d', '/s', '/c', `"${[codePath, folder].map(quote).join(' ')}"`],
+    { windowsVerbatimArguments: true, windowsHide: true, detached: true, stdio: 'ignore' }
+  );
+  child.unref();
+}
+
+async function startCourse(app, courseId) {
+  const course = findCourse(app, courseId);
+  if (!course) return { ok: false, code: 'COPY_FAILED', message: `Unknown course "${courseId}".` };
+
+  let folder;
+  try {
+    folder = ensureUserCopy(app, course);
+  } catch (err) {
+    return { ok: false, code: 'COPY_FAILED', message: `Could not copy the course files: ${err.message}` };
+  }
+
+  const codePath = await findVsCode();
+  if (!codePath) {
+    return {
+      ok: false,
+      code: 'NO_VSCODE',
+      message: 'VS Code was not found. Install it (keep "Add to PATH" ticked), then restart Pengu.'
+    };
+  }
+
+  const extensionOk = await ensureExtension(app, codePath);
+  openInVsCode(codePath, folder);
+  if (!extensionOk) {
+    return {
+      ok: false,
+      code: 'EXT_INSTALL_FAILED',
+      message: 'VS Code opened, but the Pengu extension could not be installed, so reviews will not appear.'
+    };
+  }
+  return { ok: true };
+}
+
 module.exports = {
-  bundledCoursePath,
   courseProgress,
   findCourse,
   loadManifest,
+  startCourse,
   userCoursePath,
 };

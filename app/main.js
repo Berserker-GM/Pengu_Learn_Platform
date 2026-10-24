@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, powerMonitor, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, powerMonitor, screen, shell } = require('electron');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -84,6 +84,15 @@ function writeSharedConfig(userId, defaults) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8');
   return filePath;
+}
+
+// The extension falls back to config.courses[].path when a folder has no marker (CONTRACT §3).
+function rememberCourse(courseId, coursePath) {
+  const filePath = sharedConfigPath();
+  const config = readJson(filePath) || {};
+  const kept = keptCourses(config).filter((course) => course.courseId !== courseId);
+  config.courses = kept.concat({ courseId, path: coursePath });
+  fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf8');
 }
 
 function createPetWindow() {
@@ -300,6 +309,44 @@ function registerPetIpc() {
   }, 15000);
 }
 
+function registerDashboardIpc() {
+  ipcMain.handle('dash:get-user', () => ({ userId: settings.userId, backendUrl: settings.backendUrl }));
+
+  ipcMain.handle('dash:get-courses', () =>
+    courses.loadManifest(app).map((course) => ({
+      id: course.id,
+      title: course.title,
+      description: course.description || '',
+      lessonCount: Array.isArray(course.lessons) ? course.lessons.length : 0,
+      progress: courses.courseProgress(app, course),
+      started: fs.existsSync(courses.userCoursePath(app, course)),
+    }))
+  );
+
+  ipcMain.handle('dash:start-course', async (_event, payload) => {
+    const courseId = payload && payload.courseId;
+    const result = await courses.startCourse(app, courseId);
+    const course = courses.findCourse(app, courseId);
+    if (course && fs.existsSync(courses.userCoursePath(app, course))) {
+      try {
+        rememberCourse(course.id, courses.userCoursePath(app, course));
+      } catch (err) {
+        console.error('Could not update config.json courses:', err.message);
+      }
+    }
+    return result;
+  });
+
+  ipcMain.handle('dash:get-progress', () =>
+    backendFetch(`/progress/${encodeURIComponent(settings.userId)}`, {}, 15000)
+  );
+
+  ipcMain.on('dash:open-external', (_event, payload) => {
+    const url = payload && typeof payload.url === 'string' ? payload.url : '';
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+  });
+}
+
 if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
@@ -312,6 +359,7 @@ if (!app.requestSingleInstanceLock()) {
     const configPath = writeSharedConfig(userId, defaults);
     console.log('Pengu config:', configPath);
     registerPetIpc();
+    registerDashboardIpc();
     startBridge(settings.bridgePort, handleBridgeEvent);
     petWindow = createPetWindow();
     // Wakes a sleeping Render instance before the first review (CONTEXT assumption 5).
