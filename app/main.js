@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
+const { startBridge } = require('./bridge');
+const courses = require('./courses');
 
 // Pet pages live in app/pet and animation frames in app/assets (CONTRACT §5 file:// URLs).
 app.commandLine.appendSwitch('allow-file-access-from-files');
@@ -28,6 +30,7 @@ const STATE_DEFAULTS = {
 let petWindow = null;
 let dashWindow = null;
 let dragOffset = null;
+let settings = null; // { userId, backendUrl, bridgePort }
 
 function readJson(filePath) {
   try {
@@ -160,6 +163,43 @@ function sendToPet(channel, payload) {
   if (petWindow && !petWindow.isDestroyed()) petWindow.webContents.send(channel, payload);
 }
 
+function sendToDashboard(channel, payload) {
+  if (dashWindow && !dashWindow.isDestroyed()) dashWindow.webContents.send(channel, payload);
+}
+
+// Backend calls never throw: failures come back as { error } (CONTRACT §1 clients ignore errors).
+async function backendFetch(urlPath, options, timeoutMs) {
+  try {
+    const res = await fetch(settings.backendUrl.replace(/\/+$/, '') + urlPath, {
+      ...options,
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    const body = await res.json().catch(() => null);
+    if (!res.ok) return { error: (body && body.error) || `Backend returned ${res.status}` };
+    return body || { error: 'Empty response from backend' };
+  } catch (err) {
+    return { error: err && err.name === 'TimeoutError' ? 'Backend timed out' : 'Backend is not reachable' };
+  }
+}
+
+function pushProgress(courseId) {
+  const course = courses.findCourse(app, courseId);
+  if (!course) return;
+  sendToDashboard('dash:progress-updated', { courseId, progress: courses.courseProgress(app, course) });
+}
+
+function handleBridgeEvent(event) {
+  if (event.type === 'review_start') {
+    sendToPet('pet:state', { state: 'thinking', reason: 'review_start' });
+  } else if (event.type === 'review_result') {
+    sendToPet('pet:state', { state: 'idle', reason: 'review_result' });
+    if (typeof event.question === 'string' && event.question.trim()) {
+      sendToPet('pet:say', { text: event.question, kind: 'review' });
+    }
+  }
+  if (typeof event.courseId === 'string') pushProgress(event.courseId);
+}
+
 function listAnimations() {
   const states = {};
   let names = [];
@@ -268,10 +308,14 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(() => {
     const defaults = loadDefaults();
     const userId = ensureUserId();
+    settings = { userId, ...defaults };
     const configPath = writeSharedConfig(userId, defaults);
     console.log('Pengu config:', configPath);
     registerPetIpc();
+    startBridge(settings.bridgePort, handleBridgeEvent);
     petWindow = createPetWindow();
+    // Wakes a sleeping Render instance before the first review (CONTEXT assumption 5).
+    backendFetch('/health', {}, 45000).then((health) => console.log('Backend health:', JSON.stringify(health)));
   });
 }
 

@@ -12,3 +12,7 @@
 - Files: app/main.js, app/dashboard/index.html (stub, filled in A4)
 - What: handlers for every §5 pet channel. `pet:list-animations` reads `app/assets/animations/<state>/` (png/gif/webp/jpg/svg, sorted), §6 defaults + optional `config.json`, file:/// URLs, empty folders omitted. `pet:move-by` clamps to the nearest display's work area; `atEdge` is true when the move was clamped. Drag keeps the grab offset. `pet:clicked` opens/focuses the dashboard. `pet:system-idle` every 15 s. `pet:set-interactive` → `setIgnoreMouseEvents(!interactive, { forward: true })`. `pet:transcribe` returns `{ error }` (LATER). Single-instance lock: a second launch opens the dashboard.
 - Test: copy Dev3's pet into `app/pet`, `npm start`; pet animates, drag it, click it → dashboard window.
+### A3 local bridge
+- Files: app/bridge.js (new), app/courses.js (new: manifest + §4 progress), app/main.js
+- What: `node:http` on 127.0.0.1:bridgePort. `GET /ping` → `{ ok, app: "pengu" }`; `POST /event` (256 KB cap) → `{ ok: true }`. `review_start` → `pet:state thinking`; `review_result` → `pet:state idle` then `pet:say { text: question, kind: "review" }` when question is non-empty; any event with `courseId` recomputes that course's % and sends `dash:progress-updated`. `GET /health` on launch with 45 s timeout (wakes Render), result logged.
+- Test: `npm start`, then `curl -X POST localhost:47821/event -d '{"type":"review_result","question":"Hi?","mistakes":[]}'` → bubble "Hi?" over the pet.
