@@ -18,7 +18,7 @@ export default function DownloadSection() {
       return;
     }
     setBusy(true);
-    window.location.assign(PROMO_DESTINATION);
+    window.open(PROMO_DESTINATION, "_blank", "noopener,noreferrer");
   };
 
   return (
