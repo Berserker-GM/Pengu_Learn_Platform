@@ -19,8 +19,15 @@ export default function DownloadSection() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: promo.trim() }),
       });
-      const result = await response.json();
+      const responseText = await response.text();
+      let result;
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error("The Vercel promo API returned an invalid response. Redeploy the latest project changes and try again.");
+      }
       if (!response.ok) throw new Error(result.error || "Promo code could not be applied.");
+      if (!result.downloadUrl) throw new Error("Promo download is not configured. Add PROMO_DOWNLOAD_URL in Vercel and redeploy.");
       window.location.assign(result.downloadUrl);
     } catch (error) {
       setNotice(error.message);
