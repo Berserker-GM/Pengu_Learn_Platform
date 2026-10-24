@@ -1,0 +1,12 @@
+<svg width="200" height="400" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#1a1c1c" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Blade -->
+    <path d="M60 150 h80 v180 c0 30 -80 30 -80 0 z" fill="#d4f000" />
+    <!-- Splice -->
+    <path d="M60 150 l40 80 l40 -80 z" fill="#0046fa" />
+    <!-- Handle -->
+    <path d="M85 30 h30 v120 h-30 z" fill="#0046fa" />
+    <path d="M80 30 c0 -15 40 -15 40 0 z" fill="#0046fa" />
+    <path d="M85 60 h30 M85 90 h30 M85 120 h30" />
+  </g>
+</svg>

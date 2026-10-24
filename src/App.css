@@ -1,0 +1,405 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/shadcn.css";
+
+@custom-variant dark (&:is(.dark *));
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+  /* Add this to body as well */
+}
+
+#root {
+  max-width: 100vw;
+  /* Use viewport width instead of 1780px */
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  overflow-x: clip !important;
+  /* Prevent horizontal scroll */
+
+}
+
+/* Make all images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive card padding */
+.card {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 2rem;
+  }
+
+  #root {
+    max-width: 1780px;
+    padding: 0;
+  }
+}
+
+@theme inline {
+  --font-heading: 'Sora', system-ui, sans-serif;
+  --font-subheading: 'Georgia Pro', Georgia, serif;
+  --font-sans: 'Urbanist', system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
+
+.theme-toggle {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000000;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease,
+    border-color 0.2s ease, color 0.2s ease;
+}
+
+.phone-menu-open .theme-toggle {
+  display: none;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.theme-toggle:active {
+  transform: scale(0.98);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 3px;
+}
+
+.theme-toggle--light {
+  background: rgba(255, 255, 255, 0.9);
+  color: #111111;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Quick Light Theme Toggle */
+.light-theme {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: #fff;
+  /* Ensure solid background when inverted */
+}
+
+.light-theme img:not(#footer img),
+.light-theme video:not(#footer video),
+.light-theme canvas:not(#footer canvas),
+.light-theme #footer,
+.light-theme .preserve-color {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Keep the group photo's grayscale treatment inside the preserved Team hero.
+   The generic image inversion would invert the photo a third time. */
+.light-theme .preserve-color .team-hero-photo {
+  filter: grayscale(1) brightness(0.86) contrast(1.08) !important;
+}
+
+.light-theme .team-member-card:hover .team-member-name {
+  color: #e2e2e2 !important;
+}
+
+/* --- Idea Section Light Theme Specific Elements --- */
+/* Target is #FF7722. Pre-filter color is #dd5500 */
+
+.light-theme .lamp-light-from {
+  --tw-gradient-from: #dd5500 var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), transparent var(--tw-gradient-via-position), transparent var(--tw-gradient-to-position) !important;
+}
+
+.light-theme .lamp-light-to {
+  --tw-gradient-to: #dd5500 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: transparent var(--tw-gradient-from-position), transparent var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+.light-theme .lamp-light-glow {
+  background-color: #dd5500 !important;
+}
+
+.light-theme .lamp-stick {
+  background-color: #777777 !important;
+  /* Inverts to grey (#888888) */
+}
+
+.light-theme .build-idea-text {
+  --tw-gradient-from: #d5ddf0 !important;
+  --tw-gradient-to: #d5ddf0 !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  color: transparent !important;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.light-theme .idea-submit-btn {
+  background: linear-gradient(to right, #ffffff, #dddddd) !important; /* Inverts to sleek black/dark-grey */
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #000000 !important; /* Inverts to white text */
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25) !important;
+}
+
+.light-theme .idea-submit-btn:hover {
+  background: linear-gradient(to right, #eeeeee, #cccccc) !important; 
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.45) !important;
+}
+
+.light-theme .idea-quote-icon {
+  color: #dd5500 !important;
+  opacity: 0.3 !important;
+  /* Make it slightly more visible since it's an accent */
+}
+
+/* --- Events Section Light Theme Overrides (Ambient Glow Glassmorphism) --- */
+.light-theme .event-card,
+.light-theme .flagship-box {
+  background: rgba(0, 0, 0, 0.8) !important;
+  /* Inverts to translucent white rgba(255,255,255,0.8) */
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 10px 40px rgba(233, 99, 6, 0.1) !important;
+  /* Inverts to warm orange glow rgba(249,115,22,0.1) */
+  border: 1px solid #1a1a1a !important;
+  /* Inverts to light grey border (#e5e5e5) */
+}
+
+.light-theme .event-card *,
+.light-theme .flagship-box * {
+  color: #d5ddf0 !important;
+  /* Inverts to #0F172A */
+  border-color: #d5ddf0 !important;
+}
+
+.light-theme .flagship-toggle-thumb {
+  background-color: #000000 !important; /* Inverts to white (#ffffff) */
+}
+
+/* --- Logo Toggles --- */
+.light-mode-logo {
+  display: none;
+}
+
+.light-theme .light-mode-logo {
+  display: block;
+}
+
+.light-theme .dark-mode-logo {
+  display: none;
+}
+
+/* --- View Transitions API for Theme Wave --- */
+::view-transition-group(root) {
+  animation-duration: 2s;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: theme-wave 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes theme-wave {
+  0% {
+    clip-path: circle(0px at var(--theme-toggle-x, 100%) var(--theme-toggle-y, 100%));
+  }
+
+  100% {
+    clip-path: circle(150vmax at var(--theme-toggle-x, 100%) var(--theme-toggle-y, 100%));
+  }
+}
+
+/* Crossword Double Invert for Theme Sync */
+.crossword-page {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.idea-submit-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+.idea-submit-btn:hover {
+  background-color: #e5e5e5 !important;
+}
+
+.light-theme .hide-in-light-theme { display: none !important; }
+
+
+
+.show-in-light-theme { display: none; }
+.light-theme .show-in-light-theme { display: block !important; }
+
+/* Custom scrollbar for AI Counsel pane */
+.counsel-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.counsel-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 9999px;
+}
+.counsel-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+.counsel-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+

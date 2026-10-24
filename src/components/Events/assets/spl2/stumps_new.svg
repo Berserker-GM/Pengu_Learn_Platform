@@ -1,0 +1,19 @@
+<svg width="250" height="300" viewBox="0 0 250 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Thick black and bright colors overlapping simulate the pop art feel -->
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Stumps outline -->
+    <path d="M60 120 L75 280 M115 100 L125 280 M165 100 L185 280" stroke="#1a1c1c" stroke-width="28" />
+    <!-- Stumps fill (blue) -->
+    <path d="M60 120 L75 280 M115 100 L125 280 M165 100 L185 280" stroke="#0046fa" stroke-width="16" />
+    
+    <!-- Left Bail outline -->
+    <path d="M45 90 L100 75" stroke="#1a1c1c" stroke-width="20" />
+    <!-- Left Bail fill (yellow) -->
+    <path d="M45 90 L100 75" stroke="#d4f000" stroke-width="10" />
+    
+    <!-- Right Bail outline -->
+    <path d="M135 70 L185 90" stroke="#1a1c1c" stroke-width="20" />
+    <!-- Right Bail fill (yellow) -->
+    <path d="M135 70 L185 90" stroke="#d4f000" stroke-width="10" />
+  </g>
+</svg>

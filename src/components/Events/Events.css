@@ -1,0 +1,120 @@
+
+#events {
+  background-color: #000000;
+}
+
+#events .event-primary-text {
+  color: #EEEEEE;
+  font-family: var(--font-body);
+}
+
+#events .event-card {
+  background-color: #000000;
+}
+
+#events .event-content-bg {
+  background-color: #000000;
+}
+
+#events .event-card-border {
+  border-color: #EEEEEE;
+}
+
+#events .event-btn-active {
+  background-color: #EEEEEE;
+  color: #111111;
+}
+
+#events .event-btn-inactive {
+  color: #EEEEEE;
+  background-color: transparent !important;
+}
+
+#events .event-btn-inactive:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#events .event-badge {
+  background-color: #000000;
+  color: #EEEEEE;
+}
+
+#events .event-footer-btn {
+  background-color: #EEEEEE;
+  color: #000000;
+}
+
+#events .event-subtext {
+  color: #BBBBBB;
+}
+
+#events .event-image-bg {
+  background-color: #111111;
+}
+
+#events .event-image-bg img {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Light Theme Overrides (Pixel Perfect to Screenshot) */
+.light-theme #events {
+  background-color: #FFFFFF !important;
+}
+
+.light-theme #events .event-primary-text {
+  color: #111111 !important;
+}
+
+.light-theme #events .event-card {
+  background-color: #F5F5F5 !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.light-theme #events .event-content-bg {
+  background-color: #F5F5F5 !important;
+}
+
+.light-theme #events .event-card-border {
+  border-color: #111111 !important;
+}
+
+.light-theme #events .event-btn-active {
+  background-color: #111111 !important;
+  color: #FFFFFF !important;
+}
+
+.light-theme #events .event-btn-inactive {
+  color: #111111 !important;
+  background-color: transparent !important;
+}
+
+.light-theme #events .event-btn-inactive:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-theme #events .event-badge {
+  background-color: #FFFFFF !important;
+  color: #111111 !important;
+}
+
+.light-theme #events .event-footer-btn {
+  background-color: #111111 !important;
+  color: #FFFFFF !important;
+}
+
+.light-theme #events .event-subtext {
+  color: #111111 !important;
+}
+
+.light-theme #events .event-image-bg {
+  background-color: #EEEEEE !important;
+}
+
+/* Fix global image invert for this specific component */
+.light-theme #events img {
+  filter: none !important;
+}

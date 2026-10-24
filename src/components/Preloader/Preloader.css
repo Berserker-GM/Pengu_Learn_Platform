@@ -1,0 +1,80 @@
+.preloader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #111;
+  color: white;
+}
+
+.preloader-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.capsule-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.capsule {
+  position: relative;
+  width: 100%;
+  height: 3.5rem;
+  border: 2px solid white;
+  border-radius: 1.75rem; /* Smaller border radius */
+  overflow: hidden;
+}
+
+.capsule-fill {
+  background-color: white;
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.capsule-text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.transition-text-wrapper {
+  position: relative;
+  width: fit-content;
+}
+
+.transition-text {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.text-white {
+  color: white;
+  z-index: 2;
+  position: relative;
+}
+
+.text-black {
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.1s linear;
+}

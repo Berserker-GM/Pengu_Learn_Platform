@@ -1,0 +1,26 @@
+<svg width="250" height="250" viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- Handle outline -->
+    <path d="M130 130 L210 210" stroke-width="32" stroke="#1a1c1c" />
+    <!-- Handle fill (yellow) -->
+    <path d="M130 130 L210 210" stroke-width="16" stroke="#d4f000" />
+    
+    <!-- Head Body outline -->
+    <path d="M50 150 L150 50" stroke-width="56" stroke="#1a1c1c" />
+    <!-- Head Body fill (blue) -->
+    <path d="M50 150 L150 50" stroke-width="36" stroke="#0046fa" />
+    
+    <!-- Left Cap outline -->
+    <path d="M40 160 L65 135" stroke-width="32" stroke="#1a1c1c" />
+    <!-- Left Cap fill (yellow) -->
+    <path d="M40 160 L65 135" stroke-width="16" stroke="#d4f000" />
+
+    <!-- Right Cap outline -->
+    <path d="M135 65 L160 40" stroke-width="32" stroke="#1a1c1c" />
+    <!-- Right Cap fill (yellow) -->
+    <path d="M135 65 L160 40" stroke-width="16" stroke="#d4f000" />
+    
+    <!-- Impact/BAM lines outline -->
+    <path d="M10 180 L40 170 M30 210 L60 190 M5 225 L35 235" stroke-width="14" stroke="#1a1c1c" />
+  </g>
+</svg>
