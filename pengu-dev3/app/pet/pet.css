@@ -1,0 +1,71 @@
+html, body {
+  margin: 0; padding: 0; width: 260px; height: 260px; overflow: hidden;
+  background: transparent; user-select: none; -webkit-user-select: none;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+#stage { position: relative; width: 260px; height: 260px; }
+
+/* Top area (260 x 132) is reserved for the speech bubble */
+#bubble-area { position: absolute; top: 0; left: 0; width: 260px; height: 132px; pointer-events: none; }
+
+/* Sprite: 128x128 at bottom-center */
+#sprite, #fallback { position: absolute; left: 66px; bottom: 0; width: 128px; height: 128px; transform-origin: 50% 100%; }
+#sprite { image-rendering: auto; -webkit-user-drag: none; cursor: pointer; touch-action: none; }
+#fallback {
+  box-sizing: border-box; border-radius: 50%; background: #4aa3df; border: 4px solid #1d5f8a;
+  animation: pengu-bob 1.2s ease-in-out infinite alternate;
+}
+#fallback[hidden], #sprite[hidden] { display: none; }
+
+/* ---- Synthetic motion for single-frame (placeholder) art only: data-single="true" ---- */
+#sprite[data-single="true"][data-state="idle"]       { animation: pengu-breathe 2.4s ease-in-out infinite alternate; }
+#sprite[data-single="true"][data-state="hello"]      { animation: pengu-hop .45s ease-out 2; }
+#sprite[data-single="true"][data-state="walk"]       { animation: pengu-waddle .3s ease-in-out infinite alternate; }
+#sprite[data-single="true"][data-state="dragged"]    { transform: rotate(8deg) scale(1.05); }
+#sprite[data-single="true"][data-state="hover_jump"] { animation: pengu-hop .6s ease-out 1; }
+#sprite[data-single="true"][data-state="thinking"]   { animation: pengu-wiggle .8s ease-in-out infinite alternate; }
+#sprite[data-single="true"][data-state="sending"]    { animation: pengu-squish .35s ease-out 1; }
+#sprite[data-single="true"][data-state="talking"]    { animation: pengu-bob .35s ease-in-out infinite alternate; }
+#sprite[data-single="true"][data-state="sleeping"]   { animation: pengu-snooze 3s ease-in-out infinite alternate; opacity: .8; }
+
+@keyframes pengu-bob     { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+@keyframes pengu-breathe { from { transform: scale(1, 1); } to { transform: scale(1.02, .98); } }
+@keyframes pengu-hop     { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-28px); } }
+@keyframes pengu-waddle  { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+@keyframes pengu-wiggle  { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+@keyframes pengu-squish  { 0% { transform: scale(1.1, .85); } 100% { transform: scale(1, 1); } }
+@keyframes pengu-snooze  { from { transform: scale(1, 1); } to { transform: scale(1.04, .94); } }
+
+/* ---- Speech bubble ---- */
+#bubble {
+  position: absolute; left: 10px; right: 10px; bottom: 10px; max-height: 118px; overflow: hidden;
+  box-sizing: border-box; padding: 8px 10px; border: 2px solid #1d5f8a; border-radius: 12px;
+  background: #fff; color: #1b2733; font-size: 13px; line-height: 1.3; text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25); cursor: pointer; pointer-events: auto;
+  opacity: 0; transform: translateY(6px); transition: opacity .18s, transform .18s;
+  overflow-wrap: anywhere;
+}
+#bubble.show { opacity: 1; transform: translateY(0); }
+#bubble.kind-chat   { background: #e8f4fd; }
+#bubble.kind-system { background: #fff8e1; border-color: #b8860b; }
+#bubble::after {
+  content: ""; position: absolute; left: 50%; bottom: -9px; margin-left: -8px;
+  width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 9px solid #1d5f8a;
+}
+
+/* ---- Hover chat box ---- */
+#chat {
+  position: absolute; left: 22px; right: 22px; bottom: 6px; z-index: 5;
+  display: flex; align-items: center; gap: 4px; box-sizing: border-box; padding: 4px 8px;
+  background: rgba(20, 30, 45, .9); border-radius: 16px; box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+#chat[hidden] { display: none; }
+#chat input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  color: #fff; font: 12px "Segoe UI", system-ui, sans-serif; user-select: text; -webkit-user-select: text;
+}
+#chat input::placeholder { color: #9fb0c3; }
+#chat button { border: 0; background: transparent; cursor: pointer; font-size: 13px; padding: 0 2px; }
+#chat button[hidden] { display: none; }
+#chat button.rec { filter: hue-rotate(300deg) saturate(3); animation: pengu-bob .5s infinite alternate; }
